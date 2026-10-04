@@ -1,0 +1,80 @@
+/* ---------- About ---------- */
+.ab-hero{height:auto}
+.ab-hero .pin{position:relative;top:auto}
+.ab-prog{position:absolute;left:34px;right:22px;bottom:0;height:2px;background:var(--orange);transform-origin:left;transform:scaleX(0)}
+.ab-ctl{position:absolute;right:22px;bottom:8px;display:flex;align-items:center;gap:18px;opacity:0;pointer-events:none;transition:opacity .5s}
+.ab-ctl.on{opacity:1;pointer-events:auto}
+.ab-ctl button{background:none;border:0;padding:4px 0;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);display:inline-flex;align-items:center;gap:6px}
+.ab-ctl button:hover{color:var(--ink)}
+.ab-ctl .ab-next{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px}
+.ab-ctl .ab-next span{display:inline-block;animation:bob 1.8s ease-in-out infinite}
+.ab-stage{height:100%;display:flex;padding-top:40px;padding-bottom:28px}
+.ab-frame{flex:1;display:flex;flex-direction:column;min-height:0}
+.ab-frame svg{flex:1;min-height:0;height:100%;width:100%;overflow:visible}
+.ab-g{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:1;stroke-dashoffset:1}
+.ab-circ{fill:none;stroke:var(--ink);stroke-width:1;stroke-dasharray:4 7}
+.ab-ol{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.ab-def{fill:var(--ink)}
+.ab-word{font-family:"Poppins","Montserrat","Helvetica Neue",Arial,sans-serif;font-weight:700;letter-spacing:-.02em;fill:var(--q-ink)}
+.ab-prod{font-family:var(--disp);font-stretch:87.5%;font-weight:700;letter-spacing:.16em;fill:var(--ink-2)}
+.ab-cap{position:absolute;left:34px;bottom:10px;margin:0;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-ink);transition:color .3s}
+.ab-cap.ok{color:var(--green)}
+/* unfold scene */
+.ab-unf{height:300vh}
+.ab-unf-in{height:100%;display:flex;flex-direction:column;padding-top:40px;padding-bottom:32px}
+.ab-unf-hd{margin-bottom:26px;opacity:0;transform:translateY(16px)}
+.ab-unf-hd .eyebrow{margin:0 0 14px}
+.ab-unf-stage{position:relative;flex:1;min-height:0}
+.ab-face{position:absolute;left:0;top:0;transform-origin:0 0;border-radius:12px;overflow:hidden;will-change:transform}
+.ab-face .fo{position:absolute;inset:0;background:#FF7805;pointer-events:none;z-index:2}
+.ab-face .fi{position:relative;height:100%;padding:clamp(22px,2.4vw,34px);display:flex;flex-direction:column;opacity:0}
+.ab-face .fn{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.ab-face h3{margin:18px 0 16px;font-family:var(--disp);font-stretch:87.5%;font-weight:700;text-transform:uppercase;font-size:clamp(2rem,3vw,3.1rem);line-height:.88;letter-spacing:-.035em}
+.ab-face h3.qw{font-family:"Poppins","Montserrat","Helvetica Neue",Arial,sans-serif;text-transform:none;letter-spacing:-.03em;font-size:clamp(2.6rem,4vw,4rem);line-height:1}
+.ab-face p{margin:0;font-size:1.02rem;line-height:1.5;max-width:24em}
+.ab-face .big{position:absolute;right:-6px;bottom:-34px;font-family:var(--disp);font-stretch:87.5%;font-weight:700;font-size:clamp(9rem,15vw,15rem);line-height:1;letter-spacing:-.06em;opacity:.12;pointer-events:none}
+.ab-face .fx{margin:auto 0 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:22px;border-top:1px solid rgba(31,31,31,.25);position:relative;z-index:1}
+.ab-face dt{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.ab-face dd{margin:4px 0 0;font-weight:600}
+.ab-face .chips{list-style:none;margin:auto 0 0;padding:22px 0 0;display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:1}
+.ab-face .chips li{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border:1px solid rgba(234,232,220,.4);border-radius:20px}
+.ab-face .goals{list-style:none;margin:auto 0 0;padding:18px 0 0;counter-reset:g;position:relative;z-index:1}
+.ab-face .goals li{counter-increment:g;display:flex;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid rgba(23,59,49,.22);font-weight:600}
+.ab-face .goals li::before{content:counter(g,decimal-leading-zero);font-family:var(--mono);font-size:.64rem;font-weight:500;letter-spacing:.08em}
+.f1{background:#FF7805;color:#1F1F1F}
+.f2{background:#173B31;color:#EAE8DC}
+.f3{background:#A9DFC6;color:#173B31}
+.f1 .fo{display:none}
+/* colour band */
+.ab-band{position:relative;overflow:hidden;background:#FF7805;color:#1F1F1F;padding:clamp(130px,18vh,210px) 0;background-image:linear-gradient(rgba(31,31,31,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(31,31,31,.07) 1px,transparent 1px);background-size:80px 80px}
+.ab-band-in{position:relative;z-index:1}
+.ab-band-k{margin:0 0 26px;font-family:var(--mono);font-size:.74rem;letter-spacing:.08em}
+.ab-band .disp{color:#1F1F1F}
+.ab-band-b{display:flex;align-items:center;gap:26px;flex-wrap:wrap;margin-top:44px}
+.ab-btn-dk{display:inline-flex;align-items:center;gap:10px;height:52px;padding:0 26px;background:#1F1F1F;color:#FF7805;border-radius:2px;font-family:var(--mono);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;transition:transform .22s}
+.ab-btn-dk:hover{transform:translateY(-2px)}
+.ab-ext-dk{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;color:#1F1F1F;text-decoration:none;border-bottom:1px solid rgba(31,31,31,.45);padding-bottom:3px}
+.ab-band-cube{position:absolute;right:6%;top:50%;width:min(420px,34vw);height:auto;overflow:visible;transform:translateY(-50%)}
+.ab-band-cube path{fill:none;stroke:#1F1F1F;stroke-width:.6;opacity:.35}
+@media (max-width:900px){
+  .ab-unf{height:auto}
+  .ab-unf .pin{position:static;height:auto;overflow:visible}
+  .ab-unf-in{padding-top:90px}
+  .ab-unf-hd{opacity:1;transform:none}
+  .ab-unf-stage{display:grid;gap:14px}
+  .ab-face{position:relative;transform:none!important;width:auto!important;height:auto!important;min-height:340px}
+  .ab-face .fo{display:none}
+  .ab-face .fi{opacity:1!important}
+  .ab-band-cube{opacity:.4;width:70vw;right:-14vw}
+}
+@media (max-width:767px){
+  .ab-hero{height:auto}
+  .ab-hero .pin{position:static;height:auto;overflow:visible}
+  .ab-stage{padding-top:44px;padding-bottom:10px}
+  .ab-frame svg{height:auto;flex:none}
+  .ab-frame{padding-bottom:40px}
+  .ab-frame .fco{display:none}
+  .ab-ctl{right:auto;left:0;bottom:-34px}
+  .ab-hero .ab-stage{padding-bottom:44px}
+}
+

@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- build:preload -->
+<script src="js/00-theme-preload.js"></script>
+<!-- /build:preload -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>qBotica WindowBid — Review. Procure. Fulfill.</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-4%20-2%20100%20104%22%3E%3Cpath%20fill%3D%22%23FF7805%22%20d%3D%22M52.15%203.35L81.31%2019.23Q87.46%2022.58%2081.31%2025.93L49.07%2043.49Q46.00%2045.16%2042.93%2043.49L10.69%2025.93Q4.54%2022.58%2010.69%2019.23L39.85%203.35Q46.00%200.00%2052.15%203.35Z%20M91.90%2036.84L91.90%2068.00Q91.90%2075.00%2085.75%2078.35L53.32%2096.01Q50.25%2097.69%2050.25%2094.19L50.25%2056.02Q50.25%2052.52%2053.32%2050.85L85.75%2033.19Q91.90%2029.84%2091.90%2036.84Z%20M3.17%2031.51L38.68%2050.85Q41.75%2052.52%2041.75%2056.02L41.75%2090.69Q41.75%2097.69%2035.60%2094.34L6.25%2078.35Q0.10%2075.00%200.10%2068.00L0.10%2033.34Q0.10%2029.84%203.17%2031.51Z%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<!-- build:css -->
+<link rel="stylesheet" href="css/01-tokens-base.css">
+<link rel="stylesheet" href="css/02-plan-drawing.css">
+<link rel="stylesheet" href="css/03-home-hero-stages.css">
+<link rel="stylesheet" href="css/04-home-pinned-scenes.css">
+<link rel="stylesheet" href="css/05-home-metrics-cta-footer.css">
+<link rel="stylesheet" href="css/06-contact.css">
+<link rel="stylesheet" href="css/07-status-cursor.css">
+<link rel="stylesheet" href="css/08-demo-app.css">
+<link rel="stylesheet" href="css/09-about.css">
+<link rel="stylesheet" href="css/10-additions-theme-motion.css">
+<!-- /build:css -->
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" style="fill:var(--orange-tint)"/>
+      <line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--orange)" stroke-width="1.4" opacity=".45"/>
+    </pattern>
+    <symbol id="qmark" viewBox="0 0 92 100"><path style="fill:var(--q-orange)" d="M52.15 3.35L81.31 19.23Q87.46 22.58 81.31 25.93L49.07 43.49Q46.00 45.16 42.93 43.49L10.69 25.93Q4.54 22.58 10.69 19.23L39.85 3.35Q46.00 0.00 52.15 3.35Z M91.90 36.84L91.90 68.00Q91.90 75.00 85.75 78.35L53.32 96.01Q50.25 97.69 50.25 94.19L50.25 56.02Q50.25 52.52 53.32 50.85L85.75 33.19Q91.90 29.84 91.90 36.84Z M3.17 31.51L38.68 50.85Q41.75 52.52 41.75 56.02L41.75 90.69Q41.75 97.69 35.60 94.34L6.25 78.35Q0.10 75.00 0.10 68.00L0.10 33.34Q0.10 29.84 3.17 31.51Z"/></symbol>
+  </defs>
+</svg>
+
+<canvas id="trail" aria-hidden="true"></canvas>
+<div id="cur" aria-hidden="true"><i class="c-dot"></i><i class="c-x"></i><span class="c-co"></span><span class="c-tag"></span></div>
+<div id="curBr" aria-hidden="true"><div class="bi"><i></i><i></i><i></i><i></i></div><span class="c-info"></span></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="qb" href="#" data-route="home" aria-label="qBotica WindowBid home"><svg class="qb-mark" aria-hidden="true"><use href="#qmark"/></svg><span class="qb-word">qBotica</span><span class="qb-div" aria-hidden="true"></span><span class="qb-prod">WindowBid</span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a class="roll" href="#about" data-route="about"><span data-t="About Us">About Us</span></a>
+      <a class="roll" href="#contact" data-route="contact"><span data-t="Contact Us">Contact Us</span></a>
+      <button class="btn-demo" data-go="app" data-cursor="Open →">Try Demo <span class="arr" aria-hidden="true">→</span></button>
+    </nav>
+  </div>
+</header>
+
+<div id="view">
+<!-- ================= HOME ================= -->
+<main data-page="home">
+
+<!-- 01 HERO -->
+<section class="hero sheet-sec" id="top">
+  <div class="wrap g12">
+    <div class="hero-txt">
+      <p class="eyebrow">Window + door workflow</p>
+      <h1 class="disp xl rv"><span class="ln"><span>Review.</span></span><span class="ln"><span>Procure.</span></span><span class="ln"><span>Fulfill.</span></span></h1>
+      <p class="lede">One connected workflow for checking the opening data, getting it priced, and carrying the selected products through delivery.</p>
+      <button class="btn-demo lg" data-go="app" data-cursor="Open →">Try Demo <span class="arr" aria-hidden="true">→</span></button>
+      <button class="scrollcue" data-scroll="stages">Scroll to follow the project<span aria-hidden="true">↓</span></button>
+    </div>
+    <figure class="hero-vis">
+      <div class="frame" id="heroFrame" data-inspect>
+        <span class="ruler rx"></span><span class="ruler ry"></span>
+        <span class="reg tl">+</span><span class="reg tr">+</span><span class="reg bl">+</span><span class="reg br">+</span>
+        <span class="fl l">Project / Demo Residence</span><span class="fl r">Sheet / A1.0</span>
+        <span class="fco">X 0021 · Y 0834</span>
+        <svg id="heroSvg" viewBox="0 0 1000 720" role="img" aria-label="Floor plan of the demo residence assembling, with window W07 highlighted"></svg>
+      </div>
+      <figcaption class="hcall" id="hCall"><i></i><b>This is where<br>the workflow starts.</b></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 02 THREE STAGES -->
+<section class="sec sheet-sec" id="stages">
+  <div class="wrap">
+    <div class="dline"></div>
+    <p class="eyebrow" style="margin-top:28px">02 / How WindowBid works</p>
+    <h2 class="disp lg rv"><span class="ln"><span>Three stages.</span></span><span class="ln"><span>One continuous record.</span></span></h2>
+    <p class="sub">Once the AI-extracted opening data is reviewed, the same information flows from takeoff to quoting, ordering and fulfillment.</p>
+    <div class="stg-list">
+      <article class="stg" id="stgReview">
+        <div class="stg-l"><span class="stg-n">01</span><h3 class="stg-name">Review</h3><p class="stg-q">Review the extracted takeoff</p><p class="stg-c">Verify. Edit. Mark ready for RFQ.</p><p class="stg-who">Dealer reviews AI-extracted data</p></div>
+        <div class="stg-v">
+          <div class="sv-rows">
+            <div class="sr"><span class="k">W01</span><span class="r">Bedroom 2</span><span class="r">Single hung</span><span class="sz">36×60</span><span class="st vf">Verified</span></div>
+            <div class="sr" id="svW02"><span class="k">W02</span><span class="r">Bath</span><span class="r">Awning</span><span class="sz"><span class="swap"><i class="a">24×—</i><i class="b">24×36</i></span></span><span class="st ck"><span class="swap"><i class="a">Needs review</i><i class="b">Edited</i></span></span></div>
+            <div class="sr"><span class="k">W05</span><span class="r">Primary bedroom</span><span class="r">Single hung</span><span class="sz">36×60</span><span class="st vf">Verified</span></div>
+            <div class="sr"><span class="k">W06</span><span class="r">Kitchen</span><span class="r">Casement</span><span class="sz">30×48</span><span class="st vf">Verified</span></div>
+            <div class="sr"><span class="k">W09</span><span class="r">Dining</span><span class="r">Sliding</span><span class="sz">60×48</span><span class="st ck">Needs review</span></div>
+          </div>
+        </div>
+      </article>
+      <article class="stg" id="stgProcure">
+        <div class="stg-l"><span class="stg-n">02</span><h3 class="stg-name">Procure</h3><p class="stg-q">Compare manufacturer options</p><p class="stg-c">Quote. Compare. Present.</p><p class="stg-who">Customer accepts the proposal</p></div>
+        <div class="stg-v">
+          <div class="sv-proc" id="svProc"></div>
+        </div>
+      </article>
+      <article class="stg" id="stgFulfill">
+        <div class="stg-l"><span class="stg-n">03</span><h3 class="stg-name">Fulfill</h3><p class="stg-q">From order to installation</p><p class="stg-c">Order. Track. Complete.</p><p class="stg-who">Manufacturer acknowledges the PO</p></div>
+        <div class="stg-v">
+          <div class="sv-ffw" id="svFf"><i class="fill"></i><ul class="sv-ff">
+            <li>PO created <span class="ck">✓</span></li><li>PO acknowledged <span class="ck">✓</span></li><li>Manufacturing <span class="ck">✓</span></li><li>Ready to ship <span class="ck">✓</span></li>
+            <li>In transit <span class="ck">✓</span></li><li>Delivered <span class="ck">✓</span></li><li>Installed <span class="ck">✓</span></li>
+          </ul></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 03 REVIEW -->
+<section class="pin-sec rv-sec" id="review">
+  <div class="pin">
+    <div class="wrap g12 scene" id="rvScene">
+      <div class="sc-txt">
+        <p class="eyebrow">01 / Review</p>
+        <h2 class="disp lg rv in" id="rvHead"></h2>
+        <p class="sc-copy" id="rvCopy"></p>
+        <ul class="terms" id="rvTerms"><li>Verify</li><li>Edit</li><li>Ready for RFQ</li></ul>
+        <p class="sc-cap" id="rvCap"></p>
+      </div>
+      <div class="sc-vis" id="rvVis">
+        <div class="frame" id="rvFrame" data-inspect>
+          <span class="ruler rx"></span><span class="ruler ry"></span>
+          <span class="reg tl">+</span><span class="reg tr">+</span><span class="reg bl">+</span><span class="reg br">+</span>
+          <span class="fl l">Project / Demo Residence</span><span class="fl r">Takeoff / Rev 03</span>
+          <svg id="rvSvg" viewBox="0 0 1000 720" aria-hidden="true"></svg>
+          <div class="note" id="rvNote">
+            <div class="nhd">Review / W02</div>
+            <div class="nb">
+              <div class="nt">Awning window</div>
+              <div class="nr"><span>Width</span><b>24 in</b></div>
+              <div class="nr nh"><span>Height</span><b><span class="swap"><i class="a">—</i><i class="b">36 in</i></span></b></div>
+              <div class="nm"><span class="swap"><i class="a">Height requires review.</i><i class="b">Confirmed against schedule.</i></span></div>
+              <span class="nst"><span class="swap"><i class="a">Needs review</i><i class="b">Edited · verified</i></span></span>
+            </div>
+          </div>
+        </div>
+        <div class="rv-table" id="rvTable">
+          <div class="trow th"><span>Mark</span><span>Room</span><span>Type</span><span>Size</span><span>Status</span></div>
+          <div class="rv-rows" id="rvRows"></div>
+          <div class="rv-sum" id="rvSum"><div><b>10</b>Windows</div><div><b>02</b>Doors</div><div><b>07</b>Products</div><div class="t">Ready for RFQ</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 PROCURE -->
+<section class="pin-sec pc-sec" id="procure">
+  <div class="pin">
+    <div class="wrap g12 scene" id="pcScene">
+      <div class="sc-vis pc-vis" id="pcVis">
+        <div class="ps" id="pcSheet">
+          <div class="ps-hd"><span class="swap" id="pcHdSwap"><i class="a">Procurement sheet</i><i class="b">Customer proposal</i></span><span>RFQ #WB-1042 · Sheet PR-01</span></div>
+          <div class="ps-meta" id="pcMeta"><span>Issued</span><b>Oct 02</b><span>Bids due</span><b>Oct 16</b><span>Lines</span><b>07 products</b><span>Openings</span><b>12</b><span>Sent to</span><b>3 manufacturers</b></div>
+          <div class="ps-sched" id="pcSched"></div>
+          <svg class="ps-sel" id="pcSelSvg" aria-hidden="true"><rect id="pcSel" pathLength="1"/></svg>
+          <span class="ps-sel-l" id="pcSelL">Selected for proposal</span>
+          <div class="ps-led" id="pcLed">
+            <div class="lr dl"><span>Manufacturer cost · Cascade</span><span>$29,100</span></div>
+            <div class="lr dl"><span>Freight</span><span>$1,200</span></div>
+            <div class="lr dl"><span>Installation</span><span>$5,500</span></div>
+            <div class="lr dl"><span>Dealer margin</span><span>$6,700</span></div>
+            <div class="lr cu"><span>Window package</span><span>10 windows · 2 doors</span></div>
+            <div class="lr cu"><span>Supplier</span><span>Cascade · 7 product lines</span></div>
+            <div class="lr cu"><span>Estimated delivery</span><span>5–6 weeks</span></div>
+            <div class="lr cu"><span>Installation · warranty</span><span>Included · 20 years</span></div>
+            <div class="lr tot"><span><span class="swap" id="pcTotSwap"><i class="a">Customer total</i><i class="b">Installed total</i></span></span><span class="big">$42,500</span></div>
+            <div class="ps-acc" id="pcAcc">
+              <span class="ps-acc-k">Customer acceptance</span>
+              <svg class="ps-sig" viewBox="0 0 220 44" aria-hidden="true"><path id="pcSig" pathLength="1" d="M4 30c10-14 18-22 22-16s-8 22-2 20 14-26 22-24-4 22 4 20 10-14 16-12 0 12 8 10 12-10 20-8 6 8 14 6 16-6 26-6 22 2 40-2"/></svg>
+              <span class="ps-tick" id="pcTick">✓</span>
+              <span class="ps-acc-l" id="pcAccL"><span class="swap"><i class="a">Awaiting signature</i><i class="b">Customer accepted · 18 Oct 2026</i></span></span>
+              <i class="ps-rule-g" id="pcAccRule"></i>
+            </div>
+          </div>
+        </div>
+        <div class="gcard hcard" id="pcCard"><b>Single hung</b><span class="q">5<small>QTY</small></span><span class="s">36 × 60 IN</span><span class="mk">W01 · W03 · W04 · W05 · W07</span><span class="tg" id="pcCardTag">Product 01 · Ready for RFQ</span></div>
+        <div class="ocard hcard" id="pcOrder"><span class="tg">Customer-accepted order</span><b>$42,500</b><span>Cascade · 12 openings</span></div>
+      </div>
+      <div class="sc-txt pc-txt">
+        <p class="eyebrow">02 / Procure</p>
+        <h2 class="disp lg rv"><span class="ln"><span>Compare</span></span><span class="ln"><span>manufacturer</span></span><span class="ln"><span>options.</span></span></h2>
+        <p class="sc-copy">The same reviewed takeoff becomes one comparable RFQ. Bids line up side by side, then become a customer proposal.</p>
+        <ul class="terms" id="pcTerms"><li>Quote</li><li>Compare</li><li>Present</li></ul>
+        <p class="sc-who">Dealer compares · Customer accepts</p>
+        <p class="sc-cap" id="pcCap"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 FULFILL -->
+<section class="pin-sec ff-sec" id="fulfill" data-dark>
+  <div class="pin">
+    <div class="wrap g12 scene" id="ffScene">
+      <div class="sc-vis ff-vis" id="ffVis">
+        <div class="ff-po hcard" id="ffPo">
+          <div class="a"><span class="tg">Customer-accepted order</span><b class="pa">$42,500</b><span class="ps2">Cascade · 12 openings</span></div>
+          <div class="b"><span class="tg">Purchase order · PO #WB-0048</span><b>Cascade</b><span>Project · Demo Residence</span><span>PO value · $30,300 · 7 lines</span></div>
+        </div>
+        <div class="ff-trace" id="ffTrace">
+          <span class="ff-rail"></span><span class="ff-draw" id="ffDraw"></span>
+          <span class="ff-tip" id="ffTip"><i></i><b>W07</b></span>
+          <ol class="ff-ms" id="ffMs"></ol>
+        </div>
+        <div class="ff-note" id="ffNote"></div>
+        <div class="ff-end" id="ffEnd">
+          <span class="ff-end-id">W07</span>
+          <p class="ff-end-h">Complete.</p>
+          <p class="ff-end-c">Drawing → Takeoff → RFQ → Bid → PO → Delivery → Installation</p>
+        </div>
+      </div>
+      <div class="sc-txt ff-txt">
+        <p class="eyebrow">03 / Fulfill</p>
+        <h2 class="disp lg rv"><span class="ln"><span>From order</span></span><span class="ln"><span>to</span></span><span class="ln"><span>installation.</span></span></h2>
+        <p class="sc-copy">Customer acceptance becomes a purchase order. The same lines are traced through manufacturing, delivery and installation.</p>
+        <ul class="terms" id="ffTerms"><li>Order</li><li>Track</li><li>Complete</li></ul>
+        <p class="sc-who">Manufacturer acknowledges the PO</p>
+        <p class="sc-cap" id="ffCap"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 METRICS -->
+<section class="sec sheet-sec" id="metrics">
+  <div class="wrap">
+    <div class="dline"></div>
+    <h2 class="disp lg rv c" style="margin-top:90px"><span class="ln"><span>One project.</span></span><span class="ln"><span>Fully traceable.</span></span></h2>
+    <div class="mgrid">
+      <div><b data-n="windows">00</b><span>Windows</span></div>
+      <div><b data-n="doors">00</b><span>Doors</span></div>
+      <div><b data-n="products">00</b><span>Product configurations</span></div>
+      <div><b data-n="openings">00</b><span>Openings verified</span></div>
+    </div>
+    <p class="msrc c" id="msrc">From sheet A1.0 · Demo Residence</p>
+  </div>
+</section>
+
+<!-- 08 CTA -->
+<section class="cta" id="cta" data-dark>
+  <div class="wrap g12">
+    <div class="cta-txt">
+      <p class="eyebrow">Try the workflow</p>
+      <h2 class="disp xl rv"><span class="ln"><span>See the</span></span><span class="ln"><span>workflow</span></span><span class="ln"><span>yourself.</span></span></h2>
+      <p>Review the opening information, compare sample manufacturer bids, and follow the selected products through fulfillment.</p>
+      <div class="cta-btns">
+        <button class="btn-demo lg" data-go="app" data-cursor="Open →">Try Demo <span class="arr" aria-hidden="true">→</span></button>
+        <a class="btn-line" href="#contact" data-route="contact" data-cursor="Open →">Contact Us</a>
+      </div>
+    </div>
+  </div>
+  <svg class="cta-win" viewBox="0 0 400 480" aria-hidden="true">
+    <path class="cn c1" d="M20 80V20H80"/><path class="cn c2" d="M320 20H380V80"/><path class="cn c3" d="M380 400V460H320"/><path class="cn c4" d="M80 460H20V400"/>
+    <rect class="fr" x="20" y="20" width="360" height="440" pathLength="1"/>
+    <line class="fr" x1="200" y1="20" x2="200" y2="460" pathLength="1"/>
+    <line class="fr" x1="20" y1="240" x2="380" y2="240" pathLength="1"/>
+  </svg>
+</section>
+</main>
+
+<!-- ================= ABOUT ================= -->
+<main data-page="about" hidden>
+
+<!-- A1 · Architectural brand reveal -->
+<section class="pin-sec ab-hero" id="abHero">
+  <div class="pin">
+    <div class="wrap ab-stage">
+      <div class="frame ab-frame" id="abFrame" data-inspect>
+        <span class="ruler rx"></span><span class="ruler ry"></span>
+        <span class="reg tl">+</span><span class="reg tr">+</span><span class="reg bl">+</span><span class="reg br">+</span>
+        <span class="fl l">About / WindowBid</span><span class="fl r">Sheet / AB-01</span>
+        <span class="fco">Symbol / iso 30° · #FF7805</span>
+        <svg id="abSvg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid meet" role="img" aria-label="The qBotica symbol constructed from drafting guides, with the qBotica wordmark and WindowBid label">
+          <defs>
+            <clipPath id="abFill"><rect id="abFillR" x="340" y="300" width="320" height="0"/></clipPath>
+            <clipPath id="abT1"><rect x="60" y="342" width="880" height="206"/></clipPath>
+            <clipPath id="abT2"><rect x="200" y="572" width="600" height="40"/></clipPath>
+          </defs>
+          <g id="abGuides" style="opacity:0"></g>
+          <g id="abDef" style="opacity:0"></g>
+          <g id="abOrange" clip-path="url(#abFill)" style="opacity:0"><use href="#qmark" x="375.8" y="24" width="248.4" height="270"/></g>
+          <g id="abOut"></g>
+          <g clip-path="url(#abT1)"><text id="abWord" class="ab-word" x="500" y="493" text-anchor="middle" font-size="190" transform="translate(0 215)">qBotica</text></g>
+          <g clip-path="url(#abT2)"><text id="abProd" class="ab-prod" x="500" y="602" text-anchor="middle" font-size="22" transform="translate(0 40)">WINDOWBID</text></g>
+        </svg>
+        <p class="ab-cap" id="abCap" aria-live="polite">01 / Construction guides</p>
+        <span class="ab-prog" id="abProg" aria-hidden="true"></span>
+        <div class="ab-ctl" id="abCtl"><button type="button" id="abReplay" data-cursor="Replay">Replay ↺</button><button type="button" class="ab-next" data-scroll="abUnf" data-cursor="Scroll">Scroll to unfold <span aria-hidden="true">↓</span></button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- A2 · The cube unfolds into three faces -->
+<section class="pin-sec ab-unf" id="abUnf">
+  <div class="pin">
+    <div class="wrap ab-unf-in">
+      <div class="ab-unf-hd" id="abUnfHd">
+        <p class="eyebrow">Who we are</p>
+        <h2 class="disp lg">One cube.<br>Three sides.</h2>
+      </div>
+      <div class="ab-unf-stage" id="abUnfStage">
+        <article class="ab-face f1" data-tilt>
+          <div class="fo"></div>
+          <div class="fi">
+            <span class="fn">01 / Who we are</span>
+            <h3 class="qw">qBotica</h3>
+            <p>An intelligent automation and agentic AI company, headquartered in Phoenix, Arizona.</p>
+            <dl class="fx"><div><dt>Founded</dt><dd>2017</dd></div><div><dt>Recognition</dt><dd>Inc. 5000, 2022–2024</dd></div></dl>
+            <span class="big" aria-hidden="true">01</span>
+          </div>
+        </article>
+        <article class="ab-face f2" data-tilt data-dark>
+          <div class="fo"></div>
+          <div class="fi">
+            <span class="fn">02 / What we do</span>
+            <h3>Read.<br>Understand.<br>Act.</h3>
+            <p>We automate document-heavy work, turning the information inside documents into action.</p>
+            <ul class="chips"><li>Document AI</li><li>Agentic AI</li><li>Automation</li></ul>
+            <span class="big" aria-hidden="true">02</span>
+          </div>
+        </article>
+        <article class="ab-face f3" data-tilt>
+          <div class="fo"></div>
+          <div class="fi">
+            <span class="fn">03 / Our agenda</span>
+            <h3>Windows &amp; doors, next.</h3>
+            <p>WindowBid brings that experience to an industry that still runs on drawings, spreadsheets and email.</p>
+            <ol class="goals"><li>Drawings into trusted data</li><li>One shared record</li><li>People make the decisions</li></ol>
+            <span class="big" aria-hidden="true">03</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- A3 · Colour band close -->
+<section class="ab-band" id="abBand">
+  <svg class="ab-band-cube" id="abBandCube" viewBox="0 0 92 100" aria-hidden="true"></svg>
+  <div class="wrap ab-band-in">
+    <p class="ab-band-k">qBotica WindowBid</p>
+    <h2 class="disp xl rv"><span class="ln"><span>Let's build</span></span><span class="ln"><span>it together.</span></span></h2>
+    <div class="ab-band-b">
+      <a class="ab-btn-dk" href="#contact" data-route="contact" data-cursor="Open →">Contact Us <span aria-hidden="true">→</span></a>
+      <a class="ab-ext-dk" href="https://www.qbotica.com" target="_blank" rel="noopener" data-cursor="Open ↗">qbotica.com ↗</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= CONTACT ================= -->
+<main data-page="contact" hidden>
+<section class="cx">
+  <div class="wrap">
+    <div class="frame cx-frame">
+      <span class="ruler rx"></span><span class="ruler ry"></span>
+      <span class="reg tl">+</span><span class="reg tr">+</span><span class="reg bl">+</span><span class="reg br">+</span>
+      <span class="fl l">Contact / WindowBid</span><span class="fl r">Sheet / CT-01</span>
+      <div class="cx-main">
+        <p class="cx-k">Contact</p>
+        <form class="cx-form" id="ctForm" novalidate>
+          <p class="cx-line">Hi, I'm <label class="blank"><span class="vh">Your name</span><input name="name" autocomplete="name" placeholder="your name" required></label></p>
+          <p class="cx-line">from <span class="nb"><label class="blank"><span class="vh">Company</span><input name="company" autocomplete="organization" placeholder="company"></label>.</span></p>
+          <p class="cx-line">I'd like <span class="nb"><label class="blank sel"><span class="vh">What you would like</span><select name="topic"><option>a live demo</option><option>a pilot on our plans</option><option>to talk partnership</option><option>something else</option></select></label>.</span></p>
+          <p class="cx-line">Reach me at <span class="nb"><label class="blank"><span class="vh">Email</span><input name="email" type="email" autocomplete="email" placeholder="you@company.com" required></label>.</span></p>
+          <div class="cx-act">
+            <button class="btn-demo lg" id="ctSend" type="submit" data-cursor="Send →">Send <span class="arr" aria-hidden="true">→</span></button>
+            <span class="cx-note">Prototype · nothing is sent yet</span>
+          </div>
+        </form>
+        <div class="cx-done" id="ctDone" hidden aria-live="polite">
+          <p class="cx-line">Thanks, <b id="ctName"></b>.</p>
+          <p class="cx-sub">This prototype doesn't send messages yet, so nothing was delivered or stored.</p>
+          <button class="cx-again" id="ctAgain" type="button">Start over ↺</button>
+        </div>
+      </div>
+      <div class="cx-art" aria-hidden="true"><svg id="ctArt" viewBox="0 0 400 440"></svg></div>
+      <div class="cx-foot"><span>qBotica · Phoenix, Arizona</span><a href="https://www.qbotica.com" target="_blank" rel="noopener" data-cursor="Open ↗">qbotica.com ↗</a></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-a"><a class="qb-stack" href="#" data-route="home" aria-label="qBotica WindowBid home"><svg class="qb-mark" aria-hidden="true"><use href="#qmark"/></svg><span class="qb-word">qBotica</span></a><span class="qb-prod qb-prod-s">WindowBid</span><p>Review.<br>Procure.<br>Fulfill.</p></div>
+    <nav class="foot-n" aria-label="Footer"><a href="#about" data-route="about">About Us</a><a href="#contact" data-route="contact">Contact Us</a><button data-go="app">Try Demo</button><button class="theme-sw" id="themeSw" type="button" data-cursor="Switch"><i aria-hidden="true"></i><span id="themeSwL">Light theme</span></button><span class="theme-hint">or draw a <b>W</b> with your cursor</span></nav>
+    <p class="foot-c">© 2026 <span style="text-transform:none">qBotica</span> · WindowBid<br>Prototype · RFQ, bids and fulfillment use sample data</p>
+  </div>
+</footer>
+</div>
+
+<div class="gcard hcard hfix" id="hand1" aria-hidden="true"><b>Single hung</b><span class="q">5<small>QTY</small></span><span class="s">36 × 60 IN</span><span class="mk">W01 · W03 · W04 · W05 · W07</span><span class="tg">Product 01 · Ready for RFQ</span></div>
+<div class="ocard hcard hfix" id="hand2" aria-hidden="true"><span class="tg">Customer-accepted order</span><b>$42,500</b><span>Cascade · 12 openings</span></div>
+<div class="ap-lines" id="apLines" aria-hidden="true"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i></div>
+
+<!-- ================= APP ================= -->
+<div class="app" id="app" hidden>
+  <header class="app-bar">
+    <button class="qb qb-sm" data-go="home" aria-label="qBotica WindowBid home"><svg class="qb-mark" aria-hidden="true"><use href="#qmark"/></svg><span class="qb-word">qBotica</span><span class="qb-div" aria-hidden="true"></span><span class="qb-prod">WindowBid</span></button>
+    <span class="crumb">Smart Takeoff</span>
+    <ol class="steps" id="steps"></ol>
+    <button class="btn-ghost sm exit" data-go="home">Exit demo</button>
+  </header>
+  <div class="app-body" id="appBody">
+    <section class="stage" data-stage="upload">
+      <div class="up">
+        <h1>Create a takeoff</h1>
+        <p>Upload an architectural plan. WindowBid finds the windows and doors, reads their marks, sizes and types, and lays them out for you to review.</p>
+        <label class="drop" id="drop" data-cursor="Upload">
+          <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><rect x="8" y="6" width="34" height="44" stroke="currentColor" stroke-width="1.5"/><path d="M14 16h22M14 22h22M14 28h12" stroke="currentColor" stroke-width="1.5"/><rect x="28" y="30" width="20" height="20" style="fill:var(--paper);stroke:var(--orange)" stroke-width="1.5"/><path d="M38 44v-9m-4 4 4-4 4 4" style="stroke:var(--orange)" stroke-width="1.5"/></svg>
+          <strong>Drop a plan here or browse files</strong>
+          <span class="fmt">PDF, JPG, PNG or WebP · first page is analyzed</span>
+          <span class="avail" id="avail"></span>
+          <input type="file" id="file" accept="application/pdf,image/png,image/jpeg,image/webp" class="vh">
+        </label>
+        <div class="or">or</div>
+        <button class="sample-card" id="useSample" data-cursor="Run">
+          <span class="thumb"><svg id="thumbSvg" viewBox="0 0 1000 720" aria-hidden="true"></svg></span>
+          <span><b>Use the sample plan</b><span>A1.0 Floor plan, Demo Residence. Seven rooms, twelve exterior openings. Runs instantly.</span></span>
+        </button>
+        <p class="looks">WindowBid looks for <b>windows</b>, <b>doors</b>, <b>opening marks</b>, <b>sizes</b> and <b>room locations</b>.</p>
+      </div>
+    </section>
+
+    <section class="stage work" data-stage="work">
+      <div class="work-top">
+        <div class="title"><b id="wTitle">Demo Residence</b><span id="wFile">—</span></div>
+        <div class="stats" id="wStats"></div>
+      </div>
+      <div class="work-grid">
+        <div class="viewer" id="viewer">
+          <div class="vstage" id="vstage">
+            <svg id="vsvg" viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet" aria-label="Plan with detected openings">
+              <g id="vcontent"></g><g id="vover"></g>
+              <g id="vscan" style="display:none"><rect class="scanglow" x="0" y="0" width="40" height="720"/><line class="scanln" x1="0" x2="0" y1="0" y2="720"/></g>
+            </svg>
+          </div>
+          <div class="vhint" id="vhint">Click the missed opening on the plan</div>
+          <div class="vlegend"><span><i></i>AI read</span><span><i class="rv"></i>Needs review</span><span><i class="ok"></i>Verified</span></div>
+          <div class="vtools">
+            <button data-z="out" aria-label="Zoom out">−</button>
+            <button data-z="fit" aria-label="Fit plan">⤢</button>
+            <button data-z="in" aria-label="Zoom in">+</button>
+          </div>
+        </div>
+        <aside class="side" id="side">
+          <div class="proc" id="proc">
+            <h2 id="procTitle">Reading plan</h2>
+            <ol class="psteps" id="psteps"></ol>
+            <ul class="plog" id="plog" aria-live="polite" data-dark></ul>
+            <div id="procAct"></div>
+          </div>
+          <div class="rev" id="rev" hidden>
+            <div class="tabs" role="tablist">
+              <button role="tab" data-tab="openings" aria-selected="true">Openings <span id="tN"></span></button>
+              <button role="tab" data-tab="groups" aria-selected="false">Grouped products <span id="tG"></span></button>
+            </div>
+            <div class="detail" id="detail"></div>
+            <div class="list" id="list"></div>
+            <div class="rev-foot" id="revFoot"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="stage" data-stage="rfq"><div class="doc" id="rfqDoc"></div></section>
+    <section class="stage" data-stage="bids"><div class="doc" id="bidsDoc"></div></section>
+    <section class="stage" data-stage="proposal"><div class="doc" id="propDoc"></div></section>
+    <section class="stage" data-stage="order"><div class="doc" id="orderDoc"></div></section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<!-- build:js -->
+<script src="js/01-core-helpers.js"></script>
+<script src="js/02-plan-model.js"></script>
+<script src="js/03-pricing.js"></script>
+<script src="js/04-scroll-scheduler.js"></script>
+<script src="js/05-theme-cursor.js"></script>
+<script src="js/06-router-reveals.js"></script>
+<script src="js/07-home-hero-stages.js"></script>
+<script src="js/08-home-review.js"></script>
+<script src="js/09-home-procure-fulfill.js"></script>
+<script src="js/10-home-metrics.js"></script>
+<script src="js/11-about.js"></script>
+<script src="js/12-contact.js"></script>
+<script src="js/13-app-state-order.js"></script>
+<script src="js/14-app-upload-viewer.js"></script>
+<script src="js/15-app-processing.js"></script>
+<script src="js/16-app-review-rfq-bids.js"></script>
+<script src="js/99-boot.js"></script>
+<!-- /build:js -->
+</body>
+</html>

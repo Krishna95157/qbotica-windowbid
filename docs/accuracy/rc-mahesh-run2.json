@@ -1,0 +1,931 @@
+{
+ "status": "completed",
+ "elapsed": 539,
+ "result": {
+  "summary": {
+   "total_windows": 28,
+   "unique_configurations": 20,
+   "total_doors": 15
+  },
+  "openings": [
+   {
+    "tempered_glass": false,
+    "mark": "W01",
+    "raw_callout": null,
+    "room": "BEDRM 2",
+    "confidence": 0.84,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     372,
+     57,
+     403,
+     63
+    ],
+    "type": "Unknown",
+    "note": "Size and operation are not legible.",
+    "category": "window",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W02",
+    "raw_callout": "2030 SH\nTEMP GL",
+    "room": "BATH 2",
+    "confidence": 0.76,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     318,
+     157,
+     322,
+     185
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 36,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W03",
+    "raw_callout": "4030 XO",
+    "room": "FLEX RM",
+    "confidence": 0.88,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     357,
+     251,
+     379,
+     256
+    ],
+    "type": "Sliding",
+    "note": "",
+    "category": "window",
+    "height_in": 36,
+    "quantity": 1,
+    "width_in": 48
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W04",
+    "raw_callout": "2646 SH",
+    "room": null,
+    "confidence": 0.73,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     672,
+     199,
+     689,
+     204
+    ],
+    "type": "Single hung",
+    "note": "Room is not labeled; verify small callout.",
+    "category": "window",
+    "height_in": 54,
+    "quantity": 1,
+    "width_in": 30
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W05",
+    "raw_callout": null,
+    "room": "CLOSET",
+    "confidence": 0.85,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     821,
+     34,
+     844,
+     40
+    ],
+    "type": "Unknown",
+    "note": "Size and operation are not legible.",
+    "category": "window",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W06",
+    "raw_callout": "2030 SH\nTEMP GL",
+    "room": "MSTR BATH",
+    "confidence": 0.72,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     868,
+     182,
+     873,
+     204
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 36,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W07",
+    "raw_callout": "TEMP GL",
+    "room": "MSTR BATH",
+    "confidence": 0.65,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     879,
+     220,
+     884,
+     245
+    ],
+    "type": "Unknown",
+    "note": "Only the glass note is legible; verify size and operation.",
+    "category": "window",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W08",
+    "raw_callout": "2030 SH\nTEMP GL",
+    "room": "MSTR BATH",
+    "confidence": 0.72,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     868,
+     260,
+     873,
+     283
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 36,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W09",
+    "raw_callout": "2040 SH\nTEMP GL",
+    "room": "MSTR BATH",
+    "confidence": 0.83,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     780,
+     296,
+     797,
+     302
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 48,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W10",
+    "raw_callout": "6050 XO",
+    "room": null,
+    "confidence": 0.83,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     714,
+     296,
+     740,
+     302
+    ],
+    "type": "Sliding",
+    "note": "Opening is in the unlabeled master-suite passage.",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 72
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W11",
+    "raw_callout": "2040 SH\nTEMP GL",
+    "room": "PANTRY",
+    "confidence": 0.74,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     702,
+     322,
+     707,
+     349
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 48,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W12",
+    "raw_callout": "2040 XO\nTEMP GL",
+    "room": "BATH 3",
+    "confidence": 0.73,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     333,
+     390,
+     338,
+     416
+    ],
+    "type": "Sliding",
+    "note": "",
+    "category": "window",
+    "height_in": 48,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W13",
+    "raw_callout": "3060 SH",
+    "room": "BEDRM 3",
+    "confidence": 0.8,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     333,
+     428,
+     338,
+     454
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 72,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W14",
+    "raw_callout": "3060 SH",
+    "room": "BEDRM 3",
+    "confidence": 0.8,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     333,
+     507,
+     338,
+     528
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 72,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W15",
+    "raw_callout": "2030 SH\nTEMP GL",
+    "room": "POOJA",
+    "confidence": 0.71,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     387,
+     548,
+     392,
+     578
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 36,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W16",
+    "raw_callout": "5050 XO",
+    "room": "THEATRE",
+    "confidence": 0.89,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     318,
+     612,
+     323,
+     649
+    ],
+    "type": "Sliding",
+    "note": "",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 60
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W17",
+    "raw_callout": "3050 SH",
+    "room": "THEATRE",
+    "confidence": 0.9,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     341,
+     761,
+     359,
+     768
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W18",
+    "raw_callout": "3050 SH",
+    "room": "THEATRE",
+    "confidence": 0.9,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     368,
+     761,
+     385,
+     768
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W19",
+    "raw_callout": null,
+    "room": "STUDY 1",
+    "confidence": 0.89,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     426,
+     740,
+     460,
+     747
+    ],
+    "type": "Unknown",
+    "note": "No legible size or operation callout.",
+    "category": "window",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W20",
+    "raw_callout": "3080 FX",
+    "room": "STUDY 1",
+    "confidence": 0.76,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     477,
+     631,
+     482,
+     651
+    ],
+    "type": "Picture",
+    "note": "",
+    "category": "window",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W21",
+    "raw_callout": "3080 FX",
+    "room": "STUDY 1",
+    "confidence": 0.76,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     477,
+     672,
+     482,
+     694
+    ],
+    "type": "Picture",
+    "note": "",
+    "category": "window",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W22",
+    "raw_callout": "3080 FX",
+    "room": "STUDY 2",
+    "confidence": 0.76,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     629,
+     630,
+     634,
+     651
+    ],
+    "type": "Picture",
+    "note": "",
+    "category": "window",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W23",
+    "raw_callout": "3080 FX",
+    "room": "STUDY 2",
+    "confidence": 0.76,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     629,
+     671,
+     634,
+     694
+    ],
+    "type": "Picture",
+    "note": "",
+    "category": "window",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W24",
+    "raw_callout": "6050 XO",
+    "room": "STUDY 2",
+    "confidence": 0.93,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     654,
+     713,
+     687,
+     719
+    ],
+    "type": "Sliding",
+    "note": "",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 72
+   },
+   {
+    "tempered_glass": true,
+    "mark": "W25",
+    "raw_callout": "2040 SH\nTEMP GL",
+    "room": "BATH 4",
+    "confidence": 0.72,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     629,
+     562,
+     634,
+     585
+    ],
+    "type": "Single hung",
+    "note": "",
+    "category": "window",
+    "height_in": 48,
+    "quantity": 1,
+    "width_in": 24
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W26",
+    "raw_callout": null,
+    "room": "UTILITY",
+    "confidence": 0.55,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     611,
+     442,
+     617,
+     474
+    ],
+    "type": "Unknown",
+    "note": "Unlabeled opening at loggia; verify symbol, size and operation.",
+    "category": "window",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W27",
+    "raw_callout": "3050 FX",
+    "room": "GARAGE",
+    "confidence": 0.87,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     756,
+     761,
+     774,
+     768
+    ],
+    "type": "Picture",
+    "note": "",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "W28",
+    "raw_callout": "3050 FX",
+    "room": "GARAGE",
+    "confidence": 0.87,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     782,
+     761,
+     800,
+     768
+    ],
+    "type": "Picture",
+    "note": "",
+    "category": "window",
+    "height_in": 60,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": true,
+    "mark": "D01",
+    "raw_callout": "6080 SL GL DR\nDOORS-TEMP GL",
+    "room": "FLEX RM",
+    "confidence": 0.73,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     421,
+     177,
+     425,
+     222
+    ],
+    "type": "Sliding door",
+    "note": "",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 72
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D02",
+    "raw_callout": "3080",
+    "room": "FLEX RM",
+    "confidence": 0.8,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     379,
+     251,
+     411,
+     291
+    ],
+    "type": "Hinged door",
+    "note": "",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": true,
+    "mark": "D03",
+    "raw_callout": "200100 POCKET\nDOORS-TEMP GL",
+    "room": "GREAT RM",
+    "confidence": 0.84,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     431,
+     240,
+     562,
+     254
+    ],
+    "type": "Sliding door",
+    "note": "",
+    "category": "door",
+    "height_in": 120,
+    "quantity": 1,
+    "width_in": 240
+   },
+   {
+    "tempered_glass": true,
+    "mark": "D04",
+    "raw_callout": "6080 SL GL DR\nTEMP GL",
+    "room": "BREAKFAST",
+    "confidence": 0.76,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     562,
+     180,
+     568,
+     241
+    ],
+    "type": "Sliding door",
+    "note": "",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 72
+   },
+   {
+    "tempered_glass": true,
+    "mark": "D05",
+    "raw_callout": "12080 BIFOLD\nDOORS-TEMP GL",
+    "room": "BREAKFAST",
+    "confidence": 0.82,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     572,
+     152,
+     651,
+     180
+    ],
+    "type": "Unknown",
+    "note": "Bifold operation is not available in the permitted type list.",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 144
+   },
+   {
+    "tempered_glass": true,
+    "mark": "D06",
+    "raw_callout": "120100 SL GL DR\nTEMP GL",
+    "room": "MASTER BEDRM",
+    "confidence": 0.87,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     715,
+     109,
+     781,
+     115
+    ],
+    "type": "Sliding door",
+    "note": "",
+    "category": "door",
+    "height_in": 120,
+    "quantity": 1,
+    "width_in": 144
+   },
+   {
+    "tempered_glass": true,
+    "mark": "D07",
+    "raw_callout": "120100 BIFOLD\nDOORS-TEMP GL",
+    "room": "GREAT RM",
+    "confidence": 0.86,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     537,
+     419,
+     612,
+     445
+    ],
+    "type": "Unknown",
+    "note": "Bifold operation is not available in the permitted type list.",
+    "category": "door",
+    "height_in": 120,
+    "quantity": 1,
+    "width_in": 144
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D08",
+    "raw_callout": null,
+    "room": "FOYER",
+    "confidence": 0.94,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     497,
+     442,
+     523,
+     476
+    ],
+    "type": "Hinged door",
+    "note": "No legible size callout for the entry door.",
+    "category": "door",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D09",
+    "raw_callout": "3080",
+    "room": "PATIO 3",
+    "confidence": 0.77,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     684,
+     388,
+     707,
+     421
+    ],
+    "type": "Hinged door",
+    "note": "",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D10",
+    "raw_callout": null,
+    "room": "GARAGE",
+    "confidence": 0.84,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     778,
+     447,
+     799,
+     473
+    ],
+    "type": "Hinged door",
+    "note": "Exterior service-door size callout is not legible.",
+    "category": "door",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D11",
+    "raw_callout": "3080",
+    "room": "STUDY 1",
+    "confidence": 0.86,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     462,
+     649,
+     482,
+     675
+    ],
+    "type": "Hinged door",
+    "note": "",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D12",
+    "raw_callout": "3080",
+    "room": "STUDY 2",
+    "confidence": 0.86,
+    "needs_review": false,
+    "egress": false,
+    "box": [
+     629,
+     649,
+     650,
+     675
+    ],
+    "type": "Hinged door",
+    "note": "",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 36
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D13",
+    "raw_callout": "18' X 8' OVR'D DR",
+    "room": "GARAGE",
+    "confidence": 0.77,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     843,
+     468,
+     851,
+     595
+    ],
+    "type": "Unknown",
+    "note": "Overhead operation is not available in the permitted type list.",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 216
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D14",
+    "raw_callout": "18' X 8' OVR'D DR",
+    "room": "GARAGE",
+    "confidence": 0.77,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     843,
+     619,
+     851,
+     740
+    ],
+    "type": "Unknown",
+    "note": "Overhead operation is not available in the permitted type list.",
+    "category": "door",
+    "height_in": 96,
+    "quantity": 1,
+    "width_in": 216
+   },
+   {
+    "tempered_glass": false,
+    "mark": "D15",
+    "raw_callout": null,
+    "room": "COURTYARD",
+    "confidence": 0.82,
+    "needs_review": true,
+    "egress": false,
+    "box": [
+     544,
+     766,
+     572,
+     798
+    ],
+    "type": "Hinged door",
+    "note": "Courtyard entry door or gate has no size or material callout.",
+    "category": "door",
+    "height_in": null,
+    "quantity": 1,
+    "width_in": null
+   }
+  ],
+  "sheet": "floor plan"
+ },
+ "model": "gpt-6-astra",
+ "usage": {
+  "input_tokens": 3785,
+  "input_tokens_details": {
+   "cache_write_tokens": 0,
+   "cached_tokens": 3782
+  },
+  "output_tokens": 11152,
+  "output_tokens_details": {
+   "reasoning_tokens": 5602
+  },
+  "total_tokens": 14937
+ },
+ "seconds": 541.473
+}

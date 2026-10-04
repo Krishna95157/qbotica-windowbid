@@ -1,0 +1,23 @@
+.stg-who{margin:10px 0 0;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.st.vf{color:var(--green)}
+.rfq-help{margin:0;font-size:.8rem;color:var(--ink-2);text-align:right}
+.sv-ff li.nx{color:var(--ink)}
+.sv-ff li.nx::before{border-color:var(--orange);background:var(--paper)}
+.sv-ff li.nx .ck{display:none}
+.sv-ff li.nx::after{content:"Next";font-size:.62rem;font-weight:600;letter-spacing:.1em;color:var(--orange-ink)}
+/* theme switch: circular reveal from the point where the W ended (or the footer switch) */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){animation:themeReveal .75s cubic-bezier(.6,0,.2,1)}
+@keyframes themeReveal{from{clip-path:circle(0 at var(--tx,50%) var(--ty,50%))}to{clip-path:circle(160vmax at var(--tx,50%) var(--ty,50%))}}
+.foot-n .theme-sw{display:inline-flex;align-items:center;gap:10px;margin-top:8px}
+.theme-sw i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);background:linear-gradient(90deg,var(--ink) 50%,transparent 50%)}
+.theme-hint{display:none;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-top:-4px}
+.theme-hint b{color:var(--orange-ink);font-weight:600}
+@media (hover:hover) and (pointer:fine){.theme-hint{display:block}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* drawing evidence on the opening card (raw callout as written on the plan) */
+.d-raw{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 0;padding:9px 12px;border:1px dashed var(--rule-2);border-radius:2px;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.d-raw b{font-weight:600;color:var(--ink);letter-spacing:.04em;text-transform:none;font-size:.78rem}
+.d-raw i{font-style:normal;padding:2px 6px;border:1px solid var(--orange);color:var(--orange-ink);font-size:.6rem}

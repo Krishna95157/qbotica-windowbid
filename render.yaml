@@ -1,0 +1,21 @@
+# One-click deploy on Render (https://render.com): New → Blueprint → pick this repo.
+# Render will ask for OPENAI_API_KEY (sync: false keeps it out of the repo).
+services:
+  - type: web
+    name: qbotica-windowbid
+    runtime: node
+    plan: free
+    buildCommand: node --version
+    startCommand: node server/server.mjs
+    healthCheckPath: /api/health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-6-astra
+      - key: OPENAI_IMAGE_DETAIL
+        value: high
+      - key: EXTRACTIONS_PER_HOUR
+        value: "20"
+      - key: NODE_VERSION
+        value: "20"

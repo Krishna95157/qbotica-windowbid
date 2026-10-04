@@ -1,0 +1,46 @@
+/* status pills shared */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:600;padding:2px 8px 2px 7px;border-radius:20px;white-space:nowrap;border:1px solid transparent}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.st-ready{color:var(--orange-ink);background:var(--orange-tint)}
+.pill.st-review{color:var(--orange-ink);border:1px dashed var(--orange)}
+.pill.st-missing{color:var(--orange-ink);border:1px dashed var(--orange);background:repeating-linear-gradient(135deg,var(--orange-tint) 0 4px,transparent 4px 8px)}
+.pill.st-ok{color:var(--green);background:var(--green-tint)}
+.bar{flex:1;height:3px;background:var(--rule);position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--orange)}
+.bar.ok i{background:var(--green)}
+.prog{display:flex;align-items:center;gap:12px;font-size:.82rem;color:var(--ink-2)}
+.prog .bar i{background:var(--green)}
+
+/* ---------- drafting cursor ---------- */
+#trail{position:fixed;inset:0;z-index:298;pointer-events:none;display:none}
+#cur,#curBr{display:none}
+html.cc #trail,html.cc #cur,html.cc #curBr{display:block}
+html.cc,html.cc *{cursor:none!important}
+html.cc input,html.cc textarea,html.cc select{cursor:auto!important}
+#cur{position:fixed;left:0;top:0;z-index:300;pointer-events:none;width:0;height:0;color:var(--ink)}
+#cur.inv{color:#EAE8DC}
+.c-dot{position:absolute;left:-2px;top:-2px;width:4px;height:4px;background:currentColor;transition:opacity .15s}
+.c-x{position:absolute;left:-9px;top:-9px;width:18px;height:18px;opacity:0;transform:scale(.5);transition:opacity .15s,transform .2s}
+.c-x::before,.c-x::after{content:"";position:absolute;background:currentColor}
+.c-x::before{left:0;right:0;top:8.5px;height:1px}
+.c-x::after{top:0;bottom:0;left:8.5px;width:1px}
+.c-co{position:absolute;left:12px;top:-32px;font-family:var(--mono);font-size:9.5px;line-height:1.3;white-space:pre;opacity:0;transition:opacity .2s}
+.c-tag{position:absolute;left:12px;top:10px;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;white-space:nowrap;opacity:0;transform:translateY(-3px);transition:opacity .15s,transform .2s}
+#cur.inv .c-tag{background:#EAE8DC;color:#282828}
+#cur.insp .c-dot{opacity:0}
+#cur.insp .c-x{opacity:1;transform:none}
+#cur.insp .c-co{opacity:.6}
+#cur.snap .c-dot,#cur.snap .c-x,#cur.snap .c-co{opacity:0}
+#cur.tag .c-tag{opacity:1;transform:none}
+#cur.tag .c-co{opacity:0}
+#curBr{position:fixed;left:0;top:0;z-index:299;pointer-events:none;opacity:0}
+#curBr .bi{position:absolute;inset:0}
+#curBr.press .bi{animation:press .18s ease-out}
+@keyframes press{50%{transform:scale(.78)}}
+#curBr i{position:absolute;width:9px;height:9px;border:0 solid var(--orange)}
+#curBr i:nth-child(1){left:0;top:0;border-left-width:2px;border-top-width:2px}
+#curBr i:nth-child(2){right:0;top:0;border-right-width:2px;border-top-width:2px}
+#curBr i:nth-child(3){right:0;bottom:0;border-right-width:2px;border-bottom-width:2px}
+#curBr i:nth-child(4){left:0;bottom:0;border-left-width:2px;border-bottom-width:2px}
+.c-info{position:absolute;left:0;top:100%;margin-top:6px;background:var(--orange);color:var(--on-orange);font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.05em;line-height:1.35;padding:4px 7px;white-space:pre}
+
