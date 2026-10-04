@@ -363,4 +363,13 @@ The build is lossless: splitting the original single-file page into `src/` and r
 - **`docs/DESIGN.md`**: every design decision and the reason for it, page by page, plus the checklist for adding new work.
 - **`docs/PROJECT-NOTES.md`**: product details, the full demo data (openings, bids, prices, dates), the wording rule and version history.
 
+## 14. Contributors
+
+| | |
+|---|---|
+| [@Krishna95157](https://github.com/Krishna95157) | Vamsi Krishna |
+| [@x-anudeep](https://github.com/x-anudeep) | Anudeep |
+
+---
+
 © 2026 qBotica · WindowBid. Internal prototype; not licensed for redistribution.
