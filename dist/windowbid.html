@@ -18,6 +18,7 @@
   --brand:#173B31; --brand-2:#235443; --on-brand:#EAE8DC;
   --green:#557D68; --green-tint:rgba(85,125,104,.16); --on-green:#fff; --green-hi:#8FC2A6;
   --orange:#FF7805; --orange-ink:#A34A00; --orange-tint:rgba(255,120,5,.14); --on-orange:#1F1F1F;
+  --sel:#1F5FD6; --sel-ink:#174BAA; --sel-tint:rgba(31,95,214,.16); --on-sel:#FFFFFF;   /* the opening selected in the demo */
   --q-orange:#FF7805; --q-ink:#000000;
   --plan:#282828; --plan-2:#8C8B84; --blend:multiply;
   --dark:#282828; --dark-ink:#EAE8DC; --dark-ink-2:rgba(234,232,220,.6); --dark-rule:rgba(234,232,220,.18);
@@ -40,6 +41,7 @@
     --brand:#2E6B57; --brand-2:#3A7F68; --on-brand:#F1EFE4;
     --green:#86B29B; --green-tint:rgba(134,178,155,.16); --on-green:#1A1A18;
     --orange:#FF8A2A; --orange-ink:#FFA864; --orange-tint:rgba(255,138,42,.15); --on-orange:#1A0E00; --q-ink:#F1EFE4;
+    --sel:#5C9DFF; --sel-ink:#8DBBFF; --sel-tint:rgba(92,157,255,.2); --on-sel:#0B1730;
     --plan:#DAD8CC; --plan-2:#77766F; --blend:screen;
     --dark:#111110; --cta:#173B31;
     color-scheme:dark;
@@ -53,6 +55,7 @@
   --brand:#2E6B57; --brand-2:#3A7F68; --on-brand:#F1EFE4;
   --green:#86B29B; --green-tint:rgba(134,178,155,.16); --on-green:#1A1A18;
   --orange:#FF8A2A; --orange-ink:#FFA864; --orange-tint:rgba(255,138,42,.15); --on-orange:#1A0E00; --q-ink:#F1EFE4;
+  --sel:#5C9DFF; --sel-ink:#8DBBFF; --sel-tint:rgba(92,157,255,.2); --on-sel:#0B1730;
   --plan:#DAD8CC; --plan-2:#77766F; --blend:screen;
   --dark:#111110; --cta:#173B31;
   color-scheme:dark;
@@ -1011,6 +1014,378 @@ kbd{font-family:var(--mono);font-size:.7rem;border:1px solid var(--rule-2);borde
 .d-raw{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 0;padding:9px 12px;border:1px dashed var(--rule-2);border-radius:2px;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .d-raw b{font-weight:600;color:var(--ink);letter-spacing:.04em;text-transform:none;font-size:.78rem}
 .d-raw i{font-style:normal;padding:2px 6px;border:1px solid var(--orange);color:var(--orange-ink);font-size:.6rem}
+/* drawing sets: plan sheet switcher on the viewer, and where each fact came from */
+.vsheets{position:absolute;left:12px;top:12px;display:flex;gap:1px;max-width:calc(100% - 24px);overflow-x:auto;background:var(--rule);border:1px solid var(--rule);border-radius:2px}
+.vsheets button{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:0;background:var(--card);font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.vsheets button:hover{background:var(--paper)}
+.vsheets button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.vsheets small{font-size:.6rem;color:var(--orange-ink)}
+.vsheets button[aria-pressed="true"] small{color:var(--orange)}
+.d-src{display:flex;gap:10px;margin:12px 0 0;padding:9px 12px;border:1px solid var(--rule);border-radius:2px;background:var(--paper);font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.d-src ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;text-transform:none;letter-spacing:.02em;font-size:.74rem;color:var(--ink)}
+/* the selected opening: blueprint blue, apart from orange (machine-read) and green (verified) */
+.det.sel .det-box{stroke:var(--sel);fill:var(--sel-tint);stroke-width:2.5}
+.det.sel .corner{stroke:var(--sel)}
+.det.sel .chip rect{fill:var(--sel)}
+.det.sel .chip text{fill:var(--on-sel)}
+.list tr.sel td,.list tr.sel.okr td{background:var(--sel-tint)}
+.list tr.sel td:first-child{color:var(--sel-ink);font-weight:600}
+.grp.sel{border-color:var(--sel);box-shadow:inset 0 0 0 1px var(--sel)}
+.d-head .d-mark{color:var(--sel-ink)}
+.vlegend i.sl{border-color:var(--sel);background:var(--sel-tint)}
+/* the plain-words summary at the top of an opening's card */
+.d-sum{margin:12px 0 4px;padding:11px 13px;border-left:3px solid var(--sel);background:var(--sel-tint);border-radius:2px}
+.d-sum span{display:block;margin-bottom:4px;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sel-ink)}
+.d-sum p{margin:0;font-size:.9rem;line-height:1.5;color:var(--ink)}
+.d-sum b{font-weight:600}
+/* "All windows": every opening with a preview of its spot on the plan */
+.d-nav .d-all{width:auto;padding:0 10px;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase}
+.pv-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.pv-head b{font-family:var(--disp);font-stretch:80%;font-weight:650;text-transform:uppercase;font-size:1.05rem}
+.pv-head span{font-size:.82rem;color:var(--ink-3)}
+.pv-head button{margin-left:auto}
+.pv-defs{position:absolute;width:0;height:0;overflow:hidden}
+.pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:min(62vh,640px);overflow:auto;padding:2px}
+.pv-card{display:flex;flex-direction:column;gap:4px;min-width:0;padding:6px;text-align:left;border:1px solid var(--rule);background:var(--paper);border-radius:2px;color:var(--ink);cursor:pointer}
+.pv-card:hover{border-color:var(--ink-3)}
+.pv-card.sel{border-color:var(--sel);box-shadow:inset 0 0 0 1px var(--sel)}
+.pv-img{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--plan-bg);border:1px solid var(--rule-soft);overflow:hidden}
+.pv-img svg{width:100%;height:100%;display:block}
+.pv-hl{fill:var(--sel-tint);stroke:var(--sel);stroke-width:2.5;vector-effect:non-scaling-stroke}
+.pv-none{padding:8px;font-size:.72rem;color:var(--ink-3);text-align:center}
+.pv-meta{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.pv-meta b{font-family:var(--mono);font-size:.82rem}
+.pv-meta .pill{font-size:.6rem}
+.pv-line{font-size:.76rem;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-line i{font-style:normal;color:var(--orange-ink)}
+/* the Pre-processed tab's note above its list */
+.pre-note{margin:10px 0 6px;padding:9px 12px;border:1px dashed var(--rule-2);border-radius:2px;font-size:.84rem;line-height:1.45;color:var(--ink-2)}
+.pre-note b{color:var(--ink);font-weight:600}
+.pre-note .btn-text{margin-left:2px}
+/* one header that flips between grouped products and openings; double-click opens a product */
+.tabs #tabFlip{margin-right:0;display:inline-flex;align-items:baseline;gap:2px;cursor:pointer}
+.tabs #tabFlip .flip{font-style:normal;margin-left:10px;color:var(--ink-3);font-size:.9rem;transition:transform .25s}
+.tabs #tabFlip:hover .flip{color:var(--ink);transform:rotate(180deg)}
+.gwrap{margin-bottom:8px}
+.gwrap .grp{margin-bottom:0;user-select:none}
+.gwrap.open .grp{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.gsub{border:1px solid var(--sel);border-top:0;background:var(--card);padding:4px 8px 8px;animation:gsubIn .2s ease-out}
+.gsub .ttable th:nth-child(3),.gsub .ttable td:nth-child(3){display:none}
+@keyframes gsubIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.gsub{animation:none}}
+/* the floor plans being mapped in the background */
+.bg-note{margin:12px 0 0;padding:8px 12px;font-size:.82rem;line-height:1.45;color:var(--ink-2);border:1px dashed var(--rule);border-radius:2px;display:flex;gap:8px;align-items:baseline}
+.bg-note.done{border-style:solid;border-color:var(--sel);color:var(--ink)}
+.bg-note.failed{color:var(--ink-3)}
+.bg-note .spin{flex:none;width:9px;height:9px;border:2px solid var(--ink-3);border-top-color:transparent;border-radius:50%;animation:bgspin .8s linear infinite;transform:translateY(1px)}
+@keyframes bgspin{to{transform:translateY(1px) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.bg-note .spin{animation:none}}
+/* while the floor plans are mapped: a strip of every page over the viewer (checked one after another, the plan
+   being read with a scan line, a check when its windows are placed) */
+.vstrip{position:absolute;left:12px;top:52px;display:flex;gap:6px;max-width:calc(100% - 24px);overflow-x:auto;scrollbar-width:none;padding:6px;background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--rule);border-radius:2px;backdrop-filter:blur(4px);transition:opacity .4s,transform .4s}
+.vstrip::-webkit-scrollbar{display:none}
+.vsheets[hidden] + .vstrip{top:12px}
+.vstrip.out{opacity:0;transform:translateY(-4px)}
+.vt{position:relative;flex:none;height:44px;border:1px solid var(--rule);background:#fff;overflow:hidden;opacity:.55;transition:opacity .3s,border-color .3s,box-shadow .3s}
+.vt img{display:block;height:100%;width:auto}
+.vt em{position:absolute;left:0;bottom:0;font-style:normal;font-family:var(--mono);font-size:.5rem;letter-spacing:.04em;padding:1px 3px;background:var(--card);color:var(--ink-2)}
+.vstrip.sweep .vt{animation:vtcheck .35s ease both;animation-delay:calc(var(--i) * 45ms)}
+@keyframes vtcheck{0%{opacity:.25}45%{opacity:1;border-color:var(--sel)}100%{opacity:.55}}
+.vt.reading{opacity:1;border-color:var(--sel);box-shadow:0 0 0 1px var(--sel);animation:none}
+.vt .vt-scan{position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,var(--sel-tint),transparent);opacity:0}
+.vt.reading .vt-scan{opacity:1;animation:vtscan 1.4s ease-in-out infinite alternate}
+@keyframes vtscan{from{transform:translateX(-30%)}to{transform:translateX(260%)}}
+.vt.found{opacity:1;border-color:var(--green);box-shadow:0 0 0 1px var(--green);animation:none}
+.vt.found::after{content:"✓";position:absolute;right:2px;top:1px;font-size:.62rem;font-weight:700;color:var(--on-green);background:var(--green);border-radius:50%;width:13px;height:13px;display:grid;place-items:center;line-height:1}
+/* the products while the plan is being searched: a soft hairline running along each card */
+.groups .grp{position:relative;overflow:hidden}
+.groups.mapping .grp::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:28%;background:linear-gradient(90deg,transparent,var(--sel),transparent);opacity:.55;animation:grpseek 1.6s ease-in-out infinite;animation-delay:calc(var(--gi,0) * 120ms)}
+@keyframes grpseek{from{transform:translateX(-100%)}to{transform:translateX(360%)}}
+.grp .loc{grid-column:1;font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;color:var(--green);margin-top:4px;animation:pqup .35s ease both}
+.grp .loc.none{color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){
+  .vstrip.sweep .vt,.vt.reading .vt-scan{animation:none}
+  .vt .vt-scan{display:none}
+  .groups.mapping .grp::after{animation:none;width:100%;background:none;border-bottom:2px dotted var(--sel);opacity:.4}
+}
+/* ------------------------------------------------------------------
+   PROCURE — RFQ → Bids → Proposal → Purchase order (19-app-procure.js)
+   Documents, not dashboards: rules and whitespace instead of boxes; decision first, evidence on demand.
+   Motion: a short fade when a page opens, disclosures (~250 ms), selection and status changes. Nothing loops.
+------------------------------------------------------------------ */
+@keyframes pqup{from{opacity:0;transform:translateY(4px)}}          /* also used by the product location line (10-…css) */
+/* the preview notice: system context, not content */
+.wb-pv{margin:0 0 18px;font-size:.74rem;color:var(--ink-3)}
+.wb-pv b{font-weight:600;color:var(--ink-2)}
+.wb{max-width:900px;margin:0 auto}
+.wb-enter .wb{animation:wbin .3s ease both}
+@keyframes wbin{from{opacity:0;transform:translateY(6px)}}
+
+/* header: page title + reference, then the project */
+.wb-head{padding-bottom:22px;border-bottom:1px solid var(--ink)}
+.wb-head-r{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.wb-head h1{font-family:var(--disp);font-stretch:75%;font-weight:650;text-transform:uppercase;font-size:clamp(2.2rem,4.6vw,3.4rem);line-height:.9;margin:0}
+.wb-ref{font-family:var(--mono);font-size:.74rem;letter-spacing:.05em;color:var(--ink-3);white-space:nowrap}
+.wb-ref b{color:var(--ink);font-weight:600}
+.wb-proj{font-family:var(--disp);font-stretch:85%;font-weight:600;font-size:1.35rem;margin:16px 0 2px}
+.wb-sub{margin:0;font-size:.92rem;color:var(--ink-2)}
+
+/* numbers as document blocks: thin rule above, mono figure, condensed label */
+.wb-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:26px 0 6px}
+.wb-nums div{border-top:1px solid var(--rule);padding-top:12px}
+.wb-nums b{display:block;font-family:var(--mono);font-weight:500;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.wb-nums span{font-family:var(--disp);font-stretch:80%;font-weight:600;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+
+/* sections separated by rules, not boxes */
+.wb-blk{padding:20px 0;border-bottom:1px solid var(--rule)}
+.wb-k{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--ink-3);margin:0 0 6px}
+.wb-s{margin:0;font-size:.98rem}
+.wb-warn{color:var(--orange-ink);font-weight:600}
+.wb-note{font-size:.84rem;color:var(--ink-2);margin:0 0 12px}
+.wb-dim{color:var(--ink-3);font-size:.85rem}
+.wb-mono{font-family:var(--mono);font-size:.78rem;color:var(--ink-2);overflow-wrap:anywhere;margin:0}
+
+/* the disclosure: one pattern everywhere — "View product lines  12  ↓" */
+.wb-dis{margin-top:10px}
+.wb-dis-h{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;width:100%;padding:8px 0;font-size:.9rem;font-weight:600;color:var(--ink)}
+.wb-dis-h span{text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px;transition:text-decoration-color .2s}
+.wb-dis-h:hover span{text-decoration-color:var(--ink)}
+.wb-dis-h em{font-style:normal;font-family:var(--mono);font-size:.74rem;font-weight:500;color:var(--ink-3);margin-left:auto}
+.wb-dis-h i{width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);transition:transform .25s;flex:none}
+.wb-dis-h span + i{margin-left:auto}
+.wb-dis.open > .wb-dis-h i{transform:rotate(-135deg) translate(-2px,-2px)}
+.wb-dis-h:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.wb-dis-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
+.wb-dis.open > .wb-dis-b{grid-template-rows:1fr}
+.wb-dis-in{overflow:hidden;min-height:0}
+.wb-dis.open > .wb-dis-b > .wb-dis-in{padding:8px 0 4px}
+
+/* product lines: marks summarised, every mark one click away */
+.wb-lines{font-size:.9rem}
+.wb-line{display:grid;grid-template-columns:2.2em minmax(0,1.5fr) 6.2em 3.4em minmax(0,1.4fr);gap:12px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--rule-soft)}
+.wb-lh{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding:0 0 6px;border-bottom:1px solid var(--rule)}
+.wb-line .n,.wb-line .s,.wb-line .q{font-family:var(--mono);font-size:.82rem}
+.wb-line .q{font-weight:600}
+.wb-line .r{text-align:right}
+.wb-tag{font-style:normal;margin-left:8px;font-family:var(--mono);font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);padding:1px 5px;border-radius:2px;vertical-align:2px;white-space:nowrap}
+.wb-mk summary{cursor:pointer;list-style:none;font-size:.8rem;color:var(--ink-2)}
+.wb-mk summary::-webkit-details-marker{display:none}
+.wb-mk summary::after{content:" ›";color:var(--ink-3)}
+.wb-mk[open] summary::after{content:" ⌄"}
+.wb-mk p{margin:6px 0 0;font-family:var(--mono);font-size:.74rem;line-height:1.6;color:var(--ink-2)}
+@media (max-width:640px){
+  .wb-line{grid-template-columns:2em minmax(0,1fr) auto;grid-template-areas:"n p q" ". s s" ". mk mk";row-gap:2px}
+  .wb-line .n{grid-area:n}.wb-line .p{grid-area:p}.wb-line .q{grid-area:q}.wb-line .s{grid-area:s;text-align:left}.wb-line .wb-mk{grid-area:mk}
+  .wb-line .q::after{content:" openings";font-weight:400;color:var(--ink-3)}
+  .wb-lh{display:none}
+}
+
+/* requirement switches and recipient checkboxes */
+.wb-reqs{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+@media (max-width:640px){.wb-reqs{grid-template-columns:1fr}}
+.wb-req,.wb-mfr{position:relative;display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--rule-soft);cursor:pointer}
+.wb-req input,.wb-mfr input{position:absolute;opacity:0;pointer-events:none}
+.wb-req .sw{flex:none;position:relative;width:26px;height:15px;border-radius:10px;background:var(--rule);margin-top:3px;transition:background-color .25s}
+.wb-req .sw::after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;background:var(--card);transition:transform .25s cubic-bezier(.2,.75,.2,1)}
+.wb-req input:checked + .sw{background:var(--green)}
+.wb-req input:checked + .sw::after{transform:translateX(11px)}
+.wb-req .tx{transition:opacity .25s}
+.wb-req .tx b{display:block;font-size:.9rem;font-weight:600}
+.wb-req .tx span{display:block;font-size:.8rem;line-height:1.4;color:var(--ink-2);margin-top:2px}
+.wb-req:has(input:not(:checked)) .tx{opacity:.45}
+.wb-req input:focus-visible + .sw,.wb-mfr input:focus-visible + .box{outline:2px solid var(--orange);outline-offset:2px}
+.wb-mfrs{margin-top:4px}
+.wb-mfr{align-items:center}
+.wb-mfr .box{flex:none;width:18px;height:18px;border:1.5px solid var(--rule-2);border-radius:3px;display:grid;place-items:center;transition:background-color .2s,border-color .2s}
+.wb-mfr .box svg{width:14px;height:14px;fill:none;stroke:var(--on-brand);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14;stroke-dashoffset:14;transition:stroke-dashoffset .3s ease .05s}
+.wb-mfr input:checked + .box{background:var(--brand);border-color:var(--brand)}
+.wb-mfr input:checked + .box svg{stroke-dashoffset:0}
+.wb-mfr .nm{font-weight:600}
+.wb-mfr .nt{margin-left:auto;font-size:.82rem;color:var(--ink-3);text-align:right}
+@media (max-width:640px){.wb-mfr{flex-wrap:wrap}.wb-mfr .nt{margin-left:30px;width:100%;text-align:left}}
+.wb-date{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:1.4rem;font-weight:500;cursor:pointer}
+.wb-date input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.wb-date::after{content:"Change";font-family:var(--sans);font-size:.78rem;font-weight:600;text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px;color:var(--ink-2)}
+.wb-ta{width:100%;min-height:76px;resize:vertical;border:1px solid var(--rule-2);background:var(--paper);border-radius:2px;padding:9px 11px;font:inherit;font-size:.92rem;color:var(--ink)}
+
+/* the bottom action bar: back · context · one primary action — the same on every page */
+.wb-bar{position:sticky;bottom:0;z-index:5;margin:28px -4px 0;padding:0 4px;background:var(--paper)}
+.wb-bar-in{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid var(--ink)}
+.wb-bar-mid{margin-left:auto;font-size:.85rem;color:var(--ink-2);text-align:right}
+@media (max-width:640px){.wb-bar-in{flex-wrap:wrap}.wb-bar-mid{order:-1;width:100%;margin:0;text-align:left}.wb-bar-in .btn{margin-left:auto}}
+.wb-send{position:relative;overflow:hidden}
+.wb-send::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;background:var(--on-brand);opacity:.85;transform:scaleX(0);transform-origin:left}
+.wb-send.sending::after{animation:wbfill .6s cubic-bezier(.4,0,.2,1) forwards}
+.wb-send.sending .arr{opacity:0}
+@keyframes wbfill{to{transform:scaleX(1)}}
+
+/* ---------- bids: a comparison board ---------- */
+.wb-cmp{margin:22px 0 4px}
+.wb-bid{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1.6fr) 1fr 1fr 1fr;gap:12px;align-items:center;width:100%;padding:14px 12px;border-bottom:1px solid var(--rule-soft);border-left:2px solid transparent;transition:background-color .2s,border-color .2s}
+button.wb-bid{cursor:pointer}
+button.wb-bid:hover{background:var(--rule-soft)}
+button.wb-bid:focus-visible{outline:2px solid var(--orange);outline-offset:-2px}
+.wb-bid.sel{border-left-color:var(--sel);background:var(--sel-tint)}
+.wb-bh{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:0;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.wb-bid .nm b{display:block;font-size:1.05rem}
+.wb-bid .m{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wb-bid > span:not(.nm){text-align:right}
+.wb-bid.in > span{animation:wbfade .25s ease both}
+@keyframes wbfade{from{opacity:0}}
+.wb-await{grid-column:2 / -1;text-align:right;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.wb-bid.wait .nm b{color:var(--ink-3)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.wb-t{font-style:normal;font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);padding:1px 6px;border-radius:20px}
+.wb-t.best{color:var(--green);border-color:transparent;background:var(--green-tint)}
+.rq{font-family:var(--mono);font-weight:600}
+.rq.ok{color:var(--green)}
+.rq.x{color:var(--orange-ink)}
+.rq small{display:block;font-family:var(--sans);font-weight:400;font-size:.72rem;color:var(--orange-ink)}
+@media (max-width:640px){
+  .wb-bid{grid-template-columns:1fr auto;row-gap:4px}
+  .wb-bid > span:not(.nm){text-align:left}
+  .wb-bh{display:none}
+  .wb-bid .m{grid-column:2;grid-row:1;text-align:right}
+}
+.wb-ev{padding-top:8px}
+.wb-bids.reveal .wb-ev,.wb-bids.reveal .wb-opt,.wb-bids.reveal .wb-rec{animation:wbfade .35s ease both}
+.wb-bids .wb-rec.wb-swap{animation:wbswap .25s ease}
+@keyframes wbswap{from{opacity:.2}}
+.wb-scroll{overflow-x:auto}
+.wb-tbl{width:100%;border-collapse:collapse;font-size:.86rem;min-width:520px}
+.wb-tbl th{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:500;text-align:left;padding:0 10px 6px 0;border-bottom:1px solid var(--rule)}
+.wb-tbl td{padding:7px 10px 7px 0;border-bottom:1px solid var(--rule-soft)}
+.wb-tbl .r{text-align:right}
+.wb-tbl .m{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wb-tbl tr.tot td{border-bottom:0}
+.wb-rank{list-style:none;margin:0 0 12px;padding:0}
+.wb-rank li{display:grid;grid-template-columns:8em minmax(0,1fr) 2.4em;gap:12px;align-items:center;padding:6px 0}
+.wb-rank .nm{font-weight:600}
+.wb-rank .bar{display:block;height:5px;background:var(--rule-soft);border-radius:3px;overflow:hidden;position:relative}
+.wb-rank .bar i{position:static;display:block;width:100%;height:100%;border-radius:3px;background:var(--rule-2);transform-origin:left;transition:transform .4s cubic-bezier(.2,.75,.2,1),background-color .3s}
+.wb-rank li.best .bar i{background:var(--green)}
+.wb-rank .sc{font-family:var(--mono);text-align:right}
+.wb-opt{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:0}
+.wb-opt .wb-k{margin:0}
+.seg{display:inline-flex;flex-wrap:wrap;gap:2px;padding:3px;border:1px solid var(--rule);border-radius:999px}
+.seg button{border:0;background:none;border-radius:999px;padding:5px 11px;font:inherit;font-size:.8rem;color:var(--ink-2);cursor:pointer;transition:background-color .25s,color .25s}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-checked="true"]{background:var(--ink);color:var(--paper)}
+.seg button:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.wb-rec{border-top:1px solid var(--ink);padding:22px 0 4px}
+
+.wb-rec h2{font-family:var(--disp);font-stretch:80%;font-weight:650;text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1;margin:4px 0 12px}
+.wb-pts{list-style:none;margin:0;padding:0}
+.wb-pts li{padding:3px 0 3px 18px;position:relative}
+.wb-pts li::before{content:"";position:absolute;left:0;top:.75em;width:8px;height:1px;background:var(--ink-3)}
+.wb-why{margin:0;padding-left:18px;font-size:.88rem;color:var(--ink-2)}
+.wb-why li{padding:2px 0}
+.wb-why b{color:var(--ink)}
+
+/* the leveled specification table (inside "Compare specifications") */
+.bd-wrap{overflow-x:auto}
+.bd-cmp{width:100%;min-width:620px;border-collapse:collapse;font-size:.86rem}
+.bd-cmp th,.bd-cmp td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--rule-soft);transition:background-color .2s,box-shadow .3s}
+.bd-cmp thead th{vertical-align:bottom;border-bottom:1px solid var(--rule)}
+.bd-cmp thead th:first-child,.bd-cmp tbody th{text-align:left;font-weight:500;color:var(--ink-2)}
+.bd-cmp thead th b{display:block;font-size:.92rem;color:var(--ink)}
+.bd-cmp thead th span{font-size:.72rem;font-weight:400;color:var(--ink-3)}
+.bd-cmp tbody th[scope="row"]{padding-left:24px}
+.bd-cmp tbody th small,.bd-cmp td small{display:block;font-size:.7rem;font-weight:400;color:var(--ink-3)}
+.bd-cmp .m{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.bd-gh th,.bd-gh td{background:var(--paper-2)}
+.bd-gh button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--ink)}
+.bd-gh button:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.bd-gh button i{width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .25s}
+.bd-g.open .bd-gh button i{transform:rotate(45deg) translate(-1px,-1px)}
+.bd-gh td > *{transition:opacity .25s}
+.bd-g.open .bd-gh td > *{opacity:0}
+.bd-g tr:not(.bd-gh){display:none}
+.bd-g.open tr:not(.bd-gh){display:table-row}
+.bd-cmp td.ok::after,.bd-cmp td.miss::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:8px;vertical-align:1px;background:var(--green)}
+.bd-cmp td.miss{color:var(--orange-ink)}
+.bd-cmp td.miss::after{background:var(--orange)}
+.bd-cmp td.best{color:var(--green);font-weight:600}
+.pill-ok,.pill-x{display:inline-block;font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.pill-ok{background:var(--green-tint);color:var(--green)}
+.pill-x{background:var(--orange-tint);color:var(--orange-ink)}
+.bd-cmp[data-hc="0"] [data-c="0"],.bd-cmp[data-hc="1"] [data-c="1"],.bd-cmp[data-hc="2"] [data-c="2"]{background:var(--rule-soft)}
+.bd-cmp[data-best="0"] thead [data-c="0"],.bd-cmp[data-best="1"] thead [data-c="1"],.bd-cmp[data-best="2"] thead [data-c="2"]{box-shadow:inset 0 3px 0 var(--green)}
+
+/* ---------- proposal: the most finished document ---------- */
+.wb-prop{max-width:1080px}
+.pp-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
+@media (max-width:900px){.pp-grid{grid-template-columns:1fr}}
+.pp-doc{background:var(--plan-bg);border:1px solid var(--rule);padding:clamp(28px,5vw,64px)}
+.pp-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--rule);padding-bottom:12px}
+.pp-top .wb-k{margin:0}
+.pp-proj{font-family:var(--disp);font-stretch:75%;font-weight:650;text-transform:uppercase;font-size:clamp(2.2rem,5vw,3.6rem);line-height:.92;margin:36px 0 6px}
+.pp-sub{margin:0;color:var(--ink-2)}
+.pp-price{margin:52px 0 10px}
+.pp-price b{display:block;font-family:var(--disp);font-stretch:72%;font-weight:650;font-size:clamp(3.4rem,8vw,6rem);line-height:.9;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pp-price span{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.pp-facts{margin:0 0 36px;font-size:1rem;color:var(--ink-2)}
+.pp-doc .wb-dis{border-top:1px solid var(--rule);padding-top:6px}
+.pp-from{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);font-size:.85rem}
+.pp-from span{color:var(--ink-3)}
+.pp-state{margin:22px 0 0;font-size:.92rem;color:var(--ink-2)}
+.pp-state.ok{color:var(--green);font-weight:600;animation:wbfade .35s ease}
+.pp-state i{font-style:normal;margin-right:6px}
+.pp-priv{background:var(--paper-2);border:1px dashed var(--rule-2);padding:20px;position:sticky;top:16px}
+@media (max-width:900px){.pp-priv{position:static}}
+.pp-lock{margin:0 0 14px;font-size:.78rem;color:var(--ink-3)}
+.pp-led{margin:0}
+.pp-led div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--rule-soft);font-size:.86rem}
+.pp-led dt{color:var(--ink-2)}
+.pp-led dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.pp-led .sum{border-bottom:1px solid var(--ink);font-weight:600}
+.pp-led .sum dt{color:var(--ink)}
+.pp-led.sm div{font-size:.8rem}
+.pp-slider{display:block;margin:16px 0 4px;font-size:.82rem;color:var(--ink-2)}
+.pp-slider span{display:flex;justify-content:space-between}
+.pp-slider output{font-family:var(--mono);color:var(--ink);font-weight:600}
+.pp-slider input{width:100%;margin-top:6px;accent-color:var(--brand)}
+
+/* ---------- purchase order: status first ---------- */
+.po-now,.po-done{padding:26px 0 18px;border-bottom:1px solid var(--rule)}
+.po-st{font-family:var(--disp);font-stretch:75%;font-weight:650;text-transform:uppercase;font-size:clamp(2.2rem,5vw,3.4rem);line-height:.92;margin:2px 0 6px}
+.po-exp{margin-top:16px}
+.po-exp .wb-k{display:block;margin:0}
+.po-exp b{font-family:var(--mono);font-size:1.25rem;font-weight:500}
+.po-ok{font-family:var(--disp);font-stretch:75%;font-weight:650;text-transform:uppercase;font-size:clamp(2.2rem,5vw,3.4rem);line-height:.92;margin:0 0 8px;color:var(--green);animation:wbfade .35s ease}
+.po-ok i{font-style:normal}
+.po-track{list-style:none;margin:0;padding:24px 0 22px;display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule)}
+.po-track li{position:relative;padding-top:20px;font-size:.84rem}
+.po-track li::before{content:"";position:absolute;left:0;right:0;top:5px;height:2px;background:var(--rule)}
+.po-track li.done::before{background:var(--green)}
+.po-track li.cur::before{background:linear-gradient(90deg,var(--green) 50%,var(--rule) 50%)}
+.po-track i{position:absolute;left:0;top:0;width:12px;height:12px;border-radius:50%;border:2px solid var(--rule-2);background:var(--paper);transition:background-color .3s,border-color .3s}
+.po-track li.done i{background:var(--green);border-color:var(--green)}
+.po-track li.cur i{border-color:var(--ink);background:var(--ink)}
+.po-track b{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.po-track li.next b{color:var(--ink-3)}
+.po-track span{color:var(--ink-2)}
+.po-track li.next span{color:var(--ink-3)}
+@media (max-width:640px){
+  .po-track{grid-template-columns:1fr;row-gap:16px}
+  .po-track li{padding:0 0 0 24px}
+  .po-track li::before{left:5px;right:auto;top:14px;bottom:-16px;width:2px;height:auto}
+  .po-track li:last-child::before{display:none}
+}
+.po-hist{list-style:none;margin:0 0 10px;padding:0}
+.po-hist li{display:grid;grid-template-columns:1.4em minmax(0,1fr) auto;gap:2px 10px;padding:7px 0;border-bottom:1px solid var(--rule-soft);font-size:.88rem}
+.po-hist i{font-style:normal}
+.po-hist li.ok i{color:var(--green)}
+.po-hist li.est{color:var(--ink-3)}
+.po-hist li.est b{font-weight:500}
+.po-hist span{font-family:var(--mono);font-size:.8rem}
+.po-hist small{grid-column:2 / -1;color:var(--ink-3);font-size:.78rem}
+
+@media (prefers-reduced-motion:reduce){
+  .wb-enter .wb,.wb-bids .wb-rec.wb-swap,.wb-bid.in > span,.wb-bids.reveal .wb-ev,.wb-bids.reveal .wb-opt,.wb-bids.reveal .wb-rec,.wb-rec.swap,.pp-state.ok,.po-ok{animation:none}
+  .wb-dis-b,.wb-rank .bar i,.wb-req .sw,.wb-req .sw::after,.wb-mfr .box svg{transition:none}
+  .wb-send.sending::after{animation:none;transform:scaleX(1)}
+}
 </style>
 </head>
 <body>
@@ -1408,7 +1783,7 @@ kbd{font-family:var(--mono);font-size:.7rem;border:1px solid var(--rule-2);borde
     <section class="stage" data-stage="upload">
       <div class="up">
         <h1>Create a takeoff</h1>
-        <p>Upload an architectural plan. WindowBid finds the windows and doors, reads their marks, sizes and types, and lays them out for you to review.</p>
+        <p>Upload an architectural plan or a full drawing set. WindowBid finds the windows, reads their marks, sizes and types, and lays them out for you to review.</p>
         <label class="drop" id="drop" data-cursor="Upload">
           <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><rect x="8" y="6" width="34" height="44" stroke="currentColor" stroke-width="1.5"/><path d="M14 16h22M14 22h22M14 28h12" stroke="currentColor" stroke-width="1.5"/><rect x="28" y="30" width="20" height="20" style="fill:var(--paper);stroke:var(--orange)" stroke-width="1.5"/><path d="M38 44v-9m-4 4 4-4 4 4" style="stroke:var(--orange)" stroke-width="1.5"/></svg>
           <strong>Drop a plan here or browse files</strong>
@@ -1421,7 +1796,7 @@ kbd{font-family:var(--mono);font-size:.7rem;border:1px solid var(--rule-2);borde
           <span class="thumb"><svg id="thumbSvg" viewBox="0 0 1000 720" aria-hidden="true"></svg></span>
           <span><b>Use the sample plan</b><span>A1.0 Floor plan, Demo Residence. Seven rooms, twelve exterior openings. Runs instantly.</span></span>
         </button>
-        <p class="looks">WindowBid looks for <b>windows</b>, <b>doors</b>, <b>opening marks</b>, <b>sizes</b> and <b>room locations</b>.</p>
+        <p class="looks">WindowBid looks for <b>windows</b>, <b>window marks</b>, <b>sizes</b>, <b>types</b> and <b>room locations</b>. Doors are left out.</p>
       </div>
     </section>
 
@@ -1438,8 +1813,10 @@ kbd{font-family:var(--mono);font-size:.7rem;border:1px solid var(--rule-2);borde
               <g id="vscan" style="display:none"><rect class="scanglow" x="0" y="0" width="40" height="720"/><line class="scanln" x1="0" x2="0" y1="0" y2="720"/></g>
             </svg>
           </div>
+          <div class="vsheets" id="vsheets" role="toolbar" aria-label="Plan sheets" hidden></div>
+          <div class="vstrip" id="vstrip" aria-label="Pages being scanned" hidden></div>
           <div class="vhint" id="vhint">Click the missed opening on the plan</div>
-          <div class="vlegend"><span><i></i>AI read</span><span><i class="rv"></i>Needs review</span><span><i class="ok"></i>Verified</span></div>
+          <div class="vlegend"><span><i></i>AI read</span><span><i class="rv"></i>Needs review</span><span><i class="ok"></i>Verified</span><span><i class="sl"></i>Selected</span></div>
           <div class="vtools">
             <button data-z="out" aria-label="Zoom out">−</button>
             <button data-z="fit" aria-label="Fit plan">⤢</button>
@@ -1455,8 +1832,7 @@ kbd{font-family:var(--mono);font-size:.7rem;border:1px solid var(--rule-2);borde
           </div>
           <div class="rev" id="rev" hidden>
             <div class="tabs" role="tablist">
-              <button role="tab" data-tab="openings" aria-selected="true">Openings <span id="tN"></span></button>
-              <button role="tab" data-tab="groups" aria-selected="false">Grouped products <span id="tG"></span></button>
+              <button role="tab" data-tab="flip" aria-selected="true" id="tabFlip"></button>
             </div>
             <div class="detail" id="detail"></div>
             <div class="list" id="list"></div>
@@ -1707,10 +2083,11 @@ function makeDet(parent, box, o, opt = {}) {
   if (opt.chip) {
     const fs = opt.fs || 11, txt = o.mark;
     const cw = fs * .64 * txt.length + fs * .9, ch = fs * 1.45;
-    const cy = y - ch - 2 < 0 ? y + h + 2 : y - ch - 2;
+    const right = opt.chipAt === 'right';    // schedule rows: the label beside the row, not over the row above
+    const cx = right ? x + w + fs*.4 : x, cy = right ? y + (h - ch)/2 : y - ch - 2 < 0 ? y + h + 2 : y - ch - 2;
     const c = el('g', {class:'chip'}, g);
-    el('rect', {x, y:cy, width:cw, height:ch, rx:fs*.15}, c);
-    el('text', {x:x + fs*.45, y:cy + ch/2, 'font-size':fs}, c).textContent = txt;
+    el('rect', {x:cx, y:cy, width:cw, height:ch, rx:fs*.15}, c);
+    el('text', {x:cx + fs*.45, y:cy + ch/2, 'font-size':fs}, c).textContent = txt;
   }
   return g;
 }
@@ -2680,19 +3057,24 @@ function initContact() {
 ------------------------------------------------------------------ */
 const TYPES = ['Single hung','Double hung','Casement','Awning','Picture','Sliding','Hinged door','Sliding door','French door','Unknown'];
 const DOOR_TYPES = new Set(['Hinged door','Sliding door','French door']);
-const S = {stage:'upload', src:null, items:[], sel:null, selGroup:null, tab:'openings', takeoffOK:false, run:0, adding:false, rfq:null, bids:null, pick:null, margin:6700 / 30300 * 100, pendingMark:null, ms:0, complete:false, price:0};
+const S = {stage:'upload', src:null, items:[], sel:null, selGroup:null, open:null, leftOut:[], tab:'groups', takeoffOK:false, run:0, adding:false, rfq:null, bids:null, pick:null, margin:6700 / 30300 * 100, pendingMark:null, ms:0, complete:false, price:0};
 let uid = 1;
 const STAGES = [['upload','Upload'],['work','Extract'],['review','Review'],['rfq','RFQ'],['bids','Bids'],['proposal','Proposal'],['order','Order']];
 const STEP_GROUPS = [['Review',['upload','work','review']],['Procure',['rfq','bids','proposal']],['Fulfill',['order']]];
-function groups() {
+function groups(list = S.items) {
   const m = new Map();
-  for (const it of S.items) {
+  for (const it of list) {
     const key = `${it.cat}|${it.type}|${it.w ?? '?'}|${it.h ?? '?'}`;
     if (!m.has(key)) m.set(key, {key, cat:it.cat, type:it.type, w:it.w, h:it.h, items:[]});
     m.get(key).items.push(it);
   }
   return [...m.values()].sort((a, b) => (a.cat === b.cat ? b.items.length - a.items.length : a.cat === 'window' ? -1 : 1));
 }
+// Pre-processing (applied when the review opens): openings with neither a window number nor any size on
+// the drawing are left out of the takeoff (kept in S.leftOut, one click puts them back). (No .tag field =
+// a reading that doesn't know the plan's tags, like the sample plan, whose marks are drawn: those are kept.)
+const inPreprocessed = it => !!it.added || it.w != null || it.h != null || !('tag' in it) || !!it.tag;
+const visibleItems = () => S.items;
 function openApp() {
   $('#app').hidden = false; document.body.classList.add('app-open');
   if (location.hash !== '#takeoff') history.pushState(null, '', '#takeoff');
@@ -2730,100 +3112,15 @@ function renderSteps() {
     return `<li class="grp ${gcls}"><span class="gl">${gname}</span>${items}</li>`;
   }).join('');
 }
-
-/* proposal + order (platform preview) */
-function renderProposal(sent) {
-  const b = S.pick, n = S.items.length, gs = groups();
-  const install = Math.round(INSTALL_PER * n);
-  const margin = Math.round(b.landed * S.margin / 100);
-  const price = b.landed + margin + install;
-  const mtxt = (+S.margin.toFixed(2)) + '%';
-  $('#propDoc').innerHTML = `${preview}
-    <h1>Customer proposal</h1><p class="lead">Your cost stays with you. The customer sees one clear price for the finished job.</p>
-    <div class="prop-grid">
-      <div class="panel">
-        <p class="who">Dealer view</p>
-        <table class="ledger">
-          <tr class="muted"><td>${esc(b.name)} product</td><td>${money(b.product)}</td></tr>
-          <tr class="muted"><td>Freight</td><td>${money(b.freight)}</td></tr>
-          <tr><td>Landed cost</td><td>${money(b.landed)}</td></tr>
-          <tr><td>Installation, ${n} openings</td><td>${money(install)}</td></tr>
-          <tr><td>Dealer margin (${mtxt})</td><td>${money(margin)}</td></tr>
-          <tr class="sum"><td>Customer total</td><td>${money(price)}</td></tr>
-        </table>
-        <div class="slider"><label for="mg" style="font-size:.85rem;color:var(--ink-2)">Margin</label><input id="mg" type="range" min="0" max="40" step=".01" value="${S.margin}"><output>${mtxt}</output></div>
-        <div class="foot-row" style="margin-top:16px;justify-content:flex-start"><button class="btn-ghost sm" id="propBack">Back to bids</button></div>
-      </div>
-      <div class="sheet">
-        <p class="who">What the customer sees</p>
-        <div class="sheet-head"><div><b>${esc(S.src.title)}</b><span>Windows and doors, supplied and installed</span></div><div style="text-align:right"><span>Arizona Window Solutions</span></div></div>
-        <table class="ttable"><thead><tr><th>Product</th><th class="num">Size (in)</th><th class="num">Qty</th></tr></thead><tbody>
-          ${gs.map(g => `<tr><td>${esc(pname(g))}</td><td class="num m">${g.w ?? '?'} × ${g.h ?? '?'}</td><td class="num m">${g.items.length}</td></tr>`).join('')}
-        </tbody></table>
-        <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap">
-          <div><span class="who" style="margin:0">Installed total</span><div class="price">${money(price)}</div>
-          <span style="font-size:.85rem;color:var(--ink-2)">Estimated delivery ${b.lead}–${b.lead + 1} weeks · ${esc(b.warranty)} product warranty</span></div>
-          ${sent ? '<span class="approved-line">Customer accepted</span>' : '<button class="btn" id="propSend">Send proposal <span class="arr">→</span></button>'}
-        </div>
-      </div>
-    </div>
-    ${sent ? `<div class="foot-row" style="margin-top:28px;justify-content:flex-start"><button class="btn" id="poBtn">Create purchase order <span class="arr">→</span></button><span style="font-size:.85rem;color:var(--ink-2)">Moves this project into Fulfill.</span></div>` : ''}`;
-  const mg = $('#mg');
-  mg.oninput = () => { S.margin = +mg.value; renderProposal(sent); $('#mg').focus(); };
-  $('#propBack').onclick = () => goStage('bids');
-  const ps = $('#propSend'); if (ps) ps.onclick = () => { S.price = price; renderProposal(true); toast('Customer accepted the proposal'); };
-  const po = $('#poBtn'); if (po) po.onclick = () => { S.price = price; S.ms = 0; S.complete = false; goStage('order'); renderOrder(); };
-}
-const ORDER_MS = [
-  ['PO created', 'Oct 18', 'Dealer issued PO #WB-0048 to the selected manufacturer.'],
-  ['PO acknowledged', 'Oct 20', 'The manufacturer acknowledged PO #WB-0048 and confirmed lines and quantities.'],
-  ['Manufacturing', 'Oct 22', 'Started Oct 22 · estimated completion Nov 17.'],
-  ['Ready to ship', 'Nov 18', 'Units packed and carrier booked.'],
-  ['In transit', 'Nov 20', 'Shipment 01 · ETA Nov 24.'],
-  ['Delivered', 'Nov 24', 'All units received on site · condition confirmed.'],
-  ['Installed', 'Dec 01', 'Every opening installed · customer signoff.'],
-];
-function renderOrder() {
-  const b = S.pick, gs = groups(), n = S.items.length, ms = S.ms || 0, done = ms >= ORDER_MS.length - 1 && S.complete;
-  const hPct = ORDER_MS.length > 1 ? Math.min(ms, ORDER_MS.length - 1) / (ORDER_MS.length - 1) : 0;
-  $('#orderDoc').innerHTML = `${preview}
-    <h1>Purchase order</h1><p class="lead">The customer-approved proposal becomes an order. The same lines carry through production, delivery and installation.</p>
-    <div class="or-grid">
-      <div class="sheet">
-        <div class="sheet-head"><div><b>PO #WB-0048</b><span>${esc(b.name)} · ${esc(S.src.title)}</span></div><div style="text-align:right"><span>Issued Oct 18</span><br><span>Customer total ${money(S.price || 0)}</span></div></div>
-        <div class="sheet-meta"><div><span>Openings</span>${n}</div><div><span>Product lines</span>${gs.length}</div><div><span>PO value</span>${money(b.landed)}</div></div>
-        <table class="ttable"><thead><tr><th>Line</th><th>Product</th><th class="num">Size (in)</th><th class="num">Qty</th><th>Marks</th></tr></thead><tbody>
-          ${gs.map((g, i) => `<tr><td class="m">${pad2(i+1)}</td><td>${esc(pname(g))}</td><td class="num m">${g.w ?? '?'} × ${g.h ?? '?'}</td><td class="num m">${g.items.length}</td><td style="white-space:normal;font-size:.8rem;color:var(--ink-2)">${g.items.map(x => esc(x.mark)).join(', ')}</td></tr>`).join('')}
-        </tbody></table>
-      </div>
-      <div class="panel">
-        <h3>Order status</h3>
-        <div class="or-tlw"><span class="fill" style="height:calc((100% - 44px) * ${hPct.toFixed(3)})"></span><ol class="or-tl">
-          ${ORDER_MS.map((m, i) => `<li class="${i < ms || done ? 'on' : i === ms ? 'cur' : ''}"><span>${m[0]}</span><small>${m[1]}</small></li>`).join('')}
-        </ol></div>
-        <div class="or-panel"><b>${ORDER_MS[ms][0]}</b>${ORDER_MS[ms][2]}</div>
-        <div class="foot-row" style="margin-top:16px">
-          <button class="btn-ghost sm" id="ordBack">Back to proposal</button>
-          ${done ? '' : `<button class="btn" id="ordNext">${ms < ORDER_MS.length - 1 ? 'Advance status' : 'Mark project complete'} <span class="arr">→</span></button>`}
-        </div>
-      </div>
-    </div>
-    ${done ? `<div class="complete"><h2>Project complete.</h2><p class="lead">From reviewed opening to installed product, on one record.</p>
-      <div class="foot-row" style="justify-content:flex-start"><button class="btn" id="again">Start a new takeoff</button><button class="btn-ghost sm" data-go="home">Back to the site</button></div></div>` : ''}`;
-  $('#ordBack').onclick = () => { goStage('proposal'); renderProposal(true); };
-  const nx = $('#ordNext');
-  if (nx) nx.onclick = () => { if (S.ms < ORDER_MS.length - 1) S.ms++; else S.complete = true; renderOrder(); };
-  const ag = $('#again'); if (ag) ag.onclick = () => { S.complete = false; goStage('upload'); };
-}
-
+// proposal + purchase order: 19-app-procure.js
 /* upload */
 let samplePromise = null, AI_NAME = 'Claude';
 function initAI() {
   const avail = $('#avail');
   if (!window.claude || typeof window.claude.use !== 'function') {
-    // Not on claude.ai: use the WindowBid server (OpenAI, key kept on the server) if this page is served by it.
+    // Not on claude.ai: use the WindowBid server (reading key kept on the server) if this page is served by it.
     avail.textContent = 'Checking for the WindowBid reading service…';
-    // The standalone build (dist/windowbid-standalone.html) adds a browser-direct OpenAI reader as a fallback.
+    // The standalone build (dist/windowbid-standalone.html) adds a browser-direct reader as a fallback.
     samplePromise = serverReader().then(r => r || (window.wbDirectReader ? window.wbDirectReader() : null)).then(r => {
       if (!r) {
         avail.textContent = 'Reading your own plans needs the WindowBid server (or this page open in Claude). The sample plan works anywhere.';
@@ -2831,9 +3128,14 @@ function initAI() {
         return null;
       }
       AI_NAME = r.label;
+      if (r.sets) $('#drop .fmt').textContent = 'PDF drawing set (any number of pages), JPG, PNG or WebP';
       avail.textContent = r.availText || (r.mock
         ? 'Demo server without an API key: uploads return a sample reading after a short wait.'
-        : `Your plan is read by OpenAI (${r.model}) through the WindowBid server. A reading can take 1–3 minutes.`);
+        : r.sets
+        ? 'Every page is checked. Window schedules are read first and shown right away; the floor plan is found and mapped while you review.'
+        : r.local
+        ? 'Plans are read on this computer by the fast WindowBid reader. A sheet takes about a minute; drawing sets skip the sheets that don\u2019t carry windows.'
+        : 'Your plan is read by the WindowBid reading service. A reading can take 1–3 minutes.');
       return r;
     });
     return;
@@ -2863,28 +3165,34 @@ async function serverReader() {
   } catch (e) { return null; }
   if (!h || !h.ok) return null;
   const fail = (code, message) => Object.assign(new Error(message || code), {code, message});
-  return {
-    label: h.mock ? 'mock reader, no API key' : `OpenAI ${h.model}`, model: h.model, mock: !!h.mock, polled: true, images: true,
-    async json(prompt, {images, signal, onStatus, meta} = {}) {
-      const image = await blobToDataURL(images);
-      let r, d;
-      try {
-        r = await fetch('/api/extract', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({image, ...meta}), signal});
-        d = await r.json().catch(() => ({}));
-      } catch (e) { throw fail(signal && signal.aborted ? 'cancelled' : 'network', 'Couldn\u2019t reach the WindowBid server.'); }
+  // POST one reading job, then poll it until it finishes
+  async function run(body, {signal, onStatus} = {}) {
+    let r, d;
+    try {
+      r = await fetch('/api/extract', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body), signal});
+      d = await r.json().catch(() => ({}));
+    } catch (e) { throw fail(signal && signal.aborted ? 'cancelled' : 'network', 'Couldn\u2019t reach the WindowBid server.'); }
+    if (!r.ok) throw fail(d.error || 'server_error', d.message);
+    const id = d.id;
+    onStatus && onStatus({status:d.status || 'queued', elapsed:0});
+    for (;;) {
+      await new Promise(ok => { const t = setTimeout(ok, 2500); if (signal) signal.addEventListener('abort', () => { clearTimeout(t); ok(); }, {once:true}); });
+      if (signal && signal.aborted) { fetch(`/api/extract/${id}/cancel`, {method:'POST'}).catch(() => {}); throw fail('cancelled'); }
+      try { r = await fetch(`/api/extract/${id}`, {cache:'no-store'}); d = await r.json(); }
+      catch (e) { continue; }                                   // brief network hiccup: keep polling
       if (!r.ok) throw fail(d.error || 'server_error', d.message);
-      const id = d.id;
-      onStatus && onStatus({status:d.status || 'queued', elapsed:0});
-      for (;;) {
-        await new Promise(ok => { const t = setTimeout(ok, 2500); if (signal) signal.addEventListener('abort', () => { clearTimeout(t); ok(); }, {once:true}); });
-        if (signal && signal.aborted) { fetch(`/api/extract/${id}/cancel`, {method:'POST'}).catch(() => {}); throw fail('cancelled'); }
-        try { r = await fetch(`/api/extract/${id}`, {cache:'no-store'}); d = await r.json(); }
-        catch (e) { continue; }                                   // brief network hiccup: keep polling
-        if (!r.ok) throw fail(d.error || 'server_error', d.message);
-        onStatus && onStatus(d);
-        if (d.status === 'completed') return d.result;
-        if (d.status !== 'queued' && d.status !== 'in_progress') throw fail(d.error || d.status, d.message);
-      }
+      onStatus && onStatus(d);
+      if (d.status === 'completed') return d.result;
+      if (d.status !== 'queued' && d.status !== 'in_progress') throw fail(d.error || d.status, d.message);
+    }
+  }
+  return {
+    label: h.mock ? 'mock reader, no API key' : 'WindowBid reading service', mock: !!h.mock, polled: true, images: true,
+    sets: Array.isArray(h.tasks) && h.tasks.includes('page'),      // can read whole drawing sets (17-app-document.js)
+    local: !!h.local,                                                // reads with the local OCR app (18-app-local.js)
+    run,
+    async json(prompt, {images, signal, onStatus, meta} = {}) {
+      return run({image: await blobToDataURL(images), ...meta}, {signal, onStatus});
     }
   };
 }
@@ -2912,7 +3220,7 @@ async function handleFile(f) {
   if (!fn) { toast('Reading your own plans isn\u2019t available here. Try the sample plan.'); return; }
   const isPdf = /pdf/i.test(f.type) || /\.pdf$/i.test(f.name);
   if (fn.images === false && !isPdf) { toast('This view reads PDFs from their text only. Export the plan as a PDF, or try the sample plan.'); return; }
-  runUpload(f, fn);
+  fn.sets ? runDocument(f, fn) : fn.local ? runLocal(f) : runUpload(f, fn);     // drawing sets: schedule first (17-app-document.js)
 }
 
 /* viewer */
@@ -2930,6 +3238,17 @@ function focusBox(b) {
   const cx = b[0] + b[2]/2, cy = b[1] + b[3]/2;
   const s = clamp(Math.min(r.width*.3/(b[2]*k), r.height*.3/(b[3]*k)), 1.3, 2.4);
   V.s = s; V.tx = r.width/2 - s*(ox + cx*k); V.ty = r.height/2 - s*(oy + cy*k);
+  applyT();
+}
+// Frame several boxes at once (a product's windows), with some margin around them.
+function focusArea(boxes) {
+  const {r, k, ox, oy} = fitInfo();
+  if (!k || !boxes.length) return;
+  const x0 = Math.min(...boxes.map(b => b[0])), y0 = Math.min(...boxes.map(b => b[1]));
+  const x1 = Math.max(...boxes.map(b => b[0] + b[2])), y1 = Math.max(...boxes.map(b => b[1] + b[3]));
+  const s = clamp(Math.min(r.width*.8/((x1 - x0)*k), r.height*.8/((y1 - y0)*k)), 1, 3);
+  V.s = s; V.tx = r.width/2 - s*(ox + (x0 + x1)/2*k); V.ty = r.height/2 - s*(oy + (y0 + y1)/2*k);
+  if (s === 1) { V.tx = 0; V.ty = 0; }
   applyT();
 }
 function zoomAt(f, px, py) {
@@ -2957,7 +3276,7 @@ function initViewer() {
   const vw = $('#viewer');
   let down = null;
   vw.addEventListener('pointerdown', e => {
-    if (e.target.closest('.vtools')) return;
+    if (e.target.closest('.vtools, .vsheets, .vstrip')) return;
     down = {x:e.clientX, y:e.clientY, tx:V.tx, ty:V.ty, moved:false, id:e.pointerId};
     vw.setPointerCapture(e.pointerId);
   });
@@ -2975,7 +3294,7 @@ function initViewer() {
     if (S.adding) { addAt(e.clientX, e.clientY); return; }
     const hit = document.elementsFromPoint(e.clientX, e.clientY).map(n => n.closest && n.closest('.det')).find(Boolean);
     if (hit) select(+hit.dataset.id, true);
-    else if (S.sel || S.selGroup) { S.sel = null; S.selGroup = null; renderReview(); }
+    else if (S.sel || S.selGroup) { S.sel = null; S.selGroup = null; renderReview(); idleSheet(); }
   };
   vw.addEventListener('pointerup', end);
   vw.addEventListener('pointercancel', () => { down = null; vDragging = false; vw.classList.remove('dragging'); });
@@ -2986,6 +3305,11 @@ function initViewer() {
     initViewer._w = setTimeout(() => vw.classList.remove('wheeling'), 150);
     zoomAt(Math.exp(-e.deltaY * .0018), e.clientX - r.left, e.clientY - r.top);
   }, {passive:false});
+  $('#vsheets').addEventListener('click', e => {
+    const b = e.target.closest('[data-sheet]'); if (!b) return;
+    if (S.stage === 'review' && S.sel && byId(S.sel)?.sheet !== +b.dataset.sheet) { S.sel = null; renderDetail(); renderList(); }
+    showSheet(+b.dataset.sheet); fitView();
+  });
   $('.vtools').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     const r = vw.getBoundingClientRect();
@@ -2998,22 +3322,46 @@ function drawDets(popId) {
   const over = $('#vover'); over.innerHTML = '';
   const fs = Math.max(V.W, V.H) / 78;
   const grpIds = S.selGroup ? new Set((groups().find(g => g.key === S.selGroup)?.items || []).map(i => i.id)) : null;
-  for (const it of S.items) {
-    if (!it.box) continue;
-    const g = makeDet(over, it.box, it, {cls:`det st-${openingStatus(it)}`, chip:true, fs, corner:Math.min(fs*.9, it.box[2]*.35, it.box[3]*.35)});
-    g.dataset.id = it.id;
-    if (it.id === S.sel || (grpIds && grpIds.has(it.id))) g.classList.add('sel');
-    if (it.id === popId) g.classList.add('pop');
+  const draw = (it, label, ids) => {
+    const row = it.fromSched, f = row ? Math.min(fs, it.box[3] * .6) : fs;
+    const g = makeDet(over, it.box, {...it, mark:label}, {cls:`det st-${openingStatus(it)}`, chip:true, fs:f, chipAt:row ? 'right' : '', corner:Math.min(f*.9, it.box[2]*.35, it.box[3]*.35)});
+    g.dataset.id = ids.includes(S.sel) ? S.sel : ids[0];
+    if (ids.includes(S.sel) || (grpIds && ids.some(i => grpIds.has(i)))) g.classList.add('sel');
+    if (ids.includes(popId)) g.classList.add('pop');
+  };
+  const rows = new Map();   // units read from one schedule row share its box: one box, "3 ×10"
+  for (const it of visibleItems()) {
+    if (!it.box || (S.sheet && it.sheet && it.sheet !== S.sheet)) continue;
+    if (!it.fromSched || it.located) { draw(it, it.mark, [it.id]); continue; }      // placed on a plan: its own box
+    const k = `${it.defId}|${it.sheet}`, r = rows.get(k);
+    if (r) r.ids.push(it.id); else rows.set(k, {it, ids:[it.id]});
   }
+  for (const {it, ids} of rows.values()) draw(ids.includes(S.sel) ? byId(S.sel) : it, ids.length > 1 ? `${it.tag} \u00d7${ids.length}` : it.mark, ids);
   $('#vstage').classList.toggle('has-sel', !!(S.sel || S.selGroup) && S.stage === 'review');
+}
+// Drawing sets: several plan sheets, one on screen at a time. Openings carry .sheet (the page number).
+function showSheet(page) {
+  const sh = S.src && S.src.sheets && S.src.sheets.find(s => s.page === page);
+  if (!sh) return;
+  if (S.sheet !== page) { S.sheet = page; setupViewer({kind:'upload', W:sh.W, H:sh.H, href:sh.href}); }
+  drawDets(); renderSheetTabs();
+}
+function renderSheetTabs() {
+  const T = $('#vsheets'), sheets = (S.src && S.src.sheets) || [];
+  T.hidden = sheets.length < 2;
+  if (T.hidden) { T.innerHTML = ''; return; }
+  T.innerHTML = sheets.map(s => {
+    const n = visibleItems().filter(i => i.sheet === s.page && i.box).length;
+    return `<button data-sheet="${s.page}" aria-pressed="${s.page === S.sheet}" title="${esc(s.title || '')}">${esc(s.label)}${n ? `<small>${n}</small>` : ''}</button>`;
+  }).join('');
 }
 
 /* processing */
 const PSTEPS = ['Plan received','Sheet identified','Finding windows and doors','Reading marks and sizes','Matching types','Building the takeoff'];
-function showProc(title) {
+function showProc(title, steps = PSTEPS) {
   $('#proc').hidden = false; $('#rev').hidden = true;
   $('#procTitle').textContent = title;
-  $('#psteps').innerHTML = PSTEPS.map(s => `<li><i></i>${s}</li>`).join('');
+  $('#psteps').innerHTML = steps.map(s => `<li><i></i>${s}</li>`).join('');
   $('#plog').innerHTML = ''; $('#procAct').innerHTML = '';
 }
 function setStep(i, st) { const li = $$('#psteps li')[i]; if (li) li.className = st; }
@@ -3025,8 +3373,11 @@ function counts() {
   return {windows:S.items.filter(i => i.cat === 'window').length, doors:S.items.filter(i => i.cat === 'door').length, products:groups().length, openings:S.items.length};
 }
 function renderStats() {
-  const c = counts(), a = S.items.filter(i => i.approved).length;
-  $('#wStats').innerHTML = `<div><b>${c.windows}</b>windows</div><div><b>${c.doors}</b>doors</div><div><b>${c.products}</b>products</div><div><b>${a}/${c.openings}</b>verified</div>`;
+  const list = visibleItems(), a = list.filter(i => i.approved).length;
+  const c = {windows:list.filter(i => i.cat === 'window').length, doors:list.filter(i => i.cat === 'door').length,
+             products:groups(list).length, openings:list.length};
+  const doors = S.src && S.src.kind === 'sample' ? `<div><b>${c.doors}</b>doors</div>` : '';   // uploads are windows only
+  $('#wStats').innerHTML = `<div><b>${c.windows}</b>windows</div>${doors}<div><b>${c.products}</b>products</div><div><b>${a}/${c.openings}</b>verified</div>`;
 }
 function scanTo(x) {
   $('#vscan').style.display = '';
@@ -3034,11 +3385,14 @@ function scanTo(x) {
   $('#vscan rect').setAttribute('x', x - V.W*.04);
 }
 function resetTakeoff(src) {
-  S.src = src; S.items = []; S.sel = null; S.selGroup = null; S.takeoffOK = false; S.tab = 'openings'; S.adding = false;
-  S.rfq = null; S.bids = null; S.pick = null;
+  if (S.ctl) S.ctl.abort();                   // stops any background reading of the previous takeoff
+  S.bg = null; S.bgPage = null; S.bgReading = new Set(); S.bgFound = new Set();
+  S.src = src; S.items = []; S.sel = null; S.selGroup = null; S.open = null; S.leftOut = []; S.takeoffOK = false; S.tab = 'groups'; S.adding = false;
+  S.rfq = null; S.bids = null; S.pick = null; S.sheet = null;
   $('#wTitle').textContent = src.title; $('#wFile').textContent = src.file;
   goStage('work');
   setupViewer(src);
+  renderSheetTabs(); renderStrip();
   renderStats();
 }
 async function runSample() {
@@ -3150,12 +3504,12 @@ Window and door tags and size callouts sit next to their openings, so use their 
   return `You are reading an architectural drawing to build a window and door takeoff for a window dealer.
 ${source}
 
-Find every exterior window and exterior door opening shown on this page. Skip interior doors, cased openings, closets and cabinets.
-If the page is a window or door schedule rather than a drawing, return one entry per schedule row with box set to null.
+Find every exterior window shown on this page. This is a windows-only takeoff: do NOT include doors of any kind (entry, patio, sliding glass, French, bifold, garage). Skip cased openings, closets and cabinets.
+If the page is a window schedule rather than a drawing, return one entry per window row with box set to null. Skip door schedules.
 
 For each opening return:
 - mark: the tag shown on the drawing (e.g. "W3", "101", "A"). If there is none, assign W01, W02... for windows and D01, D02... for doors.
-- category: "window" or "door"
+- category: always "window"
 - type: exactly one of ${TYPES.map(t => `"${t}"`).join(', ')}
 - width_in, height_in: numbers in inches, only if written on the drawing (dimension string, tag, size code or schedule). Convert 3'-0" to 36. A size code like 3050 means 3'0" x 5'0" = 36 x 60. Use null when not legible. Never estimate from the drawing scale.
 - room: the room the opening serves, or null
@@ -3179,6 +3533,7 @@ function normalize(res, W, H) {
     if (!r || typeof r !== 'object') continue;
     const type = TYPES.find(t => t.toLowerCase() === String(r.type || '').toLowerCase()) || 'Unknown';
     const cat = String(r.category || '').toLowerCase() === 'door' || DOOR_TYPES.has(type) ? 'door' : 'window';
+    if (cat === 'door') continue;                                   // windows-only takeoff
     const num = v => { const n = Number(v); return Number.isFinite(n) && n > 0 && n < 400 ? Math.round(n*10)/10 : null; };
     let box = null;
     if (Array.isArray(r.box) && r.box.length === 4 && r.box.every(v => Number.isFinite(Number(v)))) {
@@ -3219,7 +3574,7 @@ async function runUpload(f, sample) {
   setStep(0, 'done'); log(`${esc(f.name)} · ${pages} page${pages > 1 ? 's' : ''}${pages > 1 ? ' · analyzing page 1' : ''}`);
   setStep(1, 'active');
   if (text && text.length) log(`Text layer: <b>${text.length}</b> text items${textOnly ? '' : ' sent as a reference'}`);
-  log(sample.polled ? `Sending page 1 to the WindowBid server (${esc(AI_NAME)})` : textOnly ? 'Sending the page\u2019s text to Claude for reading' : 'Sending page 1 to Claude for reading');
+  log(sample.polled ? 'Sending page 1 to the WindowBid reading service' : textOnly ? 'Sending the page\u2019s text to Claude for reading' : 'Sending page 1 to Claude for reading');
   const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
   let scanOn = !REDUCED; const t0 = performance.now();
   const scanStep = t => { if (!scanOn || !live()) return; const p = ((t - t0) / 2600) % 2; scanTo((p < 1 ? p : 2 - p) * W); requestAnimationFrame(scanStep); };
@@ -3266,7 +3621,7 @@ async function runUpload(f, sample) {
   scanOn = false; $('#vscan').style.display = 'none';
   if (!live()) return;
   const items = normalize(res, W, H);
-  if (!items.length) { showError('No exterior windows or doors were found on page 1. Try a floor plan, elevation or schedule page.', f); return; }
+  if (!items.length) { showError('No exterior windows were found on page 1. Try a floor plan, elevation or window schedule page.', f); return; }
   setStep(1, 'done'); setStep(2, 'done'); setStep(3, 'done'); setStep(4, 'active');
   if (res && res.sheet && !gotFirst) log(`Sheet identified: <b>${esc(res.sheet)}</b>`);
   if (res && res.summary && Number.isFinite(res.summary.unique_configurations)) log(`${res.summary.total_windows} windows · ${res.summary.total_doors} doors · ${res.summary.unique_configurations} configurations`);
@@ -3289,7 +3644,7 @@ function showError(msg, f) {
   $$('#psteps li.active').forEach(li => li.className = '');
   $('#procTitle').textContent = 'Reading stopped';
   $('#procAct').innerHTML = `<div class="perr"><p>${esc(msg)}</p><div class="foot-row" style="justify-content:flex-start"><button class="btn sm" id="retry">Try again</button><button class="btn-ghost sm" id="back">Back to upload</button><button class="btn-text" id="trySample">Use the sample plan</button></div></div>`;
-  $('#retry').onclick = () => handleFile(f);
+  $('#retry').onclick = () => f ? handleFile(f) : goStage('upload');
   $('#back').onclick = () => goStage('upload');
   $('#trySample').onclick = runSample;
 }
@@ -3299,17 +3654,41 @@ const byId = id => S.items.find(i => i.id === id);
 function enterReview() {
   S.stage = 'review'; renderSteps();
   $('#proc').hidden = true; $('#rev').hidden = false;
-  let first = S.items.find(i => openingStatus(i) !== 'ready' && openingStatus(i) !== 'ok') || S.items[0];
-  if (S.pendingMark) { first = S.items.find(i => i.mark === S.pendingMark) || first; S.pendingMark = null; }
-  S.sel = null;
+  S.leftOut = S.items.filter(i => !inPreprocessed(i)); S.items = S.items.filter(inPreprocessed);
+  const first = S.pendingMark && S.items.find(i => i.mark === S.pendingMark); S.pendingMark = null;
+  S.sel = null; S.selGroup = null; S.open = null; S.tab = 'groups';
   renderReview();
   if (first) setTimeout(() => select(first.id, true), REDUCED ? 0 : 350);
 }
+const groupOf = it => groups().find(g => g.items.includes(it));
+// Double-click on a product: open it to list its windows, and frame them on the plan (on the sheet
+// that holds most of them).
+// The sheet to show a product on: where most of its units are, preferring a floor plan they were located on
+// over the schedule row they were read from.
+function groupSheet(g) {
+  const boxed = (g ? g.items : []).filter(i => i.box), onPlan = boxed.filter(i => i.located);
+  const use = onPlan.length ? onPlan : boxed;
+  if (!use.length) return null;
+  const by = new Map(); use.forEach(i => by.set(i.sheet, (by.get(i.sheet) || 0) + 1));
+  return [...by].sort((a, b) => b[1] - a[1])[0][0];
+}
+function openGroup(key) {
+  S.open = S.open === key ? null : key; S.selGroup = key; S.sel = null; S.preview = false;
+  const g = groups().find(x => x.key === key);
+  const page = groupSheet(g);
+  const placed = (g ? g.items : []).filter(i => i.box && (!page || i.sheet === page));
+  if (S.open && placed.length) {
+    if (page && page !== S.sheet) showSheet(page);
+    renderReview();
+    focusArea(placed.map(i => i.box));
+  } else { renderReview(); fitView(); }
+}
 function select(id, focus) {
-  S.sel = id; S.selGroup = null; S.adding = false; $('#viewer').classList.remove('adding'); $('#vhint').classList.remove('show');
-  S.tab = 'openings';
-  renderReview();
+  S.sel = id; S.selGroup = null; S.adding = false; S.preview = false; $('#viewer').classList.remove('adding'); $('#vhint').classList.remove('show');
   const it = byId(id);
+  if (S.tab === 'groups' && it) S.open = groupOf(it)?.key || null;
+  if (it && it.sheet && it.box && it.sheet !== S.sheet) showSheet(it.sheet);
+  renderReview();
   if (focus && it && it.box) focusBox(it.box);
   const row = $(`#list tr[data-id="${id}"]`), L = $('#list');
   if (row && L.scrollHeight > L.clientHeight + 2) {
@@ -3318,20 +3697,144 @@ function select(id, focus) {
     if (L.scrollTop > top) L.scrollTop = top; else if (L.scrollTop < bot) L.scrollTop = bot;
   }
 }
+// One header: the view on show (grouped products to start), and a click flips to the other one.
+function renderTab() {
+  const g = S.tab === 'groups';
+  $('#tabFlip').innerHTML = `${g ? 'Grouped products' : 'Openings'} <span>${g ? groups().length : S.items.length}</span><i class="flip" aria-hidden="true">⇄</i>`;
+  $('#tabFlip').title = g ? 'Show every opening' : 'Show the grouped products';
+}
 function renderReview() {
-  renderStats(); drawDets();
-  $('#tN').textContent = S.items.length; $('#tG').textContent = groups().length;
-  $$('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === S.tab));
+  renderStats(); drawDets(); renderSheetTabs();
+  renderTab();
   renderDetail(); renderList(); renderFoot();
+}
+// A few plain sentences about the selected opening — what it is, where it is, how many like it —
+// built from what was read (no extra AI call), so anyone can follow the takeoff.
+const PLAIN_TYPE = {
+  'Single hung': ['A single-hung window', 'the bottom half slides up'],
+  'Double hung': ['A double-hung window', 'both halves slide up and down'],
+  'Casement': ['A casement window', 'it swings outward on side hinges, like a door'],
+  'Awning': ['An awning window', 'it is hinged at the top and opens outward'],
+  'Picture': ['A fixed (picture) window', 'it doesn’t open'],
+  'Sliding': ['A sliding window', 'one panel slides sideways'],
+  'Hinged door': ['A hinged (swing) door', ''],
+  'Sliding door': ['A sliding glass door', ''],
+  'French door': ['A pair of French doors', ''],
+};
+const ftIn = n => { const f = Math.floor(n / 12), i = Math.round(n - f * 12); return f ? `${f} ft${i ? ` ${i} in` : ''}` : `${i} in`; };
+function plainSummary(it) {
+  const s = [];
+  const [what, how] = PLAIN_TYPE[it.type] || [it.cat === 'door' ? 'A door' : 'A window', ''];
+  s.push(`<b>${what}${how ? ` — ${how}` : ''}.</b>` + (it.type === 'Unknown' ? ' Its type isn’t identified yet.' : ''));
+  s.push(it.w && it.h ? `About ${ftIn(it.w)} wide and ${ftIn(it.h)} tall (${it.w} × ${it.h} in).`
+       : it.w ? `About ${ftIn(it.w)} wide (${it.w} in); its height isn’t known yet.`
+       : it.h ? `About ${ftIn(it.h)} tall (${it.h} in); its width isn’t known yet.`
+       : 'Its size isn’t known yet — it isn’t written next to it on the drawing.');
+  // where: the room, the sheet, and the part of the drawing it sits in
+  const sheet = (S.src?.sheets || []).find(x => x.page === it.sheet);
+  const W = sheet ? sheet.W : V.W, H = sheet ? sheet.H : V.H;
+  let part = '';
+  if (it.box) {
+    const cx = (it.box[0] + it.box[2] / 2) / W, cy = (it.box[1] + it.box[3] / 2) / H;
+    const v = cy < 1 / 3 ? 'upper' : cy > 2 / 3 ? 'lower' : '', h = cx < 1 / 3 ? 'left' : cx > 2 / 3 ? 'right' : '';
+    part = v || h ? `the ${[v, h].filter(Boolean).join('-')} part of the drawing` : 'the middle of the drawing';
+  }
+  const sname = sheet ? sheet.name || sheet.label : '';
+  const on = !sheet ? (S.src?.kind === 'sample' ? 'on the floor plan' : '')
+    : /^(page|p\.)\s*\d/i.test(sname) ? `on page ${sheet.page} of the drawing` : `on the floor-plan sheet ${esc(sname)}`;
+  const name = it.room && it.room === it.room.toUpperCase()            // "GREAT ROOM" → "Great Room"
+    ? it.room.toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase()) : it.room;
+  const room = !name ? 'in a room that isn’t labelled next to it'
+    : /\d\s*$/.test(name) ? `in <b>${esc(name)}</b>` : `in the <b>${esc(name)}</b>`;   // "in Bedroom 2", "in the Kitchen"
+  if (it.fromSched && !it.located) s.push(`It’s listed in the window schedule on ${esc(it.schedName || 'the schedule sheet')} as mark <b>${esc(it.tag)}</b>` +
+      (it.schedQty > 1 ? `, which counts ${it.schedQty} of these` : '') + '. The floor plans weren’t read because the schedule already gives every window’s size and count, so its room isn’t known.');
+  else s.push(it.box ? `It’s ${room}, ${[on, part && `in ${part}`].filter(Boolean).join(', ')}.`
+                : `It’s ${room}. It isn’t pinned to a spot on the plan — it comes from the schedule.`);
+  // how it is marked, and how many like it
+  const like = groups().find(g => g.items.includes(it));
+  const sched = (it.srcs || []).find(x => /^Schedule on|^Type legend on/.test(x));
+  if (it.fromSched && !it.located) { /* said above */ }
+  else if (it.tag) {
+    const same = S.items.filter(x => x.tag === it.tag && x.cat === it.cat).length;
+    s.push(`On the plan it carries tag <b>${esc(it.tag)}</b>` + (sched ? `; ${esc(sched.replace(/^Schedule on/, 'the schedule on sheet').replace(/^Type legend on/, 'the type legend on sheet'))} explains what that tag means` : '') +
+           (same > 1 ? `. There are ${same} openings with this tag.` : '.'));
+  } else if ('tag' in it && !it.added && it.box) {
+    s.push(whyCounted(it));
+  } else if (it.raw) {
+    s.push(`The drawing writes it as “${esc(it.raw)}”.`);
+  }
+  if (like && like.items.length > 1) s.push(`The house has ${like.items.length} ${it.cat === 'door' ? 'doors' : 'windows'} of this type and size.`);
+  if (it.temp) s.push('It needs tempered (safety) glass.');
+  if (it.egress) s.push('It’s an egress window — large enough to climb out of in an emergency.');
+  const st = openingStatus(it);
+  s.push(st === 'ok' ? 'It’s verified.' : st === 'ready' ? 'Read by AI — compare it with the drawing; Verify all (below) confirms every window at once.'
+                     : 'Needs a look before quoting' + (it.note ? `: ${esc(it.note)}` : '.'));
+  return `<div class="d-sum"><span>In plain words</span><p>${s.join(' ')}</p></div>`;
+}
+// An opening with no window number on the plan: say so, and what the count rests on, so it is never
+// taken as certain. (Readings that know the plan's tags set it.tag; '' means "no tag here".)
+const SIZE_NOTE = /\b\d{4,6}\b/;      // a size code such as 5050 or 120100
+// Worth a flag on its preview card: no number and no size note to go by (or a high window shown only dashed).
+const noNumberFlag = it => 'tag' in it && !it.tag && it.box && !it.added &&
+  (!SIZE_NOTE.test(it.raw || '') || /CLERESTORY|\bCLR\b|HIGH\s+(WINDOW|WDW)|TRANSOM/i.test(it.raw || ''));
+function whyCounted(it) {
+  const raw = (it.raw || '').toUpperCase();
+  let why = '<b>There’s no window number on the plan here.</b> ';
+  if (/CLERESTORY|\bCLR\b|HIGH\s+(WINDOW|WDW)/.test(raw))
+    why += `It’s counted because the note “${esc(it.raw)}” points to this spot. A clerestory is set high in the wall, above ` +
+           'the height a floor plan is drawn at, so the plan shows it only as a dashed line in the wall, not as a window symbol.';
+  else if (/TRANSOM|\bTR\b/.test(raw))
+    why += `It’s counted because the note “${esc(it.raw)}” points here: a transom sits above a door or another window, so the plan may not draw it.`;
+  else if (SIZE_NOTE.test(raw))
+    why = `This plan names its windows by size notes rather than numbers: it’s counted because the note “${esc(it.raw)}” sits next to this spot — check that the note belongs to this opening and not a neighbouring one.`;
+  else if (it.raw)
+    why += `It’s counted because the note “${esc(it.raw)}” is written next to this spot — check that the note really belongs to this opening.`;
+  else
+    why += 'There’s no note here either. It’s counted only because the drawing shows a window-like symbol in the wall, so it may not be a window at all.';
+  if (/shared|grouping|several|count against|one note/i.test(it.note || ''))
+    why += ' One note covers several windows here: each arrow from the note to the wall is one window, so count the arrows.';
+  return why;
+}
+// "All windows": every opening as a small preview of its spot on the plan, to look through them and
+// jump to any one. Each sheet image is placed once (pv-defs) and reused by every preview.
+function previewThumb(it) {
+  if (!it.box) return '<span class="pv-none">From the schedule \u2014 no spot on the plan</span>';
+  const sh = (S.src?.sheets || []).find(x => x.page === it.sheet);
+  const W = sh ? sh.W : V.W, H = sh ? sh.H : V.H, [x, y, w, h] = it.box;
+  const vh = Math.min(H, Math.max(h * 5, w * 3.75, Math.max(W, H) * 0.06)), vw = Math.min(W, vh * 4 / 3);
+  const vx = clamp(x + w / 2 - vw / 2, 0, Math.max(0, W - vw)), vy = clamp(y + h / 2 - vh / 2, 0, Math.max(0, H - vh));
+  return `<svg viewBox="${vx} ${vy} ${vw} ${vh}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">` +
+    `<use href="${sh ? `#pv-sheet-${sh.page}` : '#vcontent'}"/><rect class="pv-hl" x="${x}" y="${y}" width="${w}" height="${h}"/></svg>`;
+}
+function renderPreview() {
+  const sheets = S.src?.sheets || [];
+  const pages = [...new Set(visibleItems().filter(i => i.box && i.sheet).map(i => i.sheet))];
+  const defs = pages.map(n => sheets.find(x => x.page === n)).filter(Boolean)
+    .map(sh => `<image id="pv-sheet-${sh.page}" href="${esc(sh.href)}" width="${sh.W}" height="${sh.H}"/>`).join('');
+  const noun = S.items.some(i => i.cat === 'door') ? 'openings' : 'windows';
+  const cards = visibleItems().map(it => {
+    const st = openingStatus(it), untagged = noNumberFlag(it);
+    return `<button class="pv-card ${it.id === S.sel ? 'sel' : ''}" data-pick="${it.id}" title="Open ${esc(it.mark)}">
+      <span class="pv-img">${previewThumb(it)}</span>
+      <span class="pv-meta"><b>${esc(it.mark)}</b><span class="pill st-${st}">${stLabel(it)}</span></span>
+      <span class="pv-line">${esc(it.type)} \u00b7 ${it.w ?? '?'} \u00d7 ${it.h ?? '?'} in</span>
+      <span class="pv-line">${esc(it.room || '\u2014')}${untagged ? ' \u00b7 <i>no number on plan</i>' : ''}</span></button>`;
+  }).join('');
+  return `<div class="pv-head"><b>All ${visibleItems().length} ${noun}</b><span>Click one to see its details</span>
+      <button class="btn-ghost sm" data-act="closePreview">${S.sel ? 'Back to ' + esc(byId(S.sel)?.mark || 'details') : 'Close'}</button></div>
+    <svg class="pv-defs" aria-hidden="true"><defs>${defs}</defs></svg>
+    <div class="pv-grid">${cards}</div>`;
 }
 function renderDetail() {
   const d = $('#detail');
+  if (S.preview) { d.innerHTML = renderPreview(); return; }
   const it = S.sel && byId(S.sel);
-  if (!it) { d.innerHTML = `<p class="empty">${S.tab === 'groups' ? 'Select a product to see where each unit is on the plan.' : 'Select an opening on the plan or in the list to check it against the drawing.'}</p>`; return; }
+  if (!it) { d.innerHTML = `<p class="empty">${S.tab === 'groups' ? 'Select a product to see where each unit is on the plan. Double-click it to open its windows.' : 'Select an opening on the plan or in the list to check it against the drawing.'}${S.items.length ? ' <button class="btn-text" data-act="preview">Preview all</button>' : ''}</p>`; return; }
   const st = openingStatus(it), pct = Math.round(it.conf * 100), ok = st === 'ok';
   d.innerHTML = `
     <div class="d-head"><span class="d-mark">${esc(it.mark)}</span><span class="pill st-${st}">${stLabel(it)}</span>
-      <span class="d-nav"><button data-act="prev" aria-label="Previous opening">↑</button><button data-act="next" aria-label="Next opening">↓</button></span></div>
+      <span class="d-nav">${S.tab === 'groups' ? '<button class="d-all" data-act="backGroups" title="Back to the grouped products">← Products</button>' : ''}<button class="d-all" data-act="preview" title="See every opening with a preview of its spot on the plan">All ${visibleItems().length}</button><button data-act="prev" aria-label="Previous opening">↑</button><button data-act="next" aria-label="Next opening">↓</button></span></div>
+    ${plainSummary(it)}
     <div class="d-grid">
       <label>Type<select data-f="type" ${ok ? 'disabled' : ''}>${TYPES.map(t => `<option ${t === it.type ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
       <label>Room<input data-f="room" value="${esc(it.room)}" ${ok ? 'disabled' : ''}></label>
@@ -3340,37 +3843,59 @@ function renderDetail() {
     </div>
     <div class="d-conf">${it.added ? '<span>Added by you</span>' : `<span>Read confidence</span><div class="bar ${pct >= 85 ? 'ok' : ''}"><i style="width:${pct}%"></i></div><b>${pct}%</b>`}</div>
     ${it.raw || it.temp || it.egress ? `<div class="d-raw"><span>Drawing callout</span><b>${esc(it.raw || '—')}</b>${it.temp ? '<i>Tempered</i>' : ''}${it.egress ? '<i>Egress</i>' : ''}</div>` : ''}
+    ${it.srcs && it.srcs.length ? `<div class="d-src"><span>Found in</span><ul>${it.srcs.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>` : ''}
     ${it.note && !ok ? `<p class="d-note">${esc(it.note)}</p>` : ''}
-    ${!it.box ? `<p class="d-note">Read from a schedule. No location on this page.</p>` : ''}
+    ${!it.box ? `<p class="d-note">${it.srcs ? 'Not located on a floor plan.' : 'Read from a schedule. No location on this page.'}</p>` : ''}
     <div class="d-actions">
       ${ok ? `<span class="approved-line">${it.edited || it.added ? 'Edited · verified' : 'Verified'}</span><button class="btn-text" data-act="unapprove">Undo verification</button>`
-           : `<button class="btn sm" data-act="approve" ${st === 'missing' ? 'disabled title="Enter width and height first"' : ''}>✓ Verify</button><button class="btn-ghost sm" data-act="remove">Not an opening</button>`}
-      <span class="kbd"><kbd>↑</kbd><kbd>↓</kbd> move${ok ? '' : ' · <kbd>V</kbd> verify'}</span>
+           : `<button class="btn-ghost sm" data-act="remove">Not an opening</button>`}
+      <span class="kbd"><kbd>↑</kbd><kbd>↓</kbd> move</span>
     </div>`;
 }
+// The floor plans being mapped behind the review (17-app-document.js, runBackground).
+const bgNoteHtml = () => !S.bg ? '' : `<p class="bg-note ${S.bg.state}" id="bgNote">${S.bg.state === 'running' ? '<i class="spin" aria-hidden="true"></i>' : ''}<span>${S.bg.text}</span></p>`;
+function renderBgNote() {
+  const n = $('#bgNote');
+  if (n) n.outerHTML = bgNoteHtml(); else if (S.stage === 'review') renderList();
+  $('#list .groups')?.classList.toggle('mapping', S.bg?.state === 'running');
+}
+// where each product sits once the plans are mapped: "On plan A-2.1 · 15 of 15"
+function groupLoc(g) {
+  if (!S.bg || S.bg.state !== 'done') return '';
+  const on = g.items.filter(i => i.located), n = g.items.length;
+  if (!on.length) return '<span class="loc none">Not found on the plan · shown at its schedule row</span>';
+  const labels = [...new Set(on.map(i => (S.src?.sheets || []).find(s => s.page === i.sheet)?.label).filter(Boolean))].join(', ');
+  return `<span class="loc">On plan ${esc(labels)} · ${on.length} of ${n}${on.length < n ? `, ${n - on.length} at the schedule row` : ''}</span>`;
+}
+// with nothing selected while the plans are being read, the viewer goes back to the page being scanned
+function idleSheet() {
+  if (S.bg?.state === 'running' && S.bgPage && !S.sel && !S.selGroup && !S.open && S.sheet !== S.bgPage) { showSheet(S.bgPage); fitView(); }
+}
 function renderList() {
-  const L = $('#list');
+  const List = $('#list');
+  const row = it => { const st = openingStatus(it); return `<tr data-id="${it.id}" data-cursor="Locate" class="${it.id === S.sel ? 'sel' : ''} ${st === 'ok' ? 'okr' : ''}">
+      <td class="m">${esc(it.mark)}</td><td>${esc(it.room || '—')}</td><td>${esc(it.type)}</td>
+      <td class="num m">${it.w ?? '?'} × ${it.h ?? '?'}</td><td><span class="pill st-${st}">${stLabel(it)}</span></td></tr>`; };
+  const bg = bgNoteHtml();
+  const head = '<thead><tr><th>Mark</th><th>Room</th><th>Type</th><th class="num">Size</th><th>Status</th></tr></thead>';
   if (S.tab === 'groups') {
-    L.innerHTML = `<div class="groups">${groups().map(g => {
-      const allOk = g.items.every(i => i.approved);
-      return `<button class="grp ${S.selGroup === g.key ? 'sel' : ''}" data-group="${esc(g.key)}" data-cursor="Locate">
+    List.innerHTML = `${bg}<div class="groups ${S.bg?.state === 'running' ? 'mapping' : ''}">${groups().map((g, gi) => {
+      const allOk = g.items.every(i => i.approved), open = S.open === g.key;
+      return `<div class="gwrap ${open ? 'open' : ''}"><button class="grp ${S.selGroup === g.key || open ? 'sel' : ''}" data-group="${esc(g.key)}" data-cursor="Locate" aria-expanded="${open}" title="Click to see them on the plan · double-click to open" style="--gi:${gi % 6}">
         <b>${esc(pname(g))}</b><span class="q">${g.items.length}<small>${allOk ? 'verified' : 'qty'}</small></span>
         <span class="sz">${g.w ?? '?'} × ${g.h ?? '?'} in</span>
-        <span class="mk">${g.items.map(i => esc(i.mark)).join(' · ')}</span></button>`;
+        <span class="mk">${g.items.map(i => esc(i.mark)).join(' · ')}</span>${groupLoc(g)}</button>
+        ${open ? `<div class="gsub"><table class="ttable">${head}<tbody>${g.items.map(row).join('')}</tbody></table></div>` : ''}</div>`;
     }).join('')}</div>`;
     return;
   }
-  L.innerHTML = `<table class="ttable"><thead><tr><th>Mark</th><th>Room</th><th>Type</th><th class="num">Size</th><th>Status</th></tr></thead><tbody>${
-    S.items.map(it => { const st = openingStatus(it); return `<tr data-id="${it.id}" data-cursor="Locate" class="${it.id === S.sel ? 'sel' : ''} ${st === 'ok' ? 'okr' : ''}">
-      <td class="m">${esc(it.mark)}</td><td>${esc(it.room || '—')}</td><td>${esc(it.type)}</td>
-      <td class="num m">${it.w ?? '?'} × ${it.h ?? '?'}</td><td><span class="pill st-${st}">${stLabel(it)}</span></td></tr>`; }).join('')
-  }</tbody></table>
+  List.innerHTML = `${bg}<table class="ttable">${head}<tbody>${visibleItems().map(row).join('')}</tbody></table>
   <div style="padding:12px 0 16px"><button class="btn-text" data-act="add">+ Add a missed opening</button></div>`;
 }
 function renderFoot() {
   const F = $('#revFoot');
   const n = S.items.length, a = S.items.filter(i => i.approved).length;
-  const ready = S.items.filter(i => openingStatus(i) === 'ready').length;
+  const noSize = S.items.filter(i => i.w == null || i.h == null).length;
   if (S.takeoffOK) {
     F.innerHTML = `<div class="approved-line">Ready for RFQ · ${n} openings, ${groups().length} products</div>
       <div class="foot-row"><button class="btn-ghost sm" data-act="csv" id="csvBtn">Export CSV</button><button class="btn-text" data-act="reopen">Reopen review</button><button class="btn" data-act="rfq">Send to manufacturers <span class="arr">→</span></button></div>`;
@@ -3378,9 +3903,10 @@ function renderFoot() {
     return;
   }
   F.innerHTML = `<div class="prog"><div class="bar"><i style="width:${n ? a/n*100 : 0}%"></i></div><span>${a} of ${n} verified</span></div>
-    <div class="foot-row"><button class="btn-ghost sm" data-act="approveReady" ${ready ? '' : 'disabled'}>Verify high-confidence (${ready})</button>
-    <button class="btn" data-act="approveTakeoff" ${n && a === n ? '' : 'disabled'}>Mark Ready for RFQ <span class="arr">→</span></button></div>
-    <p class="rfq-help">${n && a === n ? 'All reviewed window and door data will be prepared for manufacturer quoting.' : `${n - a} opening${n - a === 1 ? '' : 's'} still to verify before quoting.`}</p>`;
+    <div class="foot-row"><button class="btn-ghost sm" data-act="approveAll" ${n && a < n ? '' : 'disabled'}>✓ Verify all (${n - a})</button>
+    <button class="btn" data-act="approveTakeoff" ${n ? '' : 'disabled'}>Mark Ready for RFQ <span class="arr">→</span></button></div>
+    <p class="rfq-help">${!n ? 'No windows in the takeoff yet.' : a === n ? 'All window data will be prepared for manufacturer quoting.'
+      : 'Verify all confirms every window at once. Mark Ready for RFQ verifies any left and prepares the quote.'}${noSize ? ` ${noSize} without a full size go out as “?” — set it first if you know it.` : ''}</p>`;
 }
 function nextUnapproved(fromId) {
   const i = S.items.findIndex(x => x.id === fromId);
@@ -3388,10 +3914,11 @@ function nextUnapproved(fromId) {
   return null;
 }
 function moveSel(d) {
-  if (!S.items.length) return;
-  let i = S.items.findIndex(x => x.id === S.sel);
-  i = i < 0 ? 0 : (i + d + S.items.length) % S.items.length;
-  select(S.items[i].id, true);
+  const list = visibleItems();
+  if (!list.length) return;
+  let i = list.findIndex(x => x.id === S.sel);
+  i = i < 0 ? 0 : (i + d + list.length) % list.length;
+  select(list[i].id, true);
 }
 function nextMark(prefix) {
   let n = 1; const used = new Set(S.items.map(i => i.mark));
@@ -3402,6 +3929,7 @@ function addAt(cx, cy) {
   const p = svgPointFromClient(cx, cy);
   const d = Math.max(V.W, V.H) * .025;
   const it = {id:uid++, mark:nextMark('W'), cat:'window', type:'Unknown', w:null, h:null, room:'', conf:1, added:true, note:'', box:[p.x - d, p.y - d/2, 2*d, d]};
+  if (S.sheet) it.sheet = S.sheet;
   S.items.push(it); S.takeoffOK = false;
   S.adding = false; $('#viewer').classList.remove('adding'); $('#vhint').classList.remove('show');
   select(it.id, false);
@@ -3410,26 +3938,56 @@ function addAt(cx, cy) {
 function initReview() {
   $('#rev').addEventListener('click', e => {
     const tab = e.target.closest('[data-tab]');
-    if (tab) { S.tab = tab.dataset.tab; if (S.tab === 'groups') { S.sel = null; fitView(); } else S.selGroup = null; renderReview(); return; }
+    if (tab) {   // flip between the grouped products and the openings
+      S.tab = S.tab === 'groups' ? 'openings' : 'groups'; S.selGroup = null; S.open = null; S.preview = false;
+      if (S.tab === 'groups') { S.sel = null; fitView(); }
+      renderReview(); return;
+    }
     const row = e.target.closest('tr[data-id]');
     if (row) { select(+row.dataset.id, true); return; }
     const grp = e.target.closest('[data-group]');
-    if (grp) { S.selGroup = S.selGroup === grp.dataset.group ? null : grp.dataset.group; S.sel = null; fitView(); renderReview(); return; }
+    if (grp) {   // one click: show the product's windows on the plan (the double-click opens it, below)
+      if (e.detail > 1) return;
+      const k = grp.dataset.group;
+      if (S.open && S.open !== k) S.open = null;
+      S.selGroup = S.selGroup === k && !S.open ? null : k; S.sel = null; S.preview = false;
+      const page = S.selGroup && groupSheet(groups().find(x => x.key === k));
+      if (page && page !== S.sheet) showSheet(page);
+      if (!S.open) fitView();
+      renderDetail(); drawDets(); renderFoot();
+      $$('#list .grp').forEach(b => b.classList.toggle('sel', b.dataset.group === S.selGroup || b.dataset.group === S.open));
+      if (!S.open) $$('#list .gwrap.open').forEach(w => { w.classList.remove('open'); w.querySelector('.gsub')?.remove(); });
+      if (!S.selGroup) idleSheet();
+      return;
+    }
+    const pick = e.target.closest('[data-pick]');
+    if (pick) { select(+pick.dataset.pick, true); return; }
     const b = e.target.closest('[data-act]'); if (!b) return;
     const it = S.sel && byId(S.sel);
     switch (b.dataset.act) {
+      case 'putBack': {
+        const n = S.leftOut.length;
+        S.items = S.items.concat(S.leftOut).sort((x, y) => x.id - y.id); S.leftOut = []; S.takeoffOK = false;
+        toast(`${n} opening${n === 1 ? '' : 's'} put back`); renderReview(); break;
+      }
+      case 'backGroups': { const k = S.open; S.sel = null; S.open = null; if (k) openGroup(k); else { renderReview(); fitView(); } break; }
+      case 'preview': S.preview = true; renderDetail(); $('#detail').scrollTop = 0; break;
+      case 'closePreview': S.preview = false; renderDetail(); break;
       case 'prev': moveSel(-1); break;
       case 'next': moveSel(1); break;
-      case 'approve': if (it && openingStatus(it) !== 'missing') { it.approved = true; const nx = nextUnapproved(it.id); nx ? select(nx.id, true) : (S.sel = it.id, renderReview()); } break;
       case 'unapprove': if (it) { it.approved = false; S.takeoffOK = false; renderReview(); } break;
       case 'remove': if (it) { const nx = nextUnapproved(it.id); S.items = S.items.filter(x => x.id !== it.id); S.takeoffOK = false; toast(`${it.mark} removed`); nx && nx.id !== it.id ? select(nx.id, true) : (S.sel = null, renderReview()); } break;
-      case 'approveReady': { const c = S.items.filter(i => openingStatus(i) === 'ready'); c.forEach(i => i.approved = true); toast(`${c.length} openings verified`); const nx = S.items.find(i => !i.approved); nx ? select(nx.id, true) : renderReview(); break; }
-      case 'approveTakeoff': S.takeoffOK = true; S.sel = null; S.selGroup = null; fitView(); renderReview(); toast('Takeoff marked ready for RFQ'); break;
+      case 'approveAll': { const c = S.items.filter(i => !i.approved); c.forEach(i => i.approved = true); toast(`${c.length} window${c.length === 1 ? '' : 's'} verified`); renderReview(); break; }
+      case 'approveTakeoff': S.items.forEach(i => i.approved = true); S.takeoffOK = true; S.sel = null; S.selGroup = null; fitView(); renderReview(); toast('Takeoff marked ready for RFQ'); break;
       case 'reopen': S.takeoffOK = false; renderReview(); break;
       case 'add': S.adding = true; $('#viewer').classList.add('adding'); $('#vhint').classList.add('show'); fitView(); break;
       case 'rfq': openRFQ(); break;
       case 'csv': exportCSV(); break;
     }
+  });
+  $('#list').addEventListener('dblclick', e => {
+    const grp = e.target.closest('[data-group]'); if (!grp) return;
+    e.preventDefault(); getSelection()?.removeAllRanges(); openGroup(grp.dataset.group);
   });
   const upd = e => {
     const f = e.target.dataset.f; if (!f) return;
@@ -3440,9 +3998,9 @@ function initReview() {
     it.edited = true;
     S.takeoffOK = false;
     renderStats(); drawDets(); renderList(); renderFoot();
-    $('#tG').textContent = groups().length;
+    renderTab();
     const st = openingStatus(it), pill = $('#detail .pill'); if (pill) { pill.className = `pill st-${st}`; pill.textContent = stLabel(it); }
-    const ap = $('#detail [data-act="approve"]'); if (ap) ap.disabled = st === 'missing';
+    const sum = $('#detail .d-sum'); if (sum) sum.outerHTML = plainSummary(it);
   };
   $('#detail').addEventListener('input', upd);
   $('#detail').addEventListener('change', upd);
@@ -3451,7 +4009,7 @@ function initReview() {
     if (e.target.matches('input,select,textarea')) { if (e.key === 'Escape') e.target.blur(); return; }
     if (e.key === 'ArrowDown' || e.key === 'j') { e.preventDefault(); moveSel(1); }
     else if (e.key === 'ArrowUp' || e.key === 'k') { e.preventDefault(); moveSel(-1); }
-    else if ((e.key === 'v' || e.key === 'V') && S.sel) { const b = $('#detail [data-act="approve"]'); if (b && !b.disabled) b.click(); }
+    else if (e.key === 'Escape' && S.preview) { S.preview = false; renderDetail(); }
     else if (e.key === 'Escape') { S.adding = false; $('#viewer').classList.remove('adding'); $('#vhint').classList.remove('show'); }
   });
 }
@@ -3469,86 +4027,1252 @@ function initDownloads() {
 async function exportCSV() {
   if (!dlFn) return;
   const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const rows = [['Mark','Category','Type','Width (in)','Height (in)','Room','Drawing callout','Tempered','Egress','Confidence','Status'].join(',')]
-    .concat(S.items.map(i => [i.mark, i.cat, i.type, i.w ?? '', i.h ?? '', i.room, i.raw || '', i.temp ? 'yes' : '', i.egress ? 'yes' : '', i.added ? 'added' : Math.round(i.conf*100) + '%', stLabel(i)].map(q).join(',')));
+  const sheetOf = i => (S.src?.sheets || []).find(s => s.page === i.sheet)?.label || '';
+  const rows = [['Mark','Category','Type','Width (in)','Height (in)','Room','Drawing callout','Tempered','Egress','Confidence','Status','Plan sheet','Found in'].join(',')]
+    .concat(S.items.map(i => [i.mark, i.cat, i.type, i.w ?? '', i.h ?? '', i.room, i.raw || '', i.temp ? 'yes' : '', i.egress ? 'yes' : '', i.added ? 'added' : Math.round(i.conf*100) + '%', stLabel(i), sheetOf(i), (i.srcs || []).join(' | ')].map(q).join(',')));
   rows.push('', ['Product','Width (in)','Height (in)','Qty','Marks'].join(','));
   groups().forEach(g => rows.push([pname(g), g.w ?? '', g.h ?? '', g.items.length, g.items.map(i => i.mark).join(' ')].map(q).join(',')));
   try { await dlFn.save({filename:`${(S.src?.title || 'takeoff').replace(/[^\w ]+/g, '').trim() || 'takeoff'} takeoff.csv`, data:rows.join('\n')}); toast('Takeoff exported'); }
   catch (e) { if (e && e.code !== 'declined') toast('Export isn\u2019t available here.'); }
 }
 
-const preview = `<div class="preview-note"><b>Platform preview.</b> The takeoff is yours; manufacturers, prices and lead times are sample data.</div>`;
-function openRFQ() {
-  const gs = groups();
+// The RFQ and the bids: 19-app-procure.js
+/* ------------------------------------------------------------------
+   Drawing sets (WindowBid server only). A full set can run to 90 pages, with the facts about one
+   window spread over several sheets: the floor plan shows tag "3" in a wall, the schedule on
+   another sheet says what "3" is. Three passes:
+     1. sort   — every page, small, in batches: floor plan? schedule? elevation? which level?
+     2. read   — one thing first, the rest only if needed: the window schedule areas, at full detail.
+                 When the schedule gives every window's size and count, that is the takeoff and the
+                 floor plans are not read. Otherwise the chosen floor plans (one per level) are read.
+     3. join   — plan tags matched to schedule rows across sheets, with quantity checks;
+                 elevations are read only when tags are still unexplained.
+   Server contracts: server/document-schema.mjs.
+------------------------------------------------------------------ */
+const DSTEPS = ['Document received','Sorting pages','Reading window schedules','Reading floor plans (if needed)','Matching tags to schedules','Building the takeoff'];
+const SCHED_KINDS = new Set(['window_schedule','door_schedule','window_door_schedule','window_types']);
+const KIND_NAME = {floor_plan:'floor plan', window_schedule:'window schedule', door_schedule:'door schedule', window_door_schedule:'window & door schedule',
+  window_types:'window type legend', elevation:'elevation', other_plan:'other plan', other:'other'};
+const DEF_RANK = {schedule:3, window_types:2, plan:1, elevation:0};
+const DEF_FROM = {schedule:'Schedule on', window_types:'Type legend on', plan:'Schedule on', elevation:'Elevation'};
+const TAG_RANK = {many:2, few:1, none:0};
+const LIMITS = {plans:6, schedules:12, cropsPerPage:3, elevations:4, inFlight:3, batch:8};
+
+// run async jobs with at most n in flight
+function limiter(n) {
+  let active = 0; const q = [];
+  const next = () => {
+    if (active >= n || !q.length) return;
+    active++; const {fn, ok, no} = q.shift();
+    fn().then(ok, no).finally(() => { active--; next(); });
+  };
+  return fn => new Promise((ok, no) => { q.push({fn, ok, no}); next(); });
+}
+// one log line that updates in place (e.g. "Sorting page 12 of 30")
+function logLive(k, html) {
+  let li = $(`#plog li[data-k="${k}"]`);
+  if (li) { li.innerHTML = html; return; }
+  log(html); $('#plog').lastElementChild.dataset.k = k;
+}
+// render a page (or a region of it, [x0,y0,x1,y1] on 0–1000) with its long side at `px`
+async function renderRegion(page, px, region) {
+  const v1 = page.getViewport({scale:1});
+  const r = region ? region.map(v => clamp(v, 0, 1000) / 1000) : [0, 0, 1, 1];
+  const rw = (r[2] - r[0]) * v1.width, rh = (r[3] - r[1]) * v1.height;
+  const scale = Math.min(px / Math.max(rw, rh), 12);
+  const vp = page.getViewport({scale});
+  const x0 = Math.floor(r[0] * vp.width), y0 = Math.floor(r[1] * vp.height);
+  const W = Math.max(1, Math.round(rw * scale)), H = Math.max(1, Math.round(rh * scale));
+  const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  await page.render({canvasContext:ctx, viewport:vp, transform:[1, 0, 0, 1, -x0, -y0]}).promise;
+  return {canvas, W, H, vp, x0, y0};
+}
+// text items inside that render, on a 0–1000 scale of it; z = font size, for picking titles
+async function regionText(page, {vp, x0, y0, W, H}) {
+  const tc = await page.getTextContent().catch(() => null);
+  if (!tc) return [];
+  const out = [];
+  for (const it of tc.items) {
+    const s = String(it.str || '').replace(/\s+/g, ' ').trim();
+    if (!s) continue;
+    const [px, py] = vp.convertToViewportPoint(it.transform[4], it.transform[5]);
+    const x = (px - x0) / W * 1000, y = (py - y0) / H * 1000;
+    if (x < 0 || x > 1000 || y < 0 || y > 1000) continue;
+    out.push({x:Math.round(x), y:Math.round(y), s, z:Math.hypot(it.transform[2], it.transform[3])});
+  }
+  return out;
+}
+// the biggest words on a sheet (titles, sheet number) — helps sorting scanned-looking thumbnails
+function bigText(items) {
+  const seen = new Set(); let out = '';
+  for (const t of [...items].sort((a, b) => b.z - a.z)) {
+    const s = t.s.slice(0, 60);
+    if (s.length < 2 || seen.has(s)) continue;
+    seen.add(s);
+    if (out.length + s.length > 500) break;
+    out += (out ? ' | ' : '') + s;
+  }
+  return out;
+}
+async function imageCanvas(f, px) {
+  const url = URL.createObjectURL(f);
+  try {
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const sc = Math.min(1, px / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(img.naturalWidth * sc); canvas.height = Math.round(img.naturalHeight * sc);
+    const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    return {canvas, W:canvas.width, H:canvas.height};
+  } finally { URL.revokeObjectURL(url); }
+}
+function scaledJpeg(canvas, px, q) {
+  const k = Math.min(1, px / Math.max(canvas.width, canvas.height));
+  if (k === 1) return {href:canvas.toDataURL('image/jpeg', q), W:canvas.width, H:canvas.height};
+  const c = document.createElement('canvas'); c.width = Math.round(canvas.width * k); c.height = Math.round(canvas.height * k);
+  c.getContext('2d').drawImage(canvas, 0, 0, c.width, c.height);
+  return {href:c.toDataURL('image/jpeg', q), W:c.width, H:c.height};
+}
+const sheetName = p => p.sheet_number ? `${p.sheet_number} (p.${p.page})` : `page ${p.page}`;
+const normLevel = l => {
+  const s = String(l || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!s || /^(1st|first|main|ground)(floor|level)?(plan)?$/.test(s)) return 'main';
+  if (/^(2nd|second|upper)(floor|level)?(plan)?$/.test(s)) return '2';
+  return s;
+};
+
+async function runDocument(f, reader) {
+  const run = ++S.run, live = () => run === S.run;
+  const isPdf = /pdf/i.test(f.type) || /\.pdf$/i.test(f.name);
+  const title = f.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').slice(0, 60) || 'Uploaded plan';
+  let pdf = null, total = 1, keepPdf = false;
+  try {
+    toast('Opening ' + f.name);
+    if (isPdf) { const lib = await loadPdfJs(); pdf = await lib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise; total = pdf.numPages; }
+  } catch (e) { toast('That file couldn’t be opened. Try another PDF or image.'); return; }
+  if (!live()) return;
+  resetTakeoff({kind:'upload', W:1000, H:720, href:'', title, file:`${f.name} · ${total} page${total > 1 ? 's' : ''}`, sheets:[]});
+  showProc('Reading drawing set', DSTEPS);
+  setStep(0, 'done'); log(`${esc(f.name)} · <b>${total}</b> page${total > 1 ? 's' : ''}`);
+  const ctl = new AbortController(); S.ctl = ctl;
+  $('#procAct').innerHTML = '<button class="btn-ghost sm" id="stopRun">Stop</button>';
+  $('#stopRun').onclick = () => ctl.abort();
+  const t0 = performance.now();
+  const tick = () => { const s = Math.round((performance.now() - t0) / 1000); $('#procTitle').textContent = `Reading drawing set · ${Math.floor(s / 60)}:${pad2(s % 60)}`; };
+  const clock = setInterval(() => live() ? tick() : clearInterval(clock), 1000);
+  let scanOn = !REDUCED;
+  const scanStep = t => { if (!scanOn || !live()) return; const p = ((t - t0) / 2600) % 2; scanTo((p < 1 ? p : 2 - p) * V.W); requestAnimationFrame(scanStep); };
+  if (scanOn) requestAnimationFrame(scanStep);
+  const stop = () => { scanOn = false; clearInterval(clock); $('#vscan').style.display = 'none'; };
+  try {
+    const out = await readSet({f, pdf, total, reader, signal:ctl.signal, live});
+    stop();
+    if (!live() || !out) return;
+    const {items, stats, plans, scheds} = out;
+    if (!items.length) { showError('No exterior windows were found in this set. Check that it includes a floor plan or a window schedule.', f); return; }
+    setStep(4, 'done'); setStep(5, 'active');
+    if (stats.tagged) log(`Matched <b>${stats.matched}</b> of ${stats.tagged} tagged openings to schedule rows`);
+    if (stats.doors) log(`Left out <b>${stats.doors}</b> doors (windows-only takeoff)`);
+    if (stats.added) log(`<b>${stats.added}</b> units listed in schedules but not found on the plans, flagged`);
+    log(`Takeoff: <b>${items.length}</b> windows`);
+    $('#wFile').textContent = S.src.file = `${f.name} · ${total} page${total > 1 ? 's' : ''} · ` + (out.schedOnly
+      ? `read ${scheds} schedule sheet${scheds === 1 ? '' : 's'} first` + (out.background ? '' : ' · floor plans not needed')
+      : `read ${plans} plan${plans === 1 ? '' : 's'}${scheds ? `, ${scheds} schedule sheet${scheds === 1 ? '' : 's'}` : ''}`);
+    S.items = items.sort((a, b) => a.mark.localeCompare(b.mark, undefined, {numeric:true}));
+    if (S.src.sheets.length) showSheet(S.src.sheets[0].page);
+    renderStats();
+    await wait(REDUCED ? 0 : 500); if (!live()) return;
+    setStep(5, 'done');
+    Object.assign(NUMS, counts(), {src:`From your plans · ${title}`});
+    S.bg = out.background ? {state:'running', text:'Locating windows on the floor plans…'} : null;
+    enterReview();
+    if (out.background) {
+      keepPdf = true;
+      runBackground(out.background, live, ctl.signal).finally(() => { try { pdf.destroy(); } catch (e) {} });
+    }
+  } catch (e) {
+    stop();
+    if (!live()) return;
+    if (e && e.code === 'cancelled') { goStage('upload'); return; }
+    showError((e && e.message) || 'The reading was interrupted. Try again.', f);
+  } finally {
+    if (pdf && !keepPdf) try { pdf.destroy(); } catch (e) {}
+  }
+}
+// The background mapping: a status line in the review while it runs, then the plan locations are filled in.
+async function runBackground(job, live, signal) {
+  S.bgReading = new Set(); S.bgFound = new Set(); S.bgPage = null;
+  const ui = {
+    say: text => { if (live()) { S.bg = {state:'running', text}; renderBgNote(); } },
+    reading: page => { if (live()) { S.bgReading.add(page); renderStrip(); } },
+    read: page => { if (live()) { S.bgReading.delete(page); renderStrip(); } },
+    sheetReady: page => { if (live()) { S.bgPage = S.bgPage || page; idleSheet(); } },     // show the page being scanned
+  };
+  renderStrip(true); bgBeam(live);
+  try {
+    const r = await job(ui);
+    if (!live()) return;
+    for (const p of r.pages) S.bgFound.add(p);
+    renderStrip(); setTimeout(() => live() && hideStrip(), REDUCED ? 600 : 1500);
+    const tot = S.items.filter(i => i.fromSched).length;
+    const skipped = r.untagged + r.unknown;
+    S.bg = {state:'done', text:`<b>${r.placed} of ${tot}</b> windows located on ${esc([...r.sheets].join(', ') || 'the floor plans')} · select a product to see them on the plan` +
+      (skipped ? `. ${skipped} window${skipped > 1 ? 's' : ''} on the plan without a schedule mark ${skipped > 1 ? 'were' : 'was'} not added.` : '')};
+    $('#wFile').textContent = S.src.file = S.src.file.replace(/ first$/, '') + ` · ${r.placed} located on the plan`;
+    // settle on the house plan: the sheet with the most windows placed (unless the user is looking at something)
+    const by = new Map(); S.items.filter(i => i.located).forEach(i => by.set(i.sheet, (by.get(i.sheet) || 0) + 1));
+    const plan = [...by].sort((a, b) => b[1] - a[1])[0]?.[0];
+    S.bgPage = null;
+    if (plan && !S.sel && !S.selGroup && !S.open) { showSheet(plan); fitView(); }
+    renderStats(); drawDets(); renderSheetTabs(); renderList(); renderFoot();
+    const it = S.sel && byId(S.sel), sum = $('#detail .d-sum');
+    if (it && sum && !S.preview) sum.outerHTML = plainSummary(it);
+    toast(`${r.placed} of ${tot} windows located on the floor plan`);
+  } catch (e) {
+    if (!live() || signal.aborted || (e && e.code === 'cancelled')) return;
+    S.bg = {state:'failed', text:`Couldn’t read the floor plans (${esc((e && e.message) || 'error')}). The takeoff from the schedule is unchanged.`};
+    S.bgPage = null; renderBgNote(); hideStrip();
+  }
+}
+// The page strip over the viewer while the plans are mapped: every page of the set, checked one after another,
+// the plan being read with a scan line, a check when its windows are placed.
+const KIND_SHORT = {floor_plan:'plan', auto:'plan', window_schedule:'schedule', window_door_schedule:'schedule', window_types:'types',
+  door_schedule:'doors', elevation:'elevation', other_plan:'other', other:'other'};
+function renderStrip(sweep) {
+  const T = $('#vstrip'), th = (S.src && S.src.thumbs) || [];
+  if (!th.length || !S.bg || S.bg.state === 'failed') { T.hidden = true; T.innerHTML = ''; return; }
+  if (!T.childElementCount) {
+    T.innerHTML = th.map((t, i) => { const k = (S.src.kinds || {})[t.page] || {}, name = k.label || `p.${t.page}`;
+      return `<span class="vt" data-p="${t.page}" style="--i:${i}" title="${esc(name)} · ${KIND_SHORT[k.kind] || 'page'}"><img src="${t.href}" alt=""><i class="vt-scan"></i><em>${esc(name)}</em></span>`; }).join('');
+    T.hidden = false; T.classList.remove('out');
+    if (sweep) { T.classList.remove('sweep'); void T.offsetWidth; T.classList.add('sweep'); }
+  }
+  for (const e of T.children) { const p = +e.dataset.p; e.classList.toggle('reading', S.bgReading.has(p)); e.classList.toggle('found', S.bgFound.has(p)); }
+  const r = T.querySelector('.reading, .found');
+  if (r) T.scrollTo({left:r.offsetLeft - T.clientWidth / 2 + r.offsetWidth / 2, behavior:REDUCED ? 'auto' : 'smooth'});
+}
+function hideStrip() {
+  const T = $('#vstrip'); if (T.hidden) return;
+  T.classList.add('out'); setTimeout(() => { if (T.classList.contains('out')) { T.hidden = true; T.innerHTML = ''; T.classList.remove('out', 'sweep'); } }, 450);
+}
+// the scan beam over the page being read, while nothing is selected
+function bgBeam(live) {
+  const t0 = performance.now();
+  const step = () => {
+    if (!live() || !S.bg || S.bg.state !== 'running') { $('#vscan').style.display = 'none'; return; }
+    if (!REDUCED && S.stage === 'review' && S.bgPage && S.sheet === S.bgPage && !S.sel && !S.selGroup && !S.open) {
+      const p = ((performance.now() - t0) / 2600) % 2; scanTo((p < 1 ? p : 2 - p) * V.W);
+    } else $('#vscan').style.display = 'none';
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+// Place each scheduled unit on the floor plans: plan tag → schedule mark → the next unplaced unit of that mark.
+// Nothing is added or removed: the schedule's counts stand; differences are noted on the product.
+function mapPlans(planReads, defs) {
+  const r = {placed:0, untagged:0, unknown:0, nobox:0, sheets:new Set(), pages:new Set()};
+  const free = new Map(), seen = new Map();
+  for (const it of S.items) if (it.fromSched && !it.located && it.defId) { if (!free.has(it.defId)) free.set(it.defId, []); free.get(it.defId).push(it); }
+  for (const pr of planReads) for (const o of pr.openings) {
+    const type0 = TYPES.includes(o.type) ? o.type : 'Unknown';
+    if (o.category === 'door' || DOOR_TYPES.has(type0)) continue;          // windows only
+    const tag = o.tag ? String(o.tag).trim().slice(0, 12) : '';
+    if (!tag) { r.untagged++; continue; }
+    const k = normKey(tag), a = altKey(k);
+    const cands = [...defs.values()].filter(d => d.cat === 'window' && (d.key === k || altKey(d.key) === a));
+    if (!cands.length) { r.unknown++; continue; }
+    const box = toBox(o.box, pr.W, pr.H);
+    if (!box) { r.nobox++; continue; }
+    const qty = clamp(Math.round(Number(o.quantity) || 1), 1, 20);
+    for (let q = 0; q < qty; q++) {
+      const d = cands.find(c => (free.get(c.id) || []).length) || cands[0];
+      seen.set(d.id, (seen.get(d.id) || 0) + 1);
+      const it = (free.get(d.id) || []).shift();
+      if (!it) continue;
+      Object.assign(it, {box, sheet:pr.page, located:true});
+      if (!it.room && o.room) it.room = String(o.room).slice(0, 40);
+      it.srcs = [...(it.srcs || []), `Tag ${tag} on ${pr.name}`];
+      r.placed++; r.sheets.add(pr.label || pr.name); r.pages.add(pr.page);
+    }
+  }
+  const addNote = (it, t) => { if (!(it.note || '').includes(t)) it.note = `${it.note || ''} ${t}`.trim(); };
+  for (const d of defs.values()) {
+    const units = S.items.filter(i => i.defId === d.id && i.fromSched);
+    if (!units.length) continue;
+    const n = seen.get(d.id) || 0;
+    if (n > units.length) units.forEach(it => { addNote(it, `The floor plans show ${n} with tag ${d.raw}; the schedule lists ${units.length}.`); it.conf = Math.min(it.conf, .75); });
+    else units.filter(it => !it.located).forEach(it => addNote(it, 'Not found on the floor plans — shown at its schedule row.'));
+  }
+  return r;
+}
+
+async function readSet({f, pdf, total, reader, signal, live}) {
+  const cancelled = () => Object.assign(new Error('cancelled'), {code:'cancelled'});
+  const isCancel = e => signal.aborted || (e && e.code === 'cancelled');
+  const lim = limiter(LIMITS.inFlight);
+  const info = new Map();                     // page → classification
+
+  // ---------- 1. sort every page ----------
+  setStep(1, 'active');
+  if (pdf && total > 1) {
+    const jobs = [], errs = [];
+    const classify = async b => {
+      for (let a = 0; ; a++) {
+        try { return await reader.run({task:'classify', filename:f.name, total, pages:b}, {signal}); }
+        catch (e) {
+          if (isCancel(e)) throw e;
+          if (a >= 1) { log(`Couldn’t sort pages ${b[0].page}–${b[b.length - 1].page}: ${esc(e.message)}`); return null; }
+        }
+      }
+    };
+    let batch = [], sorted = 0;
+    for (let n = 1; n <= total; n++) {
+      if (signal.aborted) throw cancelled();
+      const page = await pdf.getPage(n);
+      const th = await renderRegion(page, 1000, null);
+      const text = bigText(await regionText(page, th));
+      const image = th.canvas.toDataURL('image/jpeg', .72);
+      (S.src.thumbs = S.src.thumbs || []).push({page:n, href:scaledJpeg(th.canvas, 200, .6).href});   // for the page strip
+      page.cleanup();
+      if (!live()) return null;
+      setupViewer({kind:'upload', W:th.W, H:th.H, href:image});      // pages flip by while they're sorted
+      logLive('sort', `Sorting pages · <b>${n}</b> of ${total} scanned${sorted ? ` · ${sorted} sorted` : ''}`);
+      batch.push({page:n, image, text});
+      if (batch.length === LIMITS.batch || n === total) {
+        const b = batch; batch = [];
+        jobs.push(lim(() => classify(b)).then(res => {
+          for (const p of (res && res.pages) || []) if (b.some(x => x.page === p.page)) info.set(p.page, p);
+          sorted += b.length;
+          if (live()) logLive('sort', `Sorting pages · <b>${total}</b> of ${total} scanned · ${sorted} sorted`);
+        }).catch(e => errs.push(e)));
+      }
+    }
+    await Promise.all(jobs);
+    if (errs.some(isCancel)) throw cancelled();
+    if (!info.size) throw Object.assign(new Error(errs[0]?.message || 'The pages couldn’t be sorted. Try again.'), {code:'sort_failed'});
+    S.src.kinds = Object.fromEntries([...info].map(([n, p]) => [n, {kind:p.kind, label:p.sheet_number || ''}]));
+    const tally = {};
+    for (const p of info.values()) tally[p.kind] = (tally[p.kind] || 0) + 1;
+    log('Sheets: ' + ['floor_plan','window_door_schedule','window_schedule','door_schedule','window_types','elevation']
+      .filter(k => tally[k]).map(k => `<b>${tally[k]}</b> ${KIND_NAME[k]}${tally[k] > 1 && !/schedule|legend/.test(k) ? 's' : ''}`).join(', ')
+      + `, ${total - (tally.floor_plan || 0) - (tally.elevation || 0) - [...SCHED_KINDS].reduce((s, k) => s + (tally[k] || 0), 0)} other`);
+  } else {
+    info.set(1, {page:1, kind:'auto', sheet_number:null, title:null, level:null, opening_tags:'many', schedule_regions:[]});
+  }
+  setStep(1, 'done');
+
+  // ---------- 2. choose and read sheets ----------
+  const all = [...info.values()].sort((a, b) => a.page - b.page);
+  const floorPlans = all.filter(p => p.kind === 'floor_plan' || p.kind === 'auto');
+  // Sets that tag openings with symbols put each tag on exactly one noted plan, so every tagged plan is read
+  // (a level split over "continued" sheets stays whole) and the dimensioned copies are left out.
+  // Without symbols, one plan per level: the one with the most callouts.
+  const tagged = floorPlans.filter(p => (p.tag_style === 'symbols' || p.tag_style === 'both') && p.opening_tags !== 'none');
+  let plans;
+  if (tagged.length) plans = tagged;
+  else {
+    const byLevel = new Map();
+    for (const p of floorPlans) {
+      const k = normLevel(p.level), cur = byLevel.get(k);
+      if (!cur || (TAG_RANK[p.opening_tags] ?? 0) > (TAG_RANK[cur.opening_tags] ?? 0)) byLevel.set(k, p);
+    }
+    plans = [...byLevel.values()].sort((a, b) => a.page - b.page);
+  }
+  plans = plans.slice(0, LIMITS.plans);
+  const planPages = new Set(plans.map(p => p.page));
+  // schedule tables are read as high-resolution crops, also when they sit on a plan sheet
+  const schedPages = all.filter(p => (SCHED_KINDS.has(p.kind) && p.kind !== 'door_schedule') || (p.schedule_regions || []).length).slice(0, LIMITS.schedules);
+  const elevations = all.filter(p => p.kind === 'elevation').slice(0, LIMITS.elevations);
+  if (!plans.length && !schedPages.length) {
+    // nothing labelled: fall back to the sheets with the most opening tags
+    plans = all.filter(p => p.kind !== 'other' && (TAG_RANK[p.opening_tags] ?? 0) > 0).slice(0, 2);
+    if (!plans.length) throw Object.assign(new Error('No floor plan or window schedule was found in this set. Upload the architectural drawings.'), {code:'no_sheets'});
+    log('No sheet looked like a floor plan; reading the sheets with the most opening tags');
+  }
+  for (const p of plans) log(`Floor plan: <b>${esc(sheetName(p))}</b>${p.title ? ` ${esc(p.title.toLowerCase())}` : ''}`);
+  // every page was sorted above, so this is every page that carries a window schedule — not just the first
+  if (schedPages.length) log(`Window schedule${schedPages.length > 1 ? 's' : ''} found on <b>${schedPages.length}</b> page${schedPages.length > 1 ? 's' : ''}: ` +
+    schedPages.map(p => `${esc(sheetName(p))}${p.title ? ` ${esc(p.title.toLowerCase())}` : ''}`).join(', '));
+  const skipped = floorPlans.filter(p => !planPages.has(p.page)).length;
+  if (skipped) log(`${skipped} more floor plan${skipped > 1 ? 's' : ''} skipped (${tagged.length ? 'no opening tags, e.g. dimensioned plans' : 'same level, fewer opening notes'})`);
+
+  const planReads = [], defReads = [], errors = [];
+  let plansLeft = plans.length, schedLeft = schedPages.length;
+  setStep(2, schedLeft ? 'active' : 'done');
+  const refresh = () => {                     // show what's known so far on the plan
+    if (!live()) return;
+    S.items = mergeSet(planReads, defReads).items; drawDets(); renderStats(); renderSheetTabs();
+  };
+  const readOne = async (p, kind, region, quiet) => {     // quiet: a background read, the viewer isn't moved
+    if (signal.aborted) throw cancelled();
+    let canvas, W, H, text = [];
+    if (pdf) {
+      const page = await pdf.getPage(p.page);
+      const r = await renderRegion(page, region ? 2400 : 4000, region);
+      ({canvas, W, H} = r);
+      text = await regionText(page, r);
+      page.cleanup();
+    } else ({canvas, W, H} = await imageCanvas(f, 4000));
+    let sheet = null;
+    if (kind === 'floor_plan' || kind === 'auto') {
+      // keep a lighter copy of the sheet for the review viewer; boxes are placed on it (a schedule on this
+      // sheet may already have put it there)
+      sheet = S.src.sheets.find(x => x.page === p.page);
+      if (!sheet) {
+        const v = scaledJpeg(canvas, 3000, .85);
+        sheet = {page:p.page, label:p.sheet_number || `p.${p.page}`, name:sheetName(p), title:p.title || '', W:v.W, H:v.H, href:v.href};
+        S.src.sheets.push(sheet); S.src.sheets.sort((a, b) => a.page - b.page);
+      }
+      if (live()) { if (!quiet) showSheet(p.page); else { renderSheetTabs(); if (typeof quiet === 'function') quiet(p.page); } }
+    }
+    const image = await blobToDataURL(await new Promise(ok => canvas.toBlob(ok, 'image/png')));
+    canvas.width = canvas.height = 0;
+    const body = {task:'page', filename:f.name, page:p.page, total, kind, crop:!!region, level:p.level || '',
+      title:[p.sheet_number, p.title].filter(Boolean).join(' '), width:W, height:H, image, textLayer:textLayer(text, 50000)};
+    for (let a = 0; ; a++) {
+      try { return {res:await reader.run(body, {signal}), sheet}; }
+      catch (e) { if (isCancel(e) || a >= 1) throw e; }
+    }
+  };
+  // a viewer copy of a whole sheet (a schedule page, when the takeoff comes from its schedule alone)
+  const addSheet = async p => {
+    if (S.src.sheets.some(s => s.page === p.page)) return;
+    let canvas;
+    if (pdf) { const page = await pdf.getPage(p.page); ({canvas} = await renderRegion(page, 3000, null)); page.cleanup(); }
+    else ({canvas} = await imageCanvas(f, 3000));
+    const v = scaledJpeg(canvas, 3000, .85); canvas.width = canvas.height = 0;
+    S.src.sheets.push({page:p.page, label:p.sheet_number || `p.${p.page}`, name:sheetName(p), title:p.title || '', W:v.W, H:v.H, href:v.href});
+    S.src.sheets.sort((a, b) => a.page - b.page);
+  };
+  const readPlans = () => plans.map(p => lim(async () => {
+    try {
+      const {res, sheet} = await readOne(p, p.kind === 'auto' ? 'auto' : 'floor_plan');
+      planReads.push({page:p.page, name:sheetName(p), W:sheet.W, H:sheet.H, openings:res.openings || []});
+      if ((res.definitions || []).length) defReads.push({page:p.page, name:sheetName(p), from:'plan', defs:res.definitions});
+      log(`${esc(sheetName(p))}: <b>${(res.openings || []).length}</b> openings${(res.definitions || []).length ? `, ${res.definitions.length} schedule rows` : ''}`);
+      refresh();
+    } catch (e) { if (isCancel(e)) throw e; errors.push(e); log(`Couldn’t read ${esc(sheetName(p))}: ${esc(e.message)}`); }
+    finally { if (!--plansLeft) setStep(3, 'done'); }
+  }));
+  // A. the window schedule first
+  const jobs = [];
+  for (const p of schedPages) {
+    const regions = (p.schedule_regions || []).filter(b => Array.isArray(b) && b.length === 4 && b[2] - b[0] > 20 && b[3] - b[1] > 20)
+      .map(([x0, y0, x1, y1]) => [x0 - 25, y0 - 25, x1 + 25, y1 + 25]).slice(0, LIMITS.cropsPerPage);
+    const crops = regions.length ? regions : [null];
+    let left = crops.length;
+    for (const region of crops) jobs.push(lim(async () => {
+      try {
+        const {res} = await readOne(p, p.kind === 'window_types' ? 'window_types' : 'schedule', region);
+        const defs = res.definitions || [];
+        defReads.push({page:p.page, name:sheetName(p), label:p.sheet_number || `p.${p.page}`, from:p.kind === 'window_types' ? 'window_types' : 'schedule', defs, region});
+        const nw = defs.filter(d => d.applies_to === 'window').length;
+        log(`${esc(sheetName(p))}: <b>${nw}</b> window schedule rows`);
+        refresh();
+      } catch (e) { if (isCancel(e)) throw e; errors.push(e); log(`Couldn’t read the schedule on ${esc(sheetName(p))}: ${esc(e.message)}`); }
+      finally { if (!--left && !--schedLeft) setStep(2, 'done'); }
+    }));
+  }
+  const settled = await Promise.allSettled(jobs);
+  if (signal.aborted || settled.some(s => s.status === 'rejected' && isCancel(s.reason))) throw cancelled();
+  setStep(2, 'done');
+  if (defReads.length) {
+    const dm = buildDefs(defReads), tables = dm.tables.filter(t => t.rows);
+    const used = [...dm.values()].filter(d => d.exterior !== false && d.quantity !== 0);      // as scheduleEnough counts them
+    const units = used.reduce((n, d) => n + (Number.isInteger(d.quantity) && d.quantity > 0 ? d.quantity : 0), 0);
+    log(`${tables.length} window schedule table${tables.length === 1 ? '' : 's'} · <b>${used.length}</b> marks` + (units ? ` · <b>${units}</b> windows counted` : ''));
+    for (const t of tables) if (t.copyOf) log(`${esc(t.name)} repeats ${esc(t.copyOf)} · counted once`);
+      else if (t.separate) log(`${esc(t.name)} is a separate schedule that reuses marks with other sizes · kept as its own products (marks ${esc(t.label)}/…)`);
+  }
+  // B. the floor plans, only if the schedule doesn't already give every window's size and count
+  const enough = scheduleEnough(defReads);
+  if (enough.ok) {
+    const rowPages = new Set([...buildDefs(defReads).values()].map(d => d.page));   // the sheet each kept row came from
+    const used = schedPages.filter(p => rowPages.has(p.page));
+    log(`The window schedule${used.length > 1 ? 's list' : ' lists'} all <b>${enough.units}</b> windows (${enough.rows} marks) with sizes and counts · the takeoff is ready` +
+        (plans.length ? `; the floor plan${plans.length > 1 ? 's' : ''} will be mapped in the background` : ''));
+    setStep(3, 'done');
+    for (const p of used) { if (signal.aborted) throw cancelled(); await addSheet(p); }
+    if (!live()) return null;
+    if (used.length) showSheet(used[0].page);
+    // after the review opens: read the floor plans and place each scheduled unit on them (counts stay the schedule's)
+    const background = !plans.length || !pdf ? null : async ui => {
+      const reads = [];
+      const res = await Promise.allSettled(plans.map(p => lim(async () => {
+        ui.say(`Finding the floor plan… reading ${sheetName(p)}`); ui.reading(p.page);
+        try {
+          const {res, sheet} = await readOne(p, 'floor_plan', null, ui.sheetReady);
+          reads.push({page:p.page, name:sheetName(p), label:sheet.label, W:sheet.W, H:sheet.H, openings:res.openings || []});
+        } finally { ui.read(p.page); }
+      })));
+      if (signal.aborted || res.some(r => r.status === 'rejected' && isCancel(r.reason))) throw cancelled();
+      if (!reads.length) throw res.find(r => r.status === 'rejected')?.reason || new Error('No floor plan could be read.');
+      return mapPlans(reads.sort((a, b) => a.page - b.page), buildDefs(defReads));
+    };
+    return {...mergeSet([], defReads), plans:0, scheds:used.length, schedOnly:true, background, planCount:plans.length};
+  }
+  if (schedPages.length && plans.length) log(`${enough.why} · reading the floor plans`);
+  setStep(3, plans.length ? 'active' : 'done');
+  const settledB = await Promise.allSettled(readPlans());
+  if (signal.aborted || settledB.some(s => s.status === 'rejected' && isCancel(s.reason))) throw cancelled();
+  if (!planReads.length && !defReads.length) throw errors[0] || new Error('No sheet could be read. Try again.');
+  setStep(3, 'done');
+
+  // ---------- 3. join, and look at elevations if tags are still unexplained ----------
+  setStep(4, 'active');
+  let merged = mergeSet(planReads, defReads);
+  const st = merged.stats;   // a stray keynote read as a tag shouldn't trigger this; a missing schedule should
+  if (elevations.length && st.unresolved && (!defReads.length || st.unresolved >= Math.max(3, st.tagged * .2))) {
+    log(`${merged.stats.unresolved} tagged openings have no schedule entry · checking ${elevations.length} elevation sheet${elevations.length > 1 ? 's' : ''}`);
+    const ej = elevations.map(p => lim(async () => {
+      try {
+        const {res} = await readOne(p, 'elevation');
+        const defs = res.definitions || [];
+        if (defs.length) defReads.push({page:p.page, name:sheetName(p), from:'elevation', defs});
+        log(`${esc(sheetName(p))}: <b>${defs.length}</b> tag notes`);
+      } catch (e) { if (isCancel(e)) throw e; log(`Couldn’t read ${esc(sheetName(p))}: ${esc(e.message)}`); }
+    }));
+    const es = await Promise.allSettled(ej);
+    if (signal.aborted || es.some(s => s.status === 'rejected' && isCancel(s.reason))) throw cancelled();
+    merged = mergeSet(planReads, defReads);
+  }
+  return {...merged, plans:planReads.length, scheds:schedPages.length};
+}
+
+// ---------- the join ----------
+const normKey = s => { let k = String(s ?? '').toUpperCase().replace(/[\s.\-#_]+/g, ''); if (/^0*\d+$/.test(k)) k = String(parseInt(k, 10)); return k; };
+const altKey = k => k.replace(/^(WIN|WDW|DR|W|D)(?=\d)/, '').replace(/^0+(?=\d)/, '');
+const inches = v => { const n = Number(v); return Number.isFinite(n) && n > 0 && n < 400 ? Math.round(n * 10) / 10 : null; };
+function toBox(b, W, H, pad = .006) {
+  if (!Array.isArray(b) || b.length !== 4 || !b.every(v => Number.isFinite(Number(v)))) return null;
+  let [x0, y0, x1, y1] = b.map(Number);
+  if (x1 < x0) [x0, x1] = [x1, x0];
+  if (y1 < y0) [y0, y1] = [y1, y0];
+  x0 = clamp(x0, 0, 1000) / 1000 * W; x1 = clamp(x1, 0, 1000) / 1000 * W;
+  y0 = clamp(y0, 0, 1000) / 1000 * H; y1 = clamp(y1, 0, 1000) / 1000 * H;
+  const m = Math.max(W, H) * pad;
+  return [x0 - m, y0 - m, Math.max(x1 - x0, 4) + 2*m, Math.max(y1 - y0, 4) + 2*m];
+}
+// Does the schedule alone make the takeoff? Every window row needs a size and a count.
+function scheduleEnough(defReads) {
+  if (!defReads.length) return {ok:false, why:'No window schedule was read'};
+  const rows = [...buildDefs(defReads).values()].filter(d => d.exterior !== false && d.quantity !== 0);
+  if (!rows.length) return {ok:false, why:'The schedule has no window rows'};
+  const noQty = rows.filter(d => !(Number.isInteger(d.quantity) && d.quantity > 0)).length;
+  const noSize = rows.filter(d => !d.w || !d.h).length;
+  if (noQty) return {ok:false, why:noQty === rows.length ? 'The window schedule has no quantity column' : `${noQty} schedule row${noQty > 1 ? 's have' : ' has'} no count`};
+  if (noSize) return {ok:false, why:`${noSize} schedule row${noSize > 1 ? 's have' : ' has'} no size`};
+  return {ok:true, rows:rows.length, units:rows.reduce((s, d) => s + d.quantity, 0)};
+}
+// a schedule row's box, read on a crop, on the 0–1000 scale of the whole page
+function rowBoxOnPage(b, region) {
+  if (!Array.isArray(b) || b.length !== 4 || !b.every(v => Number.isFinite(Number(v)))) return null;
+  if (!region) return b.map(Number);
+  const [rx0, ry0, rx1, ry1] = region.map(v => clamp(v, 0, 1000));
+  const [x0, y0, x1, y1] = b.map(v => clamp(Number(v), 0, 1000) / 1000);
+  return [rx0 + x0 * (rx1 - rx0), ry0 + y0 * (ry1 - ry0), rx0 + x1 * (rx1 - rx0), ry0 + y1 * (ry1 - ry0)];
+}
+// Several schedule tables (pages, crops): a copy of a table already read (most rows the same mark and size)
+// merges into it; a table that reuses marks with other sizes is a separate schedule (another building, a
+// casita) and keeps its own products; new marks simply continue the list.
+function buildDefs(defReads) {
+  const m = new Map(); m.tables = [];
+  for (const r of defReads) {
+    const defs = r.defs || [], nWin = defs.filter(d => d.applies_to !== 'door').length;
+    const rows = defs.filter(d => d.applies_to !== 'door' && !DOOR_TYPES.has(d.type) && normKey(d.key));
+    const table = {page:r.page, name:r.name, label:r.label || `p.${r.page}`, rows:rows.length, copyOf:null, separate:false};
+    if (r.from !== 'elevation' && rows.length >= 2) {
+      let shared = 0, same = 0; const from = new Map();
+      for (const d of rows) {
+        const cur = m.get(`window:${normKey(d.key)}`);
+        if (!cur || cur.page === r.page) continue;
+        shared++; from.set(cur.name, (from.get(cur.name) || 0) + 1);
+        const w = inches(d.width_in), h = inches(d.height_in);
+        if (!w || !cur.w || (Math.abs(w - cur.w) <= 1 && Math.abs((h || 0) - (cur.h || 0)) <= 1)) same++;
+      }
+      if (shared && same / shared >= .7 && shared >= rows.length * .7) table.copyOf = [...from].sort((a, b) => b[1] - a[1])[0][0];
+      else if (shared >= 2 && same / shared < .7) table.separate = true;
+    }
+    m.tables.push(table);
+    for (const d of defs) {
+      if (d.applies_to === 'door' || DOOR_TYPES.has(d.type)) continue;     // windows-only takeoff
+      const key = normKey(d.key);
+      if (!key) continue;
+      const cat = d.applies_to === 'door' ? 'door' : 'window', id = table.separate ? `${cat}:${key}@p${r.page}` : `${cat}:${key}`;
+      // a lone "window" row in a door table (or the reverse) is usually a misread: it ranks below the proper table
+      const share = (cat === 'window' ? nWin : defs.length - nWin) / defs.length;
+      const odd = defs.length >= 5 && share < .2;
+      const raw = String(d.key).trim().slice(0, 12);
+      const nd = {...d, key, raw:table.separate ? `${table.label}/${raw}` : raw, separate:table.separate, cat, id, page:r.page, name:r.name, from:r.from, odd,
+        rank:(DEF_RANK[r.from] ?? 0) - (odd ? 2.5 : 0), rowBox:rowBoxOnPage(d.row_box, r.region),
+        w:inches(d.width_in), h:inches(d.height_in), type:TYPES.includes(d.type) ? d.type : 'Unknown', conflicts:[]};
+      const cur = m.get(id);
+      if (!cur) { m.set(id, nd); continue; }
+      // the same mark read twice (another sheet, another crop): keep the better source, fill its gaps, remember disagreements
+      const [keep, other] = nd.rank > cur.rank ? [nd, cur] : [cur, nd];
+      if (!other.odd) {
+        if (keep.w && other.w && (Math.abs(keep.w - other.w) > 1 || Math.abs((keep.h || 0) - (other.h || 0)) > 1))
+          keep.conflicts.push(`${other.name === keep.name ? `another read of ${other.name}` : other.name} says ${other.w} × ${other.h ?? '?'} in`);
+        for (const f of ['w', 'h', 'quantity', 'tempered_glass', 'egress', 'exterior', 'size_text']) if (keep[f] == null && other[f] != null) keep[f] = other[f];
+        if (!keep.rowBox && other.rowBox && other.page === keep.page) keep.rowBox = other.rowBox;
+        if (keep.type === 'Unknown') keep.type = other.type;
+        keep.conflicts.push(...other.conflicts);
+      }
+      m.set(id, keep);
+    }
+  }
+  return m;
+}
+function findDef(defs, tag, cat) {
+  const k = normKey(tag);
+  if (!k) return null;
+  const other = cat === 'door' ? 'window' : 'door';
+  const alt = c => { const a = altKey(k); for (const d of defs.values()) if (d.cat === c && altKey(d.key) === a) return d; return null; };
+  return defs.get(`${cat}:${k}`) || alt(cat) || defs.get(`${other}:${k}`) || alt(other);
+}
+function mergeSet(planReads, defReads) {
+  const defs = buildDefs(defReads);
+  const stats = {tagged:0, matched:0, unresolved:0, interior:0, added:0, doors:0};
+  const items = [];
+  const defLine = d => `${DEF_FROM[d.from]} ${d.name}`;
+  for (const r of planReads) for (const o of r.openings) {
+    const tag = o.tag ? String(o.tag).trim().slice(0, 12) : '';
+    const type0 = TYPES.includes(o.type) ? o.type : 'Unknown';
+    const cat0 = o.category === 'door' || DOOR_TYPES.has(type0) ? 'door' : 'window';
+    if (cat0 === 'door') { stats.doors++; continue; }                     // windows-only takeoff
+    const d = tag ? findDef(defs, tag, cat0) : null;
+    if (d && d.exterior === false) { stats.interior++; continue; }
+    const ownW = inches(o.width_in), ownH = inches(o.height_in);
+    let w = ownW, h = ownH, type = type0, conf = clamp(Number(o.confidence) || .5, 0, 1);
+    const notes = [], srcs = [`${tag ? `Tag ${tag}` : 'Drawn'} on ${r.name}`];
+    if (o.needs_review === true) { conf = Math.min(conf, .8); if (o.note) notes.push(String(o.note).slice(0, 160)); }
+    if (tag) stats.tagged++;
+    if (d) {
+      stats.matched++;
+      srcs.push(defLine(d));
+      if (d.w && d.h) {
+        if (ownW && ownH && (Math.abs(ownW - d.w) > 1 || Math.abs(ownH - d.h) > 1)) { notes.push(`The plan note says ${ownW} × ${ownH} in; ${d.name} says ${d.w} × ${d.h} in.`); conf = Math.min(conf, .7); }
+        w = d.w; h = d.h;
+      }
+      if (d.type !== 'Unknown') type = d.type;
+      conf = Math.min(conf, clamp(Number(d.confidence) || .5, 0, 1));
+      if (d.conflicts.length) { notes.push(`Sheets disagree: ${d.conflicts.join('; ')}.`); conf = Math.min(conf, .7); }
+    } else if (tag && (w == null || h == null)) {
+      stats.unresolved++;
+      notes.push(defs.size ? `Tag ${tag} isn’t in any schedule found in this set.` : `No schedule was found in this set for tag ${tag}.`);
+    }
+    if (DOOR_TYPES.has(type)) { stats.doors++; continue; }
+    const cat = 'window';
+    const base = {cat, type, w, h, room:String(o.room || '').slice(0, 40), conf, note:notes.join(' '), box:toBox(o.box, r.W, r.H),
+      raw:String(o.raw_callout || (d ? `${tag} · ${d.size_text || ''}` : '')).replace(/ · $/, '').slice(0, 40),
+      temp:o.tempered_glass === true || (d && d.tempered_glass === true), egress:o.egress === true || (d && d.egress === true),
+      sheet:r.page, srcs, tag, defId:d ? d.id : null};
+    const qty = clamp(Math.round(Number(o.quantity) || 1), 1, 20);
+    for (let k = 0; k < qty; k++) items.push({...base, srcs:[...srcs], id:uid++});
+  }
+  // quantities: the schedule's count against what was found on the plans
+  for (const d of defs.values()) {
+    if (d.exterior === false) continue;
+    const found = items.filter(i => i.defId === d.id);
+    const c = found.length;
+    if (d.quantity === 0) {          // a schedule row kept with quantity 0: this type isn't used
+      for (const it of found) { it.note = `${it.note} ${d.name} lists 0 of these.`.trim(); it.conf = Math.min(it.conf, .6); }
+      continue;
+    }
+    const q = Number.isInteger(d.quantity) && d.quantity > 0 ? d.quantity : null;
+    let missing = 0, note = d.separate ? `From a second window schedule on ${d.name} that reuses mark ${d.key} with another size — check which building it belongs to.` : '';
+    if (!planReads.length) { missing = q || 1; }
+    else if (q && c < q) { missing = q - c; note = `${d.name} lists ${q}; ${c} found on the plans. Locate the rest, or remove.`; }
+    else if (!q && !c) { missing = 1; note = `In ${d.name}, but not found on the floor plans.`; }
+    else if (q && c > q) for (const it of found) { it.note = `${it.note} ${d.name} lists ${q}, but ${c} were found on the plans.`.trim(); it.conf = Math.min(it.conf, .75); }
+    // from the schedule alone: placed on its row of the schedule sheet (when that sheet is shown)
+    const sh = !planReads.length && d.rowBox && (S.src?.sheets || []).find(s => s.page === d.page);
+    const box = sh ? toBox(d.rowBox, sh.W, sh.H, 0) : null;
+    for (let k = 0; k < Math.min(missing, planReads.length ? 30 : 200); k++) {
+      items.push({id:uid++, cat:'window', type:d.type, w:d.w, h:d.h, room:'', box, sheet:box ? d.page : null, tag:d.raw, defId:d.id,
+        fromSched:!planReads.length, schedName:d.name, schedQty:q,
+        conf:Math.min(planReads.length ? .6 : 1, clamp(Number(d.confidence) || .5, 0, 1)), note,
+        raw:`${d.raw}${d.size_text ? ` · ${d.size_text}` : ''}`.slice(0, 40), temp:d.tempered_glass === true, egress:d.egress === true, srcs:[defLine(d)]});
+      if (planReads.length) stats.added++;
+    }
+  }
+  // marks: the drawing's tag, numbered when it repeats (3·1, 3·2 …); untagged → W01 / D01
+  const seen = new Map(), reps = new Map();
+  for (const it of items) if (it.tag) reps.set(`${it.cat}:${it.tag}`, (reps.get(`${it.cat}:${it.tag}`) || 0) + 1);
+  let wn = 1, dn = 1;
+  for (const it of items) {
+    if (!it.tag) { it.mark = it.cat === 'door' ? `D${pad2(dn++)}` : `W${pad2(wn++)}`; continue; }
+    const k = `${it.cat}:${it.tag}`, n = (seen.get(k) || 0) + 1; seen.set(k, n);
+    it.mark = reps.get(k) > 1 ? `${it.tag}·${n}` : it.tag;
+  }
+  return {items, stats};
+}
+/* ------------------------------------------------------------------
+   Reading with the local WindowBid OCR app (server started with LOCAL_OCR_URL). The upload goes to it
+   through /local/api/… on this server; its takeoff is shown in this demo's review, windows only.
+   The local app shows its takeoff as soon as it is extracted and finishes its independent re-reads of
+   OCR'd notes right after — the review refreshes when they are in.
+------------------------------------------------------------------ */
+const LSTEPS = ['Drawing received','Reading text and drawing lines','Finding windows and their notes','Checking notes with independent reads','Building the takeoff'];
+const LOCAL_TYPE = {single_hung:'Single hung', double_hung:'Double hung', casement:'Casement', awning:'Awning',
+  picture:'Picture', transom:'Picture', sliding:'Sliding'};
+const LOCAL_DOOR = /door/;
+
+async function runLocal(f) {
+  const run = ++S.run, live = () => run === S.run;
+  const title = f.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').slice(0, 60) || 'Uploaded plan';
+  resetTakeoff({kind:'upload', W:1000, H:720, href:'', title, file:f.name, sheets:[]});
+  showProc('Reading drawing', LSTEPS);
+  setStep(0, 'done'); setStep(1, 'active'); log(esc(f.name));
+  const ctl = new AbortController(); S.ctl = ctl;
+  $('#procAct').innerHTML = '<button class="btn-ghost sm" id="stopRun">Stop</button>';
+  $('#stopRun').onclick = () => { ctl.abort(); goStage('upload'); };
+  const t0 = performance.now();
+  const clock = setInterval(() => {
+    if (!live()) return clearInterval(clock);
+    const s = Math.round((performance.now() - t0) / 1000);
+    $('#procTitle').textContent = `Reading drawing · ${Math.floor(s / 60)}:${pad2(s % 60)}`;
+  }, 1000);
+  const fail = msg => { clearInterval(clock); if (live()) showError(msg, f); };
+  try {
+    const form = new FormData();
+    form.append('file', f, f.name);
+    let r = await fetch('/local/api/takeoff', {method:'POST', body:form, signal:ctl.signal});
+    let d = await r.json().catch(() => ({}));
+    if (!r.ok) return fail(d.message || d.detail || 'The local reader refused this file.');
+    const id = d.document_id;
+    let st;
+    for (;;) {
+      await wait(1500);
+      if (!live() || ctl.signal.aborted) return clearInterval(clock);
+      r = await fetch(`/local/api/documents/${id}/status`, {cache:'no-store'});
+      st = await r.json().catch(() => ({}));
+      if (!r.ok) return fail(st.message || 'Lost contact with the local reader.');
+      if (st.state === 'failed') return fail(st.error || 'The drawing could not be read.');
+      const stage = st.stage || '';
+      const k = st.state === 'done' ? 3 : /notation|linking|rooms|Parsing/i.test(stage) ? 2 : 1;
+      for (let i = 1; i < 5; i++) setStep(i, i < k ? 'done' : i === k ? 'active' : '');
+      if (stage) logLive('stage', esc(stage.replace(/\s*\(all orientations\)/, '')));
+      if (st.state === 'done') break;
+    }
+    const doc = await (await fetch(`/local/api/documents/${id}`, {cache:'no-store'})).json();
+    if (!live()) return clearInterval(clock);
+    clearInterval(clock);
+    for (const w of doc.warnings || []) if (/skipped/.test(w)) log(esc(w.split(' — ')[0]));
+    const {items, sheets} = mapLocal(doc, id);
+    if (!items.length) return showError('No windows were found on this drawing. Try a floor plan or a window schedule.', f);
+    S.src.sheets = sheets;
+    S.items = items;
+    const pages = doc.pages.length;
+    $('#wFile').textContent = S.src.file = `${f.name} · ${pages} sheet${pages === 1 ? '' : 's'} read · ${Math.round(st.elapsed || 0)} s`;
+    log(`Takeoff: <b>${items.length}</b> windows`);
+    setStep(3, 'done'); setStep(4, 'done');
+    if (sheets.length) showSheet(sheets[0].page);
+    Object.assign(NUMS, counts(), {src:`From your plans · ${title}`});
+    enterReview();
+    if (doc.verification === 'pending') followLocalChecks(id, run);
+  } catch (e) {
+    if (e && e.name === 'AbortError') return;
+    fail('Couldn’t reach the local reader. Start it with ./run.sh in ~/windowbid-experiment.');
+  }
+}
+
+// The independent re-reads finish after the first result: refresh the takeoff, keeping what was verified here.
+async function followLocalChecks(id, run) {
+  toast('Checking notes with independent reads…');
+  for (;;) {
+    await wait(2000);
+    if (run !== S.run) return;
+    const st = await (await fetch(`/local/api/documents/${id}/status`, {cache:'no-store'})).json().catch(() => ({}));
+    if (st.verification === 'running') continue;
+    const doc = await (await fetch(`/local/api/documents/${id}`, {cache:'no-store'})).json();
+    if (run !== S.run || S.stage !== 'review') return;
+    const verified = new Set(S.items.filter(i => i.approved).map(i => i.localId));
+    const sel = S.sel && byId(S.sel)?.localId;
+    S.items = mapLocal(doc, id).items;
+    for (const it of S.items) if (verified.has(it.localId)) it.approved = true;
+    S.sel = (S.items.find(i => i.localId === sel) || {}).id || null;
+    renderReview();
+    toast('Independent checks finished');
+    return;
+  }
+}
+
+function mapLocal(doc, id) {
+  const sheets = doc.pages.map(p => ({page:p.number, label:`p.${p.number}`, name:`page ${p.number}`, title:'',
+    W:p.width, H:p.height, href:`/local/api/documents/${id}/pages/${p.number}.png`}));
+  const items = [];
+  for (const it of doc.items) {
+    if (it.status === 'excluded' || it.status === 'rejected' || it.in_scope === false) continue;
+    if (it.category === 'door' || LOCAL_DOOR.test(it.type || '')) continue;          // windows-only takeoff
+    const ev = it.evidence.find(e => e.role === 'annotation' || e.role === 'tag') || it.evidence[0];
+    const b = (it.opening && it.opening.bbox) || (ev && ev.bbox);
+    const blocking = it.issues.filter(i => i.severity === 'blocking').map(i => i.message);
+    const other = it.issues.filter(i => i.severity !== 'blocking').map(i => i.message);
+    const srcs = [ev ? `Note “${ev.raw_text}” on page ${it.page}` : `Window symbol on page ${it.page}`];
+    if (it.schedule_confirms) srcs.push('Size confirmed by the schedule');
+    const base = {
+      cat:'window', type:LOCAL_TYPE[it.type] || 'Unknown', w:it.width_in ?? null, h:it.height_in ?? null,
+      room:it.room || '', conf:it.status === 'verified' ? .97 : it.status === 'review_recommended' ? .9 : .6,
+      note:[...blocking, ...other].slice(0, 2).join(' ') + (it.type && !LOCAL_TYPE[it.type] ? ` Read as ${it.type.replace(/_/g, ' ')}.` : ''),
+      box:b ? [b[0] - 4, b[1] - 4, b[2] - b[0] + 8, b[3] - b[1] + 8] : null,
+      raw:(ev ? ev.raw_text : '').slice(0, 40), temp:(it.attributes || []).includes('tempered'),
+      egress:(it.attributes || []).includes('egress'), sheet:it.page, srcs, localId:it.id,
+      tag:it.mark || '',                                    // the drawing's own window number, '' if none
+    };
+    const mark = it.mark || `#${it.number}`, qty = clamp(Number(it.quantity) || 1, 1, 20);
+    for (let k = 0; k < qty; k++) items.push({...base, srcs:[...srcs], id:uid++, mark:k ? `${mark}·${k + 1}` : mark});
+  }
+  items.sort((a, b) => a.mark.localeCompare(b.mark, undefined, {numeric:true}));
+  return {items, sheets};
+}
+/* ------------------------------------------------------------------
+   PROCURE — RFQ → Bids → Proposal → Purchase order
+   (platform preview: manufacturers, prices, specs and order dates are simulated)
+
+   One rule for every screen: decision first → summary second → evidence only when asked for.
+   - Level 1 (must know now): project, the decision or status, the one important number, the primary action.
+   - Level 2 (summary): counts, price, delivery, requirement status, chosen supplier.
+   - Level 3 (evidence): tables, marks, full specs, source file, calculations, history — behind "View …".
+   A problem is never collapsed away: it stays in the summary line ("2 without a size", "3 / 6").
+   The four documents get more finished as the project moves: RFQ technical, Bids analytical,
+   Proposal client-ready, Purchase order operational. Motion is calm: disclosures, selection,
+   preference changes, status changes — no count-ups or cascading rows.
+
+   What a dealer compares besides price (bids leveled on the same terms):
+   - whole-window NFRC ratings (U-factor, SHGC, visible transmittance, air leakage); targets from
+     ENERGY STAR v7 for a hot climate (Southern zone: U-factor ≤ 0.32, SHGC ≤ 0.23)
+   - the glass package: panes, Low-E coating, gas fill, warm-edge spacer, tempered glass where required
+   - frame and finish, warranty (product, glass seal, labor), lead time, quote validity, deposit, scope
+------------------------------------------------------------------ */
+const SPEC_TARGET = {u:.32, shgc:.23, al:.30, warranty:20};
+const SPEC_ITEMS = [
+  ['perf', 'Performance', 'NFRC-certified whole-window ratings · U-factor ≤ 0.32 · SHGC ≤ 0.23 · air leakage ≤ 0.30 (ENERGY STAR v7, Southern zone)'],
+  ['glass', 'Glass package', 'Dual-pane insulated · Low-E · argon fill · warm-edge spacer'],
+  ['temp', 'Safety glass', ''],                                   // filled in with the takeoff's tempered count
+  ['finish', 'Frame & finish', 'White exterior · state the frame material'],
+  ['warranty', 'Warranty', '≥ 20 years on product and glass seal · labor coverage stated'],
+  ['terms', 'Terms', 'Prices valid ≥ 30 days · state deposit and lead time'],
+];
+// sample bid details, one per manufacturer in MFRS (03-pricing.js)
+const BID_SPEC = [
+  {frame:'Vinyl, fiberglass-clad', finish:'White', u:.28, shgc:.22, vt:.47, al:.10, nfrc:true, panes:'Dual-pane', lowe:'Low-E³ (366)', gas:'Argon 90%', spacer:'Warm-edge, stainless', warm:true, wProduct:20, wGlass:20, wLabor:2, deposit:50, valid:30},
+  {frame:'Aluminum-clad wood', finish:'White', u:.30, shgc:.21, vt:.42, al:.07, nfrc:true, panes:'Dual-pane', lowe:'Low-E³ (366)', gas:'Argon 95%', spacer:'Warm-edge, foam', warm:true, wProduct:20, wGlass:20, wLabor:1, deposit:30, valid:45},
+  {frame:'Vinyl', finish:'White', u:.30, shgc:.27, vt:.51, al:.25, nfrc:true, panes:'Dual-pane', lowe:'Low-E² (272)', gas:'Argon', spacer:'Aluminum box', warm:false, wProduct:15, wGlass:10, wLabor:0, deposit:25, valid:30},
+];
+const PRIORITIES = [
+  ['balanced', 'Balanced', {cost:.35, lead:.15, perf:.2, warranty:.1, spec:.15, terms:.05}],
+  ['cost', 'Lowest cost', {cost:.82, lead:.04, perf:.04, warranty:.03, spec:.05, terms:.02}],
+  ['speed', 'Fastest delivery', {cost:.2, lead:.6, perf:.1, warranty:.05, spec:.05, terms:0}],
+  ['perf', 'Best performance', {cost:.15, lead:.05, perf:.45, warranty:.2, spec:.15, terms:0}],
+];
+const FACTOR_NAME = {cost:'price', lead:'delivery', perf:'energy performance', warranty:'warranty', spec:'requirements met', terms:'terms'};
+const RFQ_NO = '#WB-1042', PO_NO = '#WB-0048', DEALER = 'Arizona Window Solutions';
+const today = () => new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+const dueDay = iso => { const d = new Date(`${iso}T12:00`); return isNaN(d) ? iso : d.toLocaleDateString('en-US', {month:'short', day:'numeric'}).toUpperCase(); };
+const weeks = b => `${b.lead}–${b.lead + 1} weeks`;
+const plural = (n, w, ws = w + 's') => `${n} ${n === 1 ? w : ws}`;
+
+// "5·1–5·15" for a run of one tag; otherwise the first marks and a count
+function markRange(items) {
+  const ms = items.map(i => i.mark), tag = items[0]?.tag;
+  if (tag && ms.length > 2 && ms.every((m, k) => m === `${tag}·${k + 1}`)) return `${ms[0]}–${ms[ms.length - 1]}`;
+  return ms.length > 6 ? `${ms.slice(0, 5).join(', ')} +${ms.length - 5}` : ms.join(', ');
+}
+
+/* ---------- shared pieces: preview line, header, number blocks, disclosures, product lines, action bar ---------- */
+const PREVIEW = '<p class="wb-pv"><b>Preview environment</b> · Manufacturer, pricing and lead-time data are simulated.</p>';
+const headHtml = (title, ref, project, sub) => `<header class="wb-head">
+    <div class="wb-head-r"><h1>${title}</h1><span class="wb-ref">${ref}</span></div>
+    <p class="wb-proj">${esc(project)}</p>${sub ? `<p class="wb-sub">${sub}</p>` : ''}</header>`;
+const numsHtml = list => `<div class="wb-nums">${list.map(([n, l]) => `<div><b>${n}</b><span>${l}</span></div>`).join('')}</div>`;
+S.openDis = S.openDis || new Set();
+// "View product lines  12  ↓": the same disclosure everywhere; remembers what was open across re-renders
+const dis = (id, label, count, body) => `<div class="wb-dis ${S.openDis.has(id) ? 'open' : ''}" data-dis="${id}">
+    <button type="button" class="wb-dis-h" aria-expanded="${S.openDis.has(id)}"><span>${label}</span>${count !== '' && count != null ? `<em>${count}</em>` : ''}<i aria-hidden="true"></i></button>
+    <div class="wb-dis-b"><div class="wb-dis-in">${body}</div></div></div>`;
+document.addEventListener('click', e => {
+  const h = e.target.closest('.wb-dis-h'); if (!h) return;
+  const d = h.parentElement, open = !d.classList.contains('open');
+  d.classList.toggle('open', open); h.setAttribute('aria-expanded', open);
+  open ? S.openDis.add(d.dataset.dis) : S.openDis.delete(d.dataset.dis);
+});
+// product lines with their marks summarised; every mark one click away
+function linesHtml(gs) {
+  return `<div class="wb-lines" role="table">
+    <div class="wb-line wb-lh" role="row"><span>Line</span><span>Product</span><span class="r">Size (in)</span><span class="r">Qty</span><span>Marks</span></div>
+    ${gs.map((g, i) => `<div class="wb-line" role="row">
+      <span class="n">${pad2(i + 1)}</span>
+      <span class="p">${esc(pname(g))}${g.items.some(x => x.temp) ? '<i class="wb-tag">Tempered</i>' : ''}</span>
+      <span class="s r">${g.w ?? '?'} × ${g.h ?? '?'}</span>
+      <span class="q r">${g.items.length}</span>
+      <details class="wb-mk"><summary>Marks ${esc(markRange(g.items))}</summary><p>${g.items.map(x => esc(x.mark)).join(', ')}</p></details></div>`).join('')}
+  </div>`;
+}
+const barHtml = (back, mid, primary) => `<div class="wb-bar"><div class="wb-bar-in">${back}<span class="wb-bar-mid">${mid}</span>${primary}</div></div>`;
+// mount a document; the short fade plays only when the page is first opened, not on updates
+function mountDoc(host, html, enter) {
+  host.innerHTML = html;
+  if (enter) { host.classList.remove('wb-enter'); void host.offsetWidth; host.classList.add('wb-enter'); }
+}
+const sourceLine = () => { const m = /(\d+) pages?/.exec(S.src?.file || ''); return S.src?.kind === 'sample' ? 'Sample floor plan' : m ? `${m[1]}-page architectural set` : 'Uploaded plan'; };
+
+/* ---------- RFQ: a prepared specification sheet ---------- */
+function openRFQ(enter = true) {
+  const gs = groups(), n = S.items.length, temp = S.items.filter(i => i.temp).length;
+  const noSize = S.items.filter(i => i.w == null || i.h == null).length, open = S.items.filter(i => !i.approved).length;
   const due = new Date(Date.now() + 14 * 864e5).toISOString().slice(0, 10);
-  S.rfq = S.rfq || {mfr:MFRS.map(() => true), due, notes:'Match marks to the attached plan. Quote Low-E insulated glass, white exterior.'};
-  $('#rfqDoc').innerHTML = `${preview}
-    <h1>Request for quote</h1><p class="lead">Your verified takeoff, packaged so every manufacturer prices the same list.</p>
-    <div class="two">
-      <div class="sheet">
-        <div class="sheet-head"><div><b>RFQ #WB-1042</b><span>${esc(S.src.title)}</span></div><div style="text-align:right"><span>Issued ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span><br><span>Dealer: Arizona Window Solutions</span></div></div>
-        <div class="sheet-meta"><div><span>Openings</span>${S.items.length}</div><div><span>Product lines</span>${gs.length}</div><div><span>Source</span>${esc(S.src.file)}</div></div>
-        <table class="ttable"><thead><tr><th>Line</th><th>Product</th><th class="num">Size (in)</th><th class="num">Qty</th><th>Marks</th></tr></thead><tbody>
-          ${gs.map((g, i) => `<tr><td class="m">${pad2(i+1)}</td><td>${esc(pname(g))}</td><td class="num m">${g.w ?? '?'} × ${g.h ?? '?'}</td><td class="num m">${g.items.length}</td><td style="white-space:normal;font-size:.8rem;color:var(--ink-2)">${g.items.map(x => esc(x.mark)).join(', ')}</td></tr>`).join('')}
-        </tbody></table>
-      </div>
-      <div class="panel">
-        <h3>Send to</h3>
-        ${MFRS.map((m, i) => `<label class="chk"><input type="checkbox" data-m="${i}" ${S.rfq.mfr[i] ? 'checked' : ''}><span>${m.name}<small>${m.note}</small></span></label>`).join('')}
-        <label class="field">Bids due<input type="date" id="rfqDue" value="${S.rfq.due}"></label>
-        <label class="field">Notes to manufacturers<textarea id="rfqNotes">${esc(S.rfq.notes)}</textarea></label>
-        <div class="foot-row" style="margin-top:18px"><button class="btn-ghost sm" id="rfqBack">Back to takeoff</button><button class="btn" id="rfqSend">Send RFQ <span class="arr">→</span></button></div>
-      </div>
-    </div>`;
+  S.rfq = S.rfq || {mfr:MFRS.map(() => true), due, notes:'Match marks to the attached plan. Quote Low-E insulated glass, white exterior.',
+                    spec:Object.fromEntries(SPEC_ITEMS.map(([k]) => [k, true])), v:1};
+  const sp = S.rfq.spec, on = SPEC_ITEMS.filter(([k]) => sp[k]).length;
+  const specText = k => k === 'temp' ? (temp ? `Tempered glass at the ${plural(temp, 'unit')} marked in the takeoff` : 'Tempered glass wherever code requires it') : SPEC_ITEMS.find(s => s[0] === k)[2];
+  const basis = ['Low-E insulated glass', sp.finish && 'White exterior', sp.perf && 'NFRC compliant', sp.warranty && '20-year product warranty'].filter(Boolean).join(' · ');
+  const issues = [noSize && `<b class="wb-warn">${noSize} without a size</b>`, open && `<b class="wb-warn">${open} not verified</b>`].filter(Boolean);
+  const k = S.rfq.mfr.filter(Boolean).length;
+  mountDoc($('#rfqDoc'), `<div class="wb wb-rfq">${PREVIEW}
+    ${headHtml('Request for quote', `RFQ ${RFQ_NO} · v${S.rfq.v}`, S.src.title, `${DEALER} · ${n} verified opening${n === 1 ? '' : 's'} ready to price`)}
+    ${numsHtml([[n, 'Openings'], [gs.length, 'Product lines'], [temp, 'Tempered']])}
+    <section class="wb-blk"><h3 class="wb-k">Quote basis</h3><p class="wb-s">${basis}</p></section>
+    <section class="wb-blk"><h3 class="wb-k">Products</h3>
+      <p class="wb-s">${plural(gs.length, 'product line')} · ${plural(n, 'opening')}${issues.length ? ' · ' + issues.join(' · ') : ''}</p>
+      ${dis('rfq-lines', 'View product lines', gs.length, linesHtml(gs))}</section>
+    <section class="wb-blk"><h3 class="wb-k">Requirements</h3>
+      <p class="wb-s" id="rfqReq">${on === SPEC_ITEMS.length ? `${SPEC_ITEMS.length} requirements · All included` : `${on} of ${SPEC_ITEMS.length} included · <b class="wb-warn">${SPEC_ITEMS.length - on} switched off</b>`}</p>
+      ${dis('rfq-req', 'Review requirements', SPEC_ITEMS.length, `<p class="wb-note">Every bid will be checked against these. NFRC ratings must be for the whole window, not the center of the glass.</p>
+        <div class="wb-reqs">${SPEC_ITEMS.map(([key, label]) => `<label class="wb-req"><input type="checkbox" data-spec="${key}" ${sp[key] ? 'checked' : ''}>
+          <span class="sw" aria-hidden="true"></span><span class="tx"><b>${label}</b><span>${esc(specText(key))}</span></span></label>`).join('')}</div>`)}</section>
+    <section class="wb-blk"><h3 class="wb-k">Send to</h3>
+      <div class="wb-mfrs">${MFRS.map((m, i) => `<label class="wb-mfr"><input type="checkbox" data-m="${i}" ${S.rfq.mfr[i] ? 'checked' : ''}>
+        <span class="box" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+        <span class="nm">${m.name}</span><span class="nt">${m.note}</span></label>`).join('')}</div></section>
+    <section class="wb-blk wb-due"><h3 class="wb-k">Bids due</h3>
+      <label class="wb-date"><span id="rfqDueTxt">${dueDay(S.rfq.due)}</span><input type="date" id="rfqDue" value="${S.rfq.due}" aria-label="Bids due"></label>
+      ${dis('rfq-note', 'Note to manufacturers', '', `<textarea id="rfqNotes" class="wb-ta" aria-label="Note to manufacturers">${esc(S.rfq.notes)}</textarea>`)}</section>
+    <section class="wb-blk"><h3 class="wb-k">Source</h3><p class="wb-s">${sourceLine()}</p>
+      ${dis('rfq-src', 'View source details', '', `<p class="wb-mono">${esc(S.src.file || '')}</p>`)}</section>
+    ${barHtml('<button class="btn-ghost sm" id="rfqBack">← Back to takeoff</button>', `<span id="rfqMid">${k ? plural(k, 'manufacturer') + ' selected' : 'Choose at least one manufacturer'}</span>`,
+      `<button class="btn wb-send" id="rfqSend" ${k ? '' : 'disabled'}><span class="lb">Send RFQ</span> <span class="arr">→</span></button>`)}
+  </div>`, enter);
   goStage('rfq');
-  $$('#rfqDoc [data-m]').forEach(c => c.onchange = () => { S.rfq.mfr[+c.dataset.m] = c.checked; $('#rfqSend').disabled = !S.rfq.mfr.some(Boolean); });
-  $('#rfqDue').onchange = e => S.rfq.due = e.target.value;
+  const sync = () => {
+    const k = S.rfq.mfr.filter(Boolean).length, on = Object.values(S.rfq.spec).filter(Boolean).length;
+    $('#rfqMid').textContent = k ? `${plural(k, 'manufacturer')} selected` : 'Choose at least one manufacturer';
+    $('#rfqSend').disabled = !k;
+    $('#rfqReq').innerHTML = on === SPEC_ITEMS.length ? `${SPEC_ITEMS.length} requirements · All included` : `${on} of ${SPEC_ITEMS.length} included · <b class="wb-warn">${SPEC_ITEMS.length - on} switched off</b>`;
+  };
+  $$('#rfqDoc [data-m]').forEach(c => c.onchange = () => { S.rfq.mfr[+c.dataset.m] = c.checked; sync(); });
+  $$('#rfqDoc [data-spec]').forEach(c => c.onchange = () => { S.rfq.spec[c.dataset.spec] = c.checked; sync(); });
+  $('#rfqDue').onchange = e => { S.rfq.due = e.target.value; $('#rfqDueTxt').textContent = dueDay(S.rfq.due); };
   $('#rfqNotes').oninput = e => S.rfq.notes = e.target.value;
   $('#rfqBack').onclick = () => { goStage('work'); S.stage = 'review'; renderSteps(); requestAnimationFrame(() => { fitView(); renderReview(); }); };
-  $('#rfqSend').onclick = sendRFQ;
+  $('#rfqSend').onclick = async () => {
+    const b = $('#rfqSend'); if (b.classList.contains('sending')) return;
+    if (S.rfq.sent && S.rfq.sentKey !== JSON.stringify([S.rfq.mfr, S.rfq.spec, S.rfq.due])) S.rfq.v++;   // changed since last sent: a new version
+    S.rfq.sent = true; S.rfq.sentKey = JSON.stringify([S.rfq.mfr, S.rfq.spec, S.rfq.due]);
+    b.classList.add('sending'); b.querySelector('.lb').textContent = 'Sending';
+    await wait(REDUCED ? 0 : 600);
+    sendRFQ();
+  };
+}
+
+/* ---------- bids: a comparison board ---------- */
+// which of the switched-on requirements a bid meets
+function reqCheck(b) {
+  const sp = S.rfq.spec, x = b.spec;
+  const tests = {
+    perf: [x.nfrc && x.u <= SPEC_TARGET.u && x.shgc <= SPEC_TARGET.shgc && x.al <= SPEC_TARGET.al,
+           x.shgc > SPEC_TARGET.shgc ? `SHGC ${x.shgc.toFixed(2)} > ${SPEC_TARGET.shgc}` : x.u > SPEC_TARGET.u ? `U-factor ${x.u.toFixed(2)} > ${SPEC_TARGET.u}` : 'Not NFRC-rated'],
+    glass: [x.warm, 'No warm-edge spacer'],
+    temp: [true, ''],
+    finish: [true, ''],
+    warranty: [x.wProduct >= SPEC_TARGET.warranty && x.wGlass >= SPEC_TARGET.warranty && x.wLabor > 0, `${x.wGlass}-year glass seal${x.wLabor ? '' : ', no labor cover'}`],
+    terms: [x.valid >= 30, `Prices valid ${x.valid} days`],
+  };
+  const on = SPEC_ITEMS.map(s => s[0]).filter(k => sp[k]);
+  const fails = on.filter(k => !tests[k][0]).map(k => tests[k][1]);
+  return {met:on.length - fails.length, total:on.length, fails, star:x.u <= SPEC_TARGET.u && x.shgc <= SPEC_TARGET.shgc};
 }
 function computeBids() {
   const gs = groups(), hasAwning = gs.some(g => g.type === 'Awning');
   return MFRS.map((m, i) => {
     if (!S.rfq.mfr[i]) return null;
-    const product = Math.round(gs.reduce((s, g) => s + unitPrice(g) * g.items.length, 0) * m.mult / 10) * 10;
-    return {...m, i, product, landed:product + m.freight, dev: m.dev ? (hasAwning ? 'Awning not offered, casement substituted' : 'Grid pattern not offered') : null};
+    const lines = gs.map(g => Math.round(unitPrice(g) * g.items.length * m.mult / 10) * 10);
+    const product = lines.reduce((a, v) => a + v, 0);
+    return {...m, i, spec:BID_SPEC[i], lines, product, landed:product + m.freight,
+      dev: m.dev ? (hasAwning ? 'Awning not offered, casement substituted' : 'Grid pattern not offered') : null};
   }).filter(Boolean);
 }
-async function sendRFQ() {
-  S.bids = computeBids();
-  const run = ++S.run;
-  $('#bidsDoc').innerHTML = `${preview}<h1>Bids</h1><p class="lead">RFQ #WB-1042 sent to ${S.bids.length} manufacturer${S.bids.length > 1 ? 's' : ''}.</p>
-    <ul class="arrivals">${S.bids.map(b => `<li data-b="${b.i}"><b>${b.name}</b><span>Waiting for bid</span></li>`).join('')}</ul><div id="cmp"></div>`;
-  goStage('bids');
-  for (const b of S.bids) {
-    await wait(REDUCED ? 0 : 700); if (run !== S.run) return;
-    const li = $(`#bidsDoc [data-b="${b.i}"]`); li.classList.add('got'); li.querySelector('span').textContent = 'Bid received';
-  }
-  await wait(REDUCED ? 0 : 300); if (run !== S.run) return;
-  renderBids();
-}
-function renderBids() {
-  const B = S.bids;
+// 0–1 per factor (1 = best among these bids), weighted by the chosen priority
+function scoreBids(B, w) {
   const minL = Math.min(...B.map(b => b.landed)), minLead = Math.min(...B.map(b => b.lead));
-  const cell = (html, cls = 'm') => `<td class="${cls}">${html}</td>`;
-  $('#cmp').innerHTML = `<div class="cmp-wrap"><table class="cmp">
-    <thead><tr><th>Normalized to your takeoff</th>${B.map(b => `<th>${b.name}<br>${b.landed === minL ? '<span class="badge">Lowest landed cost</span>' : ''}${b.lead === minLead ? ' <span class="badge">Fastest delivery</span>' : ''}${b.dev ? ' <span class="badge o">1 deviation</span>' : ''}</th>`).join('')}</tr></thead>
-    <tbody>
-      <tr><td>Product</td>${B.map(b => cell(money(b.product))).join('')}</tr>
-      <tr><td>Freight</td>${B.map(b => cell(money(b.freight))).join('')}</tr>
-      <tr class="total"><td>Landed cost</td>${B.map(b => cell(money(b.landed), 'm' + (b.landed === minL ? ' best' : ''))).join('')}</tr>
-      <tr><td>Lead time</td>${B.map(b => cell(`${b.lead} weeks`, 'm' + (b.lead === minLead ? ' best' : ''))).join('')}</tr>
-      <tr><td>Warranty</td>${B.map(b => cell(b.warranty, '')).join('')}</tr>
-      <tr><td>Specification match</td>${B.map(b => cell(b.dev ? esc(b.dev) : `All ${S.items.length} openings`, b.dev ? 'warn' : '')).join('')}</tr>
-    </tbody>
-    <tfoot><tr><td></td>${B.map(b => `<td><button class="btn sm" data-pick="${b.i}">Use this bid</button></td>`).join('')}</tr></tfoot>
-  </table></div>
-  <div class="foot-row" style="margin-top:18px;justify-content:flex-start"><button class="btn-ghost sm" id="bidsBack">Back to RFQ</button></div>`;
-  $$('#cmp [data-pick]').forEach(b => b.onclick = () => { S.pick = S.bids.find(x => x.i === +b.dataset.pick); goStage('proposal'); renderProposal(); });
-  $('#bidsBack').onclick = openRFQ;
+  return B.map(b => {
+    const x = b.spec, c = reqCheck(b), misses = (c.total - c.met) + (b.dev ? 1 : 0);
+    const f = {
+      cost: clamp(1 - (b.landed - minL) / (minL * .12), 0, 1),
+      lead: clamp(1 - (b.lead - minLead) / 6, 0, 1),
+      perf: clamp((clamp(1 - (x.u - .22) / .12, 0, 1) + clamp(1 - (x.shgc - .17) / .12, 0, 1)) / 2 - (c.star ? 0 : .25) + (x.warm ? .05 : 0), 0, 1),
+      warranty: clamp((x.wProduct + x.wGlass + x.wLabor * 4) / 48, 0, 1),
+      spec: clamp(1 - misses * .3, 0, 1),
+      terms: clamp(1 - (x.deposit - 20) / 40, 0, 1) * .7 + clamp(x.valid / 45, 0, 1) * .3,
+    };
+    const tw = Object.values(w).reduce((a, v) => a + v, 0) || 1;
+    return Math.round(Object.keys(w).reduce((a, k) => a + w[k] * f[k], 0) / tw * 100);
+  });
+}
+const prio = () => PRIORITIES.find(p => p[0] === S.prio) || PRIORITIES[0];
+function bidState() {
+  const B = S.bids, sc = scoreBids(B, prio()[2]), best = sc.indexOf(Math.max(...sc));
+  const minL = Math.min(...B.map(b => b.landed)), minLead = Math.min(...B.map(b => b.lead));
+  const chosen = S.bidChoice != null && B.some(b => b.i === S.bidChoice) ? B.findIndex(b => b.i === S.bidChoice) : best;
+  return {B, sc, best, minL, minLead, chosen};
+}
+async function sendRFQ() {
+  S.bids = computeBids(); S.prio = S.prio || 'balanced'; S.bidChoice = null; S.bidsIn = 0;
+  const run = S.bidRun = (S.bidRun || 0) + 1;            // its own counter: a background plan read keeps going
+  renderBids(true); goStage('bids');
+  for (let k = 0; k < S.bids.length; k++) {
+    await wait(REDUCED ? 0 : 650); if (run !== S.bidRun) return;
+    S.bidsIn = k + 1; renderBids(false, k);
+  }
+}
+function renderBids(enter, fresh) {
+  const {B, best, minL, minLead, chosen} = bidState(), all = S.bidsIn >= B.length, gs = groups();
+  const tags = (b, k) => [k === best && all && '<i class="wb-t best">Best match</i>', b.lead === minLead && '<i class="wb-t">Fastest</i>',
+                          b.landed === minL && '<i class="wb-t">Lowest cost</i>'].filter(Boolean).join('');
+  const rows = B.map((b, k) => {
+    if (k >= S.bidsIn) return `<div class="wb-bid wait" role="row"><span class="nm"><b>${b.short}</b></span><span class="wb-await">Awaiting bid…</span></div>`;
+    const c = reqCheck(b), ok = c.met === c.total;
+    return `<button type="button" class="wb-bid ${k === fresh ? 'in' : ''} ${all && k === chosen ? 'sel' : ''}" data-bid="${b.i}" role="row" aria-pressed="${all && k === chosen}" ${all ? '' : 'disabled'}>
+      <span class="nm"><b>${b.short}</b><span class="tags" data-tags="${k}">${tags(b, k)}</span></span>
+      <span class="m">${money(b.landed)}</span><span>${weeks(b)}</span>
+      <span class="rq ${ok ? 'ok' : 'x'}">${ok ? '✓' : '!'} ${c.met} / ${c.total}${b.dev ? '<small>+ 1 product deviation</small>' : ''}</span></button>`;
+  }).join('');
+  const rest = !all ? '' : `
+    <section class="wb-blk wb-ev">
+      ${dis('bid-products', 'Compare products', gs.length, productsCompareHtml(B, gs))}
+      ${dis('bid-specs', 'Compare specifications', '', specTableHtml(B))}
+      ${dis('bid-rank', 'View ranking details', '', `<div id="rankBox">${rankHtml()}</div>`)}
+    </section>
+    <section class="wb-blk wb-opt"><h3 class="wb-k">Optimize recommendation for</h3>
+      <div class="seg" role="radiogroup" aria-label="Optimize recommendation for">${PRIORITIES.map(([key, l]) => `<button type="button" role="radio" data-prio="${key}" aria-checked="${S.prio === key}">${l}</button>`).join('')}</div></section>
+    <section class="wb-rec" id="recBox">${recHtml()}</section>`;
+  mountDoc($('#bidsDoc'), `<div class="wb wb-bids ${all && fresh === B.length - 1 ? 'reveal' : ''}">${PREVIEW}
+    ${headHtml('Bids received', `<b>${S.bidsIn} / ${B.length}</b> · RFQ ${RFQ_NO} · v${S.rfq.v}`, S.src.title, all ? 'Every bid normalized to your takeoff and checked against your requirements.' : 'Waiting for manufacturers to reply…')}
+    <div class="wb-cmp" role="table">
+      <div class="wb-bid wb-bh" role="row"><span></span><span class="m">Total</span><span>Delivery</span><span>Requirements</span></div>
+      ${rows}</div>
+    ${rest}
+    ${barHtml('<button class="btn-ghost sm" id="bidsBack">← Back to RFQ</button>', `<span id="bidsMid">${all ? usingText() : ''}</span>`,
+      `<button class="btn" id="bidUse" ${all ? '' : 'disabled'}>Use this bid <span class="arr">→</span></button>`)}
+  </div>`, enter);
+  $('#bidsBack').onclick = () => { S.bidRun++; openRFQ(); };
+  if (!all) return;
+  $$('#bidsDoc [data-bid]').forEach(r => r.onclick = () => { S.bidChoice = S.bidChoice === +r.dataset.bid ? null : +r.dataset.bid; applyPriority(); });
+  $$('#bidsDoc [data-prio]').forEach(b => b.onclick = () => { S.prio = b.dataset.prio; applyPriority(); });
+  const t = $('#bdCmp');
+  t.onmouseover = e => { const c = e.target.closest('[data-c]'); t.dataset.hc = c ? c.dataset.c : ''; };
+  t.onmouseleave = () => { t.dataset.hc = ''; };
+  $$('#bdCmp .bd-gh button').forEach(b => b.onclick = () => { const g = b.closest('tbody'); g.classList.toggle('open'); b.setAttribute('aria-expanded', g.classList.contains('open')); });
+  $('#bidUse').onclick = () => { const {B, chosen} = bidState(); S.pick = B[chosen]; S.prop = {state:'draft', v:1}; openProposal(true); };
+}
+const usingText = () => { const {B, best, chosen} = bidState(); return chosen === best ? `Using ${B[chosen].short} · recommended` : `Using ${B[chosen].short} · your choice`; };
+// a preference change updates the recommendation, tags, bars and selection in place — no jump, no re-render
+function applyPriority() {
+  const {B, best, chosen} = bidState();
+  $$('#bidsDoc [data-prio]').forEach(b => b.setAttribute('aria-checked', b.dataset.prio === S.prio));
+  $$('#bidsDoc [data-bid]').forEach((r, k) => { r.classList.toggle('sel', k === chosen); r.setAttribute('aria-pressed', k === chosen); });
+  $$('#bidsDoc .wb-t.best').forEach(t => t.remove());
+  const tg = $(`#bidsDoc [data-tags="${best}"]`); if (tg) tg.insertAdjacentHTML('afterbegin', '<i class="wb-t best">Best match</i>');
+  $('#recBox').innerHTML = recHtml(); const rb = $('#recBox'); rb.classList.remove('wb-swap'); void rb.offsetWidth; rb.classList.add('wb-swap');
+  const sc = scoreBids(B, prio()[2]);
+  $$('#rankBox .wb-rank li').forEach((li, k) => { li.querySelector('.bar i').style.transform = `scaleX(${sc[k] / 100})`; li.querySelector('.sc').textContent = sc[k]; li.classList.toggle('best', k === best); });
+  const w = $('#rankBox .wb-weights'); if (w) w.innerHTML = weightsText();
+  $('#bidsMid').textContent = usingText();
+  $('#bdCmp').dataset.best = best;
+}
+const weightsText = () => { const [, label, w] = prio(); return `<b>${label}:</b> ` + Object.entries(w).filter(([, v]) => v).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${FACTOR_NAME[k]} ${Math.round(v * 100)}%`).join(' · '); };
+function rankHtml() {
+  const {B, sc, best} = bidState();
+  return `<ol class="wb-rank">${B.map((b, k) => `<li class="${k === best ? 'best' : ''}"><span class="nm">${b.short}</span><span class="bar"><i style="transform:scaleX(${sc[k] / 100})"></i></span><b class="sc">${sc[k]}</b></li>`).join('')}</ol>
+    <p class="wb-note wb-weights">${weightsText()}</p>
+    <p class="wb-note">Each factor is scored 0–1 against the other bids (the lowest price scores 1; 12 % more scores 0), then weighted and summed to 100.</p>`;
+}
+function recHtml() {
+  const {B, best, minL, minLead} = bidState(), b = B[best], c = reqCheck(b), sp = b.spec;
+  const pts = [c.met === c.total && !b.dev ? 'Meets every project requirement' : `Misses ${c.total - c.met + (b.dev ? 1 : 0)}: ${[...c.fails, b.dev].filter(Boolean).join(' · ')}`,
+               b.landed === minL ? 'The lowest bid' : `${money(b.landed - minL)} above the lowest bid`,
+               `${weeks(b)} estimated delivery`];
+  const why = [`<b>Price:</b> ${money(b.landed)} landed${b.landed === minL ? ', the lowest' : ` — ${money(b.landed - minL)} more than the lowest`}`,
+               `<b>Delivery:</b> ${weeks(b)}${b.lead === minLead ? ', the fastest' : ` — ${b.lead - minLead} week${b.lead - minLead > 1 ? 's' : ''} slower than the fastest`}`,
+               `<b>Energy:</b> U-factor ${sp.u.toFixed(2)}, SHGC ${sp.shgc.toFixed(2)}${c.star ? ' — qualifies for ENERGY STAR v7, Southern zone' : ' — does not meet the ENERGY STAR targets'}`,
+               `<b>Warranty:</b> ${sp.wProduct} years product, ${sp.wGlass} years glass seal, ${sp.wLabor ? `${sp.wLabor} year${sp.wLabor > 1 ? 's' : ''} labor` : 'no labor cover'}`,
+               `<b>Terms:</b> ${sp.deposit}% deposit, prices valid ${sp.valid} days`];
+  return `<p class="wb-k">Recommended · ${prio()[1]}</p><h2>${b.name}</h2>
+    <ul class="wb-pts">${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+    ${dis('bid-why', `Why ${b.short} ranks first`, '', `<ul class="wb-why">${why.map(w => `<li>${w}</li>`).join('')}</ul>`)}`;
+}
+function productsCompareHtml(B, gs) {
+  return `<div class="wb-scroll"><table class="wb-tbl"><thead><tr><th>Line</th><th>Product</th><th class="r">Qty</th>${B.map(b => `<th class="r">${b.short}</th>`).join('')}</tr></thead><tbody>
+    ${gs.map((g, i) => `<tr><td class="m">${pad2(i + 1)}</td><td>${esc(pname(g))} <span class="wb-dim">${g.w ?? '?'} × ${g.h ?? '?'}</span></td><td class="r m">${g.items.length}</td>${B.map(b => `<td class="r m">${money(b.lines[i])}</td>`).join('')}</tr>`).join('')}
+    <tr class="tot"><td></td><td>Freight</td><td></td>${B.map(b => `<td class="r m">${money(b.freight)}</td>`).join('')}</tr>
+    <tr class="tot"><td></td><td><b>Total landed</b></td><td></td>${B.map(b => `<td class="r m"><b>${money(b.landed)}</b></td>`).join('')}</tr></tbody></table></div>`;
+}
+// the full leveled table, grouped; groups open on demand and show "All met / 2 misses" when closed
+function specTableHtml(B) {
+  const sp = S.rfq.spec, C = B.map(reqCheck), minL = Math.min(...B.map(b => b.landed)), minLead = Math.min(...B.map(b => b.lead));
+  const row = (label, v, sub = '') => `<tr><th scope="row">${label}${sub ? `<small>${sub}</small>` : ''}</th>${B.map((b, k) => { const [h, st = ''] = v(b, k); return `<td data-c="${k}" class="${st}">${h}</td>`; }).join('')}</tr>`;
+  const ok = (cond, on) => !on ? '' : cond ? 'ok' : 'miss';
+  const group = (id, title, sum, rows, open) => `<tbody class="bd-g ${open ? 'open' : ''}"><tr class="bd-gh"><th scope="rowgroup"><button type="button" aria-expanded="${!!open}">${title}<i aria-hidden="true"></i></button></th>${B.map((b, k) => `<td data-c="${k}">${sum(b, k)}</td>`).join('')}</tr>${rows}</tbody>`;
+  const passSum = tests => b => { const bad = tests.filter(t => t(b) === 'miss').length; return bad ? `<span class="pill-x">${bad} miss${bad > 1 ? 'es' : ''}</span>` : '<span class="pill-ok">All met</span>'; };
+  const perfT = [b => ok(b.spec.u <= SPEC_TARGET.u, sp.perf), b => ok(b.spec.shgc <= SPEC_TARGET.shgc, sp.perf), b => ok(b.spec.al <= SPEC_TARGET.al, sp.perf), b => ok(b.spec.nfrc, sp.perf)];
+  const glassT = [b => ok(b.spec.warm, sp.glass)];
+  const warT = [b => ok(b.spec.wProduct >= SPEC_TARGET.warranty, sp.warranty), b => ok(b.spec.wGlass >= SPEC_TARGET.warranty, sp.warranty), b => ok(b.spec.wLabor > 0, sp.warranty)];
+  const best = bidState().best;
+  return `<div class="bd-wrap"><table class="bd-cmp" id="bdCmp" data-best="${best}">
+    <thead><tr><th scope="col"></th>${B.map((b, k) => `<th scope="col" data-c="${k}"><b>${b.short}</b><span>${b.note}</span></th>`).join('')}</tr></thead>
+    ${group('cost', 'Cost', b => `<span class="m">${money(b.landed)}</span>`, [
+      row('Product', b => [`<span class="m">${money(b.product)}</span>`]),
+      row('Freight', b => [`<span class="m">${money(b.freight)}</span>`]),
+      row('Landed cost', b => [`<span class="m">${money(b.landed)}</span>${b.landed === minL ? '<small>Lowest</small>' : `<small>+${money(b.landed - minL)}</small>`}`, b.landed === minL ? 'best' : '']),
+    ].join(''))}
+    ${group('time', 'Schedule', b => `<span class="m">${b.lead}–${b.lead + 1} wk</span>`, [
+      row('Lead time', b => [weeks(b), b.lead === minLead ? 'best' : '']),
+      row('Prices valid', b => [`${b.spec.valid} days`, ok(b.spec.valid >= 30, sp.terms)]),
+    ].join(''))}
+    ${group('perf', 'Energy performance', passSum(perfT), [
+      row('U-factor', b => [`<span class="m">${b.spec.u.toFixed(2)}</span>`, perfT[0](b)], `target ≤ ${SPEC_TARGET.u} · lower insulates better`),
+      row('SHGC', b => [`<span class="m">${b.spec.shgc.toFixed(2)}</span>`, perfT[1](b)], `target ≤ ${SPEC_TARGET.shgc} · lower blocks more sun heat`),
+      row('Visible light', b => [`<span class="m">${b.spec.vt.toFixed(2)}</span>`], 'VT · higher lets in more daylight'),
+      row('Air leakage', b => [`<span class="m">${b.spec.al.toFixed(2)}</span>`, perfT[2](b)], 'cfm/ft² · ≤ 0.30'),
+      row('NFRC certified', b => [b.spec.nfrc ? 'Yes' : 'No', perfT[3](b)]),
+      row('ENERGY STAR v7', (b, k) => [C[k].star ? 'Southern zone' : 'Not qualified', ok(C[k].star, sp.perf)]),
+    ].join(''))}
+    ${group('glass', 'Glass package', passSum(glassT), [
+      row('Glazing', b => [b.spec.panes]), row('Low-E coating', b => [esc(b.spec.lowe)]), row('Gas fill', b => [esc(b.spec.gas)]),
+      row('Spacer', b => [esc(b.spec.spacer), glassT[0](b)]), row('Tempered where marked', () => ['Included', ok(true, sp.temp)]),
+    ].join(''))}
+    ${group('frame', 'Frame & finish', b => esc(b.spec.frame.split(',')[0]), [row('Frame', b => [esc(b.spec.frame)]), row('Exterior finish', b => [esc(b.spec.finish), ok(true, sp.finish)])].join(''))}
+    ${group('war', 'Warranty', passSum(warT), [
+      row('Product', b => [`${b.spec.wProduct} years`, warT[0](b)]), row('Glass seal', b => [`${b.spec.wGlass} years`, warT[1](b)]),
+      row('Labor', b => [b.spec.wLabor ? plural(b.spec.wLabor, 'year') : 'Not covered', warT[2](b)]),
+    ].join(''))}
+    ${group('terms', 'Terms', b => `${b.spec.deposit}% deposit`, [row('Deposit on order', b => [`${b.spec.deposit}%`]), row('Balance', () => ['Before delivery'])].join(''))}
+    ${group('scope', 'Products as specified', (b) => b.dev ? '<span class="pill-x">1 deviation</span>' : '<span class="pill-ok">All met</span>',
+      row('Deviations', b => [b.dev ? esc(b.dev) : `All ${S.items.length} openings as specified`, b.dev ? 'miss' : 'ok']))}
+  </table></div>`;
 }
 
+/* ---------- proposal: the client-ready document, with the dealer's private pricing beside it ---------- */
+function proposalNums() {
+  const b = S.pick, n = S.items.length, install = Math.round(INSTALL_PER * n);
+  const markup = Math.round(b.landed * S.margin / 100);
+  return {b, n, install, markup, price:b.landed + install + markup};
+}
+function openProposal(enter) {
+  const {b, n, install, markup, price} = proposalNums(), gs = groups(), st = S.prop.state;
+  const done = st === 'accepted', locked = st !== 'draft';
+  mountDoc($('#propDoc'), `<div class="wb wb-prop">${PREVIEW}
+    <div class="pp-grid">
+      <article class="pp-doc">
+        <div class="pp-top"><span class="wb-k">Customer proposal</span><span class="wb-ref">Proposal v${S.prop.v} · ${today()}</span></div>
+        <h1 class="pp-proj">${esc(S.src.title)}</h1>
+        <p class="pp-sub">Windows supplied and installed</p>
+        <div class="pp-price"><b id="ppPrice">${money(price)}</b><span>Installed total</span></div>
+        <p class="pp-facts">${n} openings · Delivery ${weeks(b)} · ${b.spec.wProduct}-year product warranty</p>
+        ${dis('prop-incl', 'View included products', gs.length, linesHtml(gs))}
+        <footer class="pp-from"><b>${DEALER}</b><span>Prices valid 30 days · installation by ${DEALER}</span></footer>
+        ${st === 'sent' ? '<p class="pp-state">Sent to the customer · waiting for a reply</p>' : ''}
+        ${done ? `<p class="pp-state ok"><i aria-hidden="true">✓</i> Accepted by the customer · ${today()}</p>` : ''}
+      </article>
+      <aside class="pp-priv" aria-label="Dealer pricing, private">
+        <p class="wb-k">Dealer pricing</p><p class="pp-lock">Private · not included in the customer proposal</p>
+        <dl class="pp-led">
+          <div><dt>Landed · ${esc(b.short)}</dt><dd>${money(b.landed)}</dd></div>
+          <div><dt>Installation · ${n} openings</dt><dd>${money(install)}</dd></div>
+          <div><dt>Markup</dt><dd id="ppMk">${money(markup)}</dd></div>
+          <div class="sum"><dt>Customer price</dt><dd id="ppSum">${money(price)}</dd></div>
+        </dl>
+        <label class="pp-slider"><span>Markup on landed cost <output id="ppPct">${(+S.margin.toFixed(2))}%</output></span>
+          <input id="mg" type="range" min="0" max="40" step=".01" value="${S.margin}" ${locked ? 'disabled' : ''}></label>
+        ${dis('prop-cost', 'Cost breakdown', '', `<dl class="pp-led sm">
+          <div><dt>Product</dt><dd>${money(b.product)}</dd></div><div><dt>Freight</dt><dd>${money(b.freight)}</dd></div>
+          <div><dt>Landed cost</dt><dd>${money(b.landed)}</dd></div><div><dt>Installation (${money(Math.round(INSTALL_PER))} × ${n})</dt><dd>${money(install)}</dd></div>
+          <div><dt>Markup (${(+S.margin.toFixed(2))}% of landed)</dt><dd>${money(markup)}</dd></div></dl>`)}
+      </aside>
+    </div>
+    ${barHtml('<button class="btn-ghost sm" id="propBack">← Back to bids</button>',
+      done ? 'The customer accepted · next, order from the manufacturer' : st === 'sent' ? 'Waiting for the customer' : 'The customer sees one price, not your costs',
+      done ? '<button class="btn" id="poBtn">Create purchase order <span class="arr">→</span></button>'
+           : `<button class="btn" id="propSend" ${locked ? 'disabled' : ''}>Send proposal <span class="arr">→</span></button>`)}
+  </div>`, enter);
+  goStage('proposal');
+  const mg = $('#mg');
+  mg.oninput = () => {
+    S.margin = +mg.value; const p = proposalNums();
+    $('#ppPrice').textContent = money(p.price); $('#ppSum').textContent = money(p.price); $('#ppMk').textContent = money(p.markup);
+    $('#ppPct').textContent = (+S.margin.toFixed(2)) + '%';
+  };
+  $('#propBack').onclick = () => { goStage('bids'); };
+  const send = $('#propSend');
+  if (send) send.onclick = async () => {
+    S.price = proposalNums().price; S.prop.state = 'sent'; openProposal(); toast(`Proposal v${S.prop.v} sent`);
+    await wait(REDUCED ? 0 : 1200);
+    if (S.stage !== 'proposal' || S.prop.state !== 'sent') return;
+    S.prop.state = 'accepted'; openProposal();
+  };
+  const po = $('#poBtn'); if (po) po.onclick = () => { S.ms = 0; goStage('order'); renderOrder(true); };
+}
+const renderProposal = () => openProposal(true);
+
+/* ---------- purchase order: an operational record — status first ---------- */
+const ORDER_MS = [
+  ['PO created', 'Oct 18', 'Dealer issued the purchase order'],
+  ['PO acknowledged', 'Oct 20', 'The manufacturer confirmed lines and quantities'],
+  ['Manufacturing', 'Oct 22', 'Production started, completion estimated Nov 17'],
+  ['Ready to ship', 'Nov 18', 'Units packed and carrier booked'],
+  ['In transit', 'Nov 20', 'Shipment 01 on its way'],
+  ['Delivered', 'Nov 24', 'All units received on site, condition confirmed'],
+  ['Installed', 'Dec 01', 'Every opening installed, customer signoff'],
+];
+const ORDER_STAGES = [['Confirmed', [0, 1]], ['Manufacturing', [2, 3]], ['Delivery', [4, 5]], ['Installed', [6]]];
+const STATUS_NOW = ['Order placed', 'Order confirmed', 'Manufacturing', 'Ready to ship', 'In transit', 'Delivered', 'Installed'];
+function renderOrder(enter) {
+  const b = S.pick, gs = groups(), n = S.items.length, ms = S.ms || 0, complete = ms >= ORDER_MS.length - 1;
+  const stage = ORDER_STAGES.map(([name, idx]) => {
+    const happened = idx.filter(i => i <= ms), allDone = happened.length === idx.length;
+    const state = allDone ? 'done' : happened.length ? 'cur' : 'next';
+    const note = allDone ? `✓ ${ORDER_MS[idx[idx.length - 1]][1]}` : happened.length ? `Started ${ORDER_MS[happened[0]][1]}`
+               : name === 'Delivery' ? `Expected ${ORDER_MS[5][1]}` : `Est. ${ORDER_MS[idx[0]][1]}`;
+    return {name, state, note};
+  });
+  const delivery = ms >= 5 ? `Delivered ${ORDER_MS[5][1]}` : `Expected ${ORDER_MS[5][1]}`;
+  const head = complete
+    ? `<section class="po-done"><p class="po-ok"><i aria-hidden="true">✓</i> Project complete</p>
+        <p class="wb-s">Installed ${ORDER_MS[6][1]} · ${n} of ${n} openings installed · customer signoff completed</p></section>`
+    : `<section class="po-now"><p class="wb-k">Current status</p><p class="po-st">${STATUS_NOW[ms]}</p>
+        <p class="wb-s">${ORDER_MS[ms][2]} · since ${ORDER_MS[ms][1]}</p>
+        <div class="po-exp"><span class="wb-k">Delivery</span><b>${delivery.toUpperCase()}</b></div></section>`;
+  mountDoc($('#orderDoc'), `<div class="wb wb-po">${PREVIEW}
+    ${headHtml('Purchase order', `PO ${PO_NO}`, S.src.title, `${b.name} · RFQ ${RFQ_NO} · Proposal v${S.prop?.v || 1}`)}
+    ${numsHtml([[money(b.landed), 'Order value'], [n, 'Openings'], [gs.length, 'Product lines']])}
+    ${head}
+    <ol class="po-track" aria-label="Order progress">${stage.map(s => `<li class="${s.state}"><i aria-hidden="true"></i><b>${s.name}</b><span>${s.note}</span></li>`).join('')}</ol>
+    <section class="wb-blk">${dis('po-hist', 'View complete order history', ORDER_MS.length, `<ol class="po-hist">${ORDER_MS.map((m, i) => i <= ms
+        ? `<li class="ok"><i aria-hidden="true">✓</i><b>${m[0]}</b><span>${m[1]}</span><small>${m[2]}</small></li>`
+        : `<li class="est"><i aria-hidden="true">○</i><b>Estimated · ${m[0].toLowerCase()}</b><span>${m[1]}</span></li>`).join('')}</ol>
+        <p class="wb-note">✓ = confirmed event · ○ = estimate, not yet happened.</p>`)}</section>
+    <section class="wb-blk"><h3 class="wb-k">Ordered products</h3><p class="wb-s">${plural(gs.length, 'line')} · ${plural(n, 'opening')}</p>
+      ${dis('po-lines', 'View order details', gs.length, linesHtml(gs))}</section>
+    ${barHtml('<button class="btn-ghost sm" id="ordBack">← Back to proposal</button>',
+      complete ? '' : '<span class="wb-dim">Demo · move the order to its next milestone</span>',
+      complete ? '<button class="btn" id="again">Start new takeoff <span class="arr">→</span></button>'
+               : `<button class="btn" id="ordNext">Next milestone <span class="arr">→</span></button>`)}
+  </div>`, enter);
+  $('#ordBack').onclick = () => { goStage('proposal'); };
+  const nx = $('#ordNext'); if (nx) nx.onclick = () => { S.ms = Math.min(ORDER_MS.length - 1, (S.ms || 0) + 1); renderOrder(); };
+  const ag = $('#again'); if (ag) ag.onclick = () => { S.complete = false; goStage('upload'); };
+}
 /* ------------------------------------------------------------------
    Boot
 ------------------------------------------------------------------ */

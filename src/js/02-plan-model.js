@@ -155,10 +155,11 @@ function makeDet(parent, box, o, opt = {}) {
   if (opt.chip) {
     const fs = opt.fs || 11, txt = o.mark;
     const cw = fs * .64 * txt.length + fs * .9, ch = fs * 1.45;
-    const cy = y - ch - 2 < 0 ? y + h + 2 : y - ch - 2;
+    const right = opt.chipAt === 'right';    // schedule rows: the label beside the row, not over the row above
+    const cx = right ? x + w + fs*.4 : x, cy = right ? y + (h - ch)/2 : y - ch - 2 < 0 ? y + h + 2 : y - ch - 2;
     const c = el('g', {class:'chip'}, g);
-    el('rect', {x, y:cy, width:cw, height:ch, rx:fs*.15}, c);
-    el('text', {x:x + fs*.45, y:cy + ch/2, 'font-size':fs}, c).textContent = txt;
+    el('rect', {x:cx, y:cy, width:cw, height:ch, rx:fs*.15}, c);
+    el('text', {x:cx + fs*.45, y:cy + ch/2, 'font-size':fs}, c).textContent = txt;
   }
   return g;
 }

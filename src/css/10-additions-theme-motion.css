@@ -21,3 +21,97 @@
 .d-raw{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 0;padding:9px 12px;border:1px dashed var(--rule-2);border-radius:2px;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .d-raw b{font-weight:600;color:var(--ink);letter-spacing:.04em;text-transform:none;font-size:.78rem}
 .d-raw i{font-style:normal;padding:2px 6px;border:1px solid var(--orange);color:var(--orange-ink);font-size:.6rem}
+/* drawing sets: plan sheet switcher on the viewer, and where each fact came from */
+.vsheets{position:absolute;left:12px;top:12px;display:flex;gap:1px;max-width:calc(100% - 24px);overflow-x:auto;background:var(--rule);border:1px solid var(--rule);border-radius:2px}
+.vsheets button{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:0;background:var(--card);font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+.vsheets button:hover{background:var(--paper)}
+.vsheets button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.vsheets small{font-size:.6rem;color:var(--orange-ink)}
+.vsheets button[aria-pressed="true"] small{color:var(--orange)}
+.d-src{display:flex;gap:10px;margin:12px 0 0;padding:9px 12px;border:1px solid var(--rule);border-radius:2px;background:var(--paper);font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.d-src ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;text-transform:none;letter-spacing:.02em;font-size:.74rem;color:var(--ink)}
+/* the selected opening: blueprint blue, apart from orange (machine-read) and green (verified) */
+.det.sel .det-box{stroke:var(--sel);fill:var(--sel-tint);stroke-width:2.5}
+.det.sel .corner{stroke:var(--sel)}
+.det.sel .chip rect{fill:var(--sel)}
+.det.sel .chip text{fill:var(--on-sel)}
+.list tr.sel td,.list tr.sel.okr td{background:var(--sel-tint)}
+.list tr.sel td:first-child{color:var(--sel-ink);font-weight:600}
+.grp.sel{border-color:var(--sel);box-shadow:inset 0 0 0 1px var(--sel)}
+.d-head .d-mark{color:var(--sel-ink)}
+.vlegend i.sl{border-color:var(--sel);background:var(--sel-tint)}
+/* the plain-words summary at the top of an opening's card */
+.d-sum{margin:12px 0 4px;padding:11px 13px;border-left:3px solid var(--sel);background:var(--sel-tint);border-radius:2px}
+.d-sum span{display:block;margin-bottom:4px;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--sel-ink)}
+.d-sum p{margin:0;font-size:.9rem;line-height:1.5;color:var(--ink)}
+.d-sum b{font-weight:600}
+/* "All windows": every opening with a preview of its spot on the plan */
+.d-nav .d-all{width:auto;padding:0 10px;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase}
+.pv-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.pv-head b{font-family:var(--disp);font-stretch:80%;font-weight:650;text-transform:uppercase;font-size:1.05rem}
+.pv-head span{font-size:.82rem;color:var(--ink-3)}
+.pv-head button{margin-left:auto}
+.pv-defs{position:absolute;width:0;height:0;overflow:hidden}
+.pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:min(62vh,640px);overflow:auto;padding:2px}
+.pv-card{display:flex;flex-direction:column;gap:4px;min-width:0;padding:6px;text-align:left;border:1px solid var(--rule);background:var(--paper);border-radius:2px;color:var(--ink);cursor:pointer}
+.pv-card:hover{border-color:var(--ink-3)}
+.pv-card.sel{border-color:var(--sel);box-shadow:inset 0 0 0 1px var(--sel)}
+.pv-img{display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;background:var(--plan-bg);border:1px solid var(--rule-soft);overflow:hidden}
+.pv-img svg{width:100%;height:100%;display:block}
+.pv-hl{fill:var(--sel-tint);stroke:var(--sel);stroke-width:2.5;vector-effect:non-scaling-stroke}
+.pv-none{padding:8px;font-size:.72rem;color:var(--ink-3);text-align:center}
+.pv-meta{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.pv-meta b{font-family:var(--mono);font-size:.82rem}
+.pv-meta .pill{font-size:.6rem}
+.pv-line{font-size:.76rem;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-line i{font-style:normal;color:var(--orange-ink)}
+/* the Pre-processed tab's note above its list */
+.pre-note{margin:10px 0 6px;padding:9px 12px;border:1px dashed var(--rule-2);border-radius:2px;font-size:.84rem;line-height:1.45;color:var(--ink-2)}
+.pre-note b{color:var(--ink);font-weight:600}
+.pre-note .btn-text{margin-left:2px}
+/* one header that flips between grouped products and openings; double-click opens a product */
+.tabs #tabFlip{margin-right:0;display:inline-flex;align-items:baseline;gap:2px;cursor:pointer}
+.tabs #tabFlip .flip{font-style:normal;margin-left:10px;color:var(--ink-3);font-size:.9rem;transition:transform .25s}
+.tabs #tabFlip:hover .flip{color:var(--ink);transform:rotate(180deg)}
+.gwrap{margin-bottom:8px}
+.gwrap .grp{margin-bottom:0;user-select:none}
+.gwrap.open .grp{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.gsub{border:1px solid var(--sel);border-top:0;background:var(--card);padding:4px 8px 8px;animation:gsubIn .2s ease-out}
+.gsub .ttable th:nth-child(3),.gsub .ttable td:nth-child(3){display:none}
+@keyframes gsubIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.gsub{animation:none}}
+/* the floor plans being mapped in the background */
+.bg-note{margin:12px 0 0;padding:8px 12px;font-size:.82rem;line-height:1.45;color:var(--ink-2);border:1px dashed var(--rule);border-radius:2px;display:flex;gap:8px;align-items:baseline}
+.bg-note.done{border-style:solid;border-color:var(--sel);color:var(--ink)}
+.bg-note.failed{color:var(--ink-3)}
+.bg-note .spin{flex:none;width:9px;height:9px;border:2px solid var(--ink-3);border-top-color:transparent;border-radius:50%;animation:bgspin .8s linear infinite;transform:translateY(1px)}
+@keyframes bgspin{to{transform:translateY(1px) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.bg-note .spin{animation:none}}
+/* while the floor plans are mapped: a strip of every page over the viewer (checked one after another, the plan
+   being read with a scan line, a check when its windows are placed) */
+.vstrip{position:absolute;left:12px;top:52px;display:flex;gap:6px;max-width:calc(100% - 24px);overflow-x:auto;scrollbar-width:none;padding:6px;background:color-mix(in srgb,var(--card) 88%,transparent);border:1px solid var(--rule);border-radius:2px;backdrop-filter:blur(4px);transition:opacity .4s,transform .4s}
+.vstrip::-webkit-scrollbar{display:none}
+.vsheets[hidden] + .vstrip{top:12px}
+.vstrip.out{opacity:0;transform:translateY(-4px)}
+.vt{position:relative;flex:none;height:44px;border:1px solid var(--rule);background:#fff;overflow:hidden;opacity:.55;transition:opacity .3s,border-color .3s,box-shadow .3s}
+.vt img{display:block;height:100%;width:auto}
+.vt em{position:absolute;left:0;bottom:0;font-style:normal;font-family:var(--mono);font-size:.5rem;letter-spacing:.04em;padding:1px 3px;background:var(--card);color:var(--ink-2)}
+.vstrip.sweep .vt{animation:vtcheck .35s ease both;animation-delay:calc(var(--i) * 45ms)}
+@keyframes vtcheck{0%{opacity:.25}45%{opacity:1;border-color:var(--sel)}100%{opacity:.55}}
+.vt.reading{opacity:1;border-color:var(--sel);box-shadow:0 0 0 1px var(--sel);animation:none}
+.vt .vt-scan{position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,var(--sel-tint),transparent);opacity:0}
+.vt.reading .vt-scan{opacity:1;animation:vtscan 1.4s ease-in-out infinite alternate}
+@keyframes vtscan{from{transform:translateX(-30%)}to{transform:translateX(260%)}}
+.vt.found{opacity:1;border-color:var(--green);box-shadow:0 0 0 1px var(--green);animation:none}
+.vt.found::after{content:"✓";position:absolute;right:2px;top:1px;font-size:.62rem;font-weight:700;color:var(--on-green);background:var(--green);border-radius:50%;width:13px;height:13px;display:grid;place-items:center;line-height:1}
+/* the products while the plan is being searched: a soft hairline running along each card */
+.groups .grp{position:relative;overflow:hidden}
+.groups.mapping .grp::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:28%;background:linear-gradient(90deg,transparent,var(--sel),transparent);opacity:.55;animation:grpseek 1.6s ease-in-out infinite;animation-delay:calc(var(--gi,0) * 120ms)}
+@keyframes grpseek{from{transform:translateX(-100%)}to{transform:translateX(360%)}}
+.grp .loc{grid-column:1;font-family:var(--mono);font-size:.64rem;letter-spacing:.04em;text-transform:uppercase;color:var(--green);margin-top:4px;animation:pqup .35s ease both}
+.grp .loc.none{color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){
+  .vstrip.sweep .vt,.vt.reading .vt-scan{animation:none}
+  .vt .vt-scan{display:none}
+  .groups.mapping .grp::after{animation:none;width:100%;background:none;border-bottom:2px dotted var(--sel);opacity:.4}
+}

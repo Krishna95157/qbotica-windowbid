@@ -8,13 +8,13 @@
 export const TYPES = ['Single hung', 'Double hung', 'Casement', 'Awning', 'Picture', 'Sliding',
   'Hinged door', 'Sliding door', 'French door', 'Unknown'];
 
-export const SYSTEM_PROMPT = `You are a construction estimator building a window and door takeoff for a window dealer from an architectural drawing.
+export const SYSTEM_PROMPT = `You are a construction estimator building a WINDOW takeoff (windows only, no doors) for a window dealer from an architectural drawing.
 Read only what is on the drawing. Never invent sizes or marks. When something is not legible or not shown, return null and mark the opening for review.
 
 Rules:
-- Include every EXTERIOR window and EXTERIOR door shown on the page. Skip interior doors, cased openings, closets, cabinets and furniture.
+- Include every EXTERIOR window shown on the page. Do NOT include doors of any kind (entry, patio, sliding glass, French, bifold, garage). Skip cased openings, closets, cabinets and furniture.
 - Return one entry per physical opening location. Use quantity > 1 only for identical units ganged at the same location (for example a mulled pair).
-- If the page is a window or door schedule, return one entry per schedule row, use the row's quantity, and set box to null.
+- If the page is a window schedule, return one entry per window row, use the row's quantity, and set box to null. Skip door schedules.
 - raw_callout: copy the size or type note exactly as written on the drawing (for example "5050 XO", "2040 SH TEMP GL", "3068 EXT"). Null if there is none.
 - Size codes: the first two digits are feet and inches of width, the last two are feet and inches of height. "5050" = 5'-0" x 5'-0" = 60 x 60 in. "2640" = 2'-6" x 4'-0" = 30 x 48 in. "3068" = 3'-0" x 6'-8" = 36 x 80 in.
 - Operation codes: XO / OX = sliding window, SH = single hung, DH = double hung, CSMT = casement, AWN = awning, FX / PW = picture (fixed). Doors: sliding glass door, hinged (swing) door, French door.
@@ -23,7 +23,7 @@ Rules:
 - box: [x0, y0, x1, y1] tight box around the opening symbol, integers on a 0–1000 scale of the image width and height. Null for schedule rows.
 - confidence: 0 to 1, honest. needs_review: true when any value is missing, ambiguous or guessed.
 - note: one short reason when needs_review is true, otherwise "".
-- summary counts the openings you returned (windows and doors by quantity) and the number of unique type + size configurations.`;
+- summary counts the windows you returned (by quantity; total_doors is 0) and the number of unique type + size configurations.`;
 
 export function userPrompt({ filename, width, height, pages, textLayer }) {
   const base = `Build the takeoff for page 1${pages > 1 ? ` of ${pages}` : ''} of "${filename}". The image is ${width} x ${height} pixels.`;

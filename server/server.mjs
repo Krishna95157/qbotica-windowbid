@@ -7,8 +7,11 @@
  * Routes
  *   GET  /                      the site (dist/windowbid.html)
  *   GET  /src/…                 the multi-file source version (for development)
- *   GET  /api/health            {ok, provider, model, mock}
+ *   GET  /api/health            {ok, mock, tasks}
  *   POST /api/extract           {filename, width, height, pages, image:"data:image/png;base64,…"} → {id}
+ *                               task:"classify" {filename, total, pages:[{page, image, text}]}  — sort a batch of sheets
+ *                               task:"page"     {filename, page, total, kind, level, title, crop, width, height, image, textLayer}
+ *                                                — read one sheet of a set (see document-schema.mjs)
  *   GET  /api/extract/:id       {status: queued|in_progress|completed|failed|cancelled|incomplete, elapsed, result?, error?}
  *   POST /api/extract/:id/cancel
  *
@@ -24,7 +27,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { SYSTEM_PROMPT, userPrompt, TAKEOFF_SCHEMA } from './takeoff-schema.mjs';
-import { mockResult } from './mock.mjs';
+import { CLASSIFY_SYSTEM, classifyPrompt, CLASSIFY_SCHEMA, PAGE_SYSTEM, pagePrompt, PAGE_SCHEMA, PAGE_KINDS } from './document-schema.mjs';
+import { mockResult, mockClassify, mockPage } from './mock.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -35,14 +39,19 @@ const CFG = {
   key: (process.env.OPENAI_API_KEY || '').trim(),
   model: process.env.OPENAI_MODEL || 'gpt-6-astra',
   detail: process.env.OPENAI_IMAGE_DETAIL || 'high',
+  pageDetail: process.env.OPENAI_PAGE_DETAIL || 'original',   // full-detail sheet reads; "high" caps the image at ~3k tokens however large it is
+  classifyDetail: process.env.OPENAI_CLASSIFY_DETAIL || 'high',
   effort: process.env.OPENAI_REASONING_EFFORT || '',          // optional, e.g. "medium"; leave empty if the model doesn't support it
   maxOutput: Number(process.env.OPENAI_MAX_OUTPUT_TOKENS || 32000),
   base: (process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1').replace(/\/$/, ''),
   maxMB: Number(process.env.MAX_UPLOAD_MB || 20),
-  perHour: Number(process.env.EXTRACTIONS_PER_HOUR || 20),   // per visitor IP — protects your API budget
+  perHour: Number(process.env.EXTRACTIONS_PER_HOUR || 200),  // reading calls per visitor IP — protects your API budget (a 90-page set uses ~15)
   mockSeconds: Number(process.env.WB_MOCK_SECONDS || 12),
 };
 CFG.mock = process.env.WB_MOCK === '1' || !CFG.key;
+// LOCAL_OCR_URL: read uploads with the local WindowBid OCR app instead (e.g. http://127.0.0.1:8001).
+// The browser talks to it through /local/… on this server, so everything stays on one address.
+CFG.localUrl = (process.env.LOCAL_OCR_URL || '').replace(/\/$/, '');
 
 const STATIC = [
   { prefix: '/src/', dir: path.join(ROOT, 'src') },
@@ -65,13 +74,14 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, 'http://x');
     if (url.pathname === '/api/health' && req.method === 'GET') {
-      return json(res, 200, { ok: true, provider: 'openai', model: CFG.model, mock: CFG.mock });
+      return json(res, 200, { ok: true, mock: CFG.mock, tasks: ['takeoff', 'classify', 'page'], local: !!CFG.localUrl });
     }
     if (url.pathname === '/api/extract' && req.method === 'POST') return startExtraction(req, res);
     let m = url.pathname.match(/^\/api\/extract\/([\w-]{6,80})$/);
     if (m && req.method === 'GET') return pollExtraction(m[1], res);
     m = url.pathname.match(/^\/api\/extract\/([\w-]{6,80})\/cancel$/);
     if (m && req.method === 'POST') return cancelExtraction(m[1], res);
+    if (CFG.localUrl && url.pathname.startsWith('/local/api/')) return proxyLocal(req, res, url);
     if (url.pathname.startsWith('/api/')) return json(res, 404, { error: 'not_found' });
     if (req.method === 'GET' || req.method === 'HEAD') return serveStatic(url.pathname, res);
     json(res, 405, { error: 'method_not_allowed' });
@@ -84,8 +94,22 @@ server.listen(CFG.port, () => {
   console.log(`WindowBid running at http://localhost:${CFG.port}`);
   console.log(CFG.mock
     ? '  Plan reading: MOCK mode (no OPENAI_API_KEY set) — uploads return a canned result after a short wait.'
-    : `  Plan reading: OpenAI ${CFG.model} (background mode, image detail "${CFG.detail}")`);
+    : `  Plan reading: OpenAI ${CFG.model} (background mode; sheet reads at image detail "${CFG.pageDetail}", page sorting at "${CFG.classifyDetail}")`);
 });
+
+// ---------- local OCR app (LOCAL_OCR_URL) ----------
+// Streams /local/api/… to the local app's /api/… unchanged: uploads, status polls, results, page images.
+function proxyLocal(req, res, url) {
+  const target = new URL(url.pathname.slice('/local'.length) + url.search, CFG.localUrl);
+  const headers = { ...req.headers, host: target.host };
+  const up = http.request(target, { method: req.method, headers }, r => {
+    res.writeHead(r.statusCode, { 'Content-Type': r.headers['content-type'] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+    r.pipe(res);
+  });
+  up.on('error', () => json(res, 502, { error: 'local_unreachable',
+    message: 'The local WindowBid reader isn’t running. Start it with ./run.sh in ~/windowbid-experiment.' }));
+  req.pipe(up);
+}
 
 // ---------- API ----------
 async function startExtraction(req, res) {
@@ -97,42 +121,73 @@ async function startExtraction(req, res) {
   try { body = JSON.parse(await readBody(req, CFG.maxMB * 1024 * 1024 * 1.4)); }
   catch (e) { return json(res, e.code === 'too_large' ? 413 : 400, { error: e.code || 'bad_request', message: e.code === 'too_large' ? `Image is larger than ${CFG.maxMB} MB.` : 'Invalid request.' }); }
 
-  const image = String(body.image || '');
-  if (!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(image)) return json(res, 400, { error: 'bad_image', message: 'Send the page as a PNG, JPEG or WebP data URL.' });
-  const meta = {
-    filename: String(body.filename || 'plan').slice(0, 120),
-    width: clampInt(body.width, 1, 20000), height: clampInt(body.height, 1, 20000), pages: clampInt(body.pages, 1, 999),
-    textLayer: typeof body.textLayer === 'string' ? body.textLayer.slice(0, 60000) : '',
-  };
+  const task = ['takeoff', 'classify', 'page'].includes(body.task) ? body.task : 'takeoff';
+  const filename = String(body.filename || 'plan').slice(0, 120);
+  const textLayer = typeof body.textLayer === 'string' ? body.textLayer.slice(0, 60000) : '';
+  let spec;                       // {instructions, content, name, schema, maxOutput, meta}
+  if (task === 'classify') {
+    // a batch of small page images: what is each sheet?
+    const pages = Array.isArray(body.pages) ? body.pages.slice(0, 16) : [];
+    if (!pages.length || !pages.every(p => validImage(p && p.image))) return badImage(res);
+    const total = clampInt(body.total, 1, 2000);
+    const content = [{ type: 'input_text', text: classifyPrompt({ filename, total }) }];
+    for (const p of pages) {
+      const text = typeof p.text === 'string' ? p.text.slice(0, 1500) : '';
+      content.push({ type: 'input_text', text: `Page ${clampInt(p.page, 1, 2000)}${text ? ` — largest text on the sheet: ${text}` : ''}` });
+      content.push({ type: 'input_image', image_url: p.image, detail: CFG.classifyDetail });
+    }
+    spec = { instructions: CLASSIFY_SYSTEM, content, name: 'sheet_index', schema: CLASSIFY_SCHEMA, maxOutput: 12000,
+      meta: { pages: pages.map(p => clampInt(p.page, 1, 2000)) } };
+  } else {
+    const image = String(body.image || '');
+    if (!validImage(image)) return badImage(res);
+    const meta = { filename, width: clampInt(body.width, 1, 20000), height: clampInt(body.height, 1, 20000), textLayer };
+    if (task === 'page') {
+      // one sheet of a set (or a crop of its schedule) at full detail
+      Object.assign(meta, {
+        page: clampInt(body.page, 1, 2000), total: clampInt(body.total, 1, 2000),
+        kind: PAGE_KINDS.includes(body.kind) ? body.kind : 'auto', crop: body.crop === true,
+        level: typeof body.level === 'string' ? body.level.slice(0, 60) : '', title: typeof body.title === 'string' ? body.title.slice(0, 80) : '',
+      });
+      spec = { instructions: PAGE_SYSTEM, name: 'sheet_takeoff', schema: PAGE_SCHEMA, maxOutput: CFG.maxOutput, meta,
+        content: [{ type: 'input_text', text: pagePrompt(meta) }, { type: 'input_image', image_url: image, detail: CFG.pageDetail }] };
+    } else {
+      // single page (claude.ai-compatible flow and older clients)
+      meta.pages = clampInt(body.pages, 1, 999);
+      spec = { instructions: SYSTEM_PROMPT, name: 'window_takeoff', schema: TAKEOFF_SCHEMA, maxOutput: CFG.maxOutput, meta,
+        content: [{ type: 'input_text', text: userPrompt(meta) }, { type: 'input_image', image_url: image, detail: CFG.detail }] };
+    }
+  }
   hits.push(Date.now()); HITS.set(ip, hits);
 
   if (CFG.mock) {
     const id = 'mock_' + crypto.randomBytes(9).toString('hex');
-    JOBS.set(id, { created: Date.now(), ip, mock: true });
-    return json(res, 202, { id, status: 'queued', model: 'mock' });
+    JOBS.set(id, { created: Date.now(), ip, mock: true, task, meta: spec.meta });
+    return json(res, 202, { id, status: 'queued' });
   }
 
   const payload = {
     model: CFG.model,
     background: true,
-    instructions: SYSTEM_PROMPT,
-    input: [{
-      role: 'user',
-      content: [
-        { type: 'input_text', text: userPrompt(meta) },
-        { type: 'input_image', image_url: image, detail: CFG.detail },
-      ],
-    }],
-    text: { format: { type: 'json_schema', name: 'window_takeoff', strict: true, schema: TAKEOFF_SCHEMA } },
-    max_output_tokens: CFG.maxOutput,
+    instructions: spec.instructions,
+    input: [{ role: 'user', content: spec.content }],
+    text: { format: { type: 'json_schema', name: spec.name, strict: true, schema: spec.schema } },
+    max_output_tokens: spec.maxOutput,
   };
   if (CFG.effort) payload.reasoning = { effort: CFG.effort };
 
-  const r = await openai('POST', '/responses', payload);
+  let r = await openai('POST', '/responses', payload);
+  if (!r.ok && r.status === 400 && /detail/i.test(r.raw)) {
+    // this model doesn't take that image detail level: fall back to "high"
+    for (const c of spec.content) if (c.type === 'input_image') c.detail = 'high';
+    r = await openai('POST', '/responses', payload);
+  }
   if (!r.ok) return json(res, 502, { error: 'openai_error', message: r.message });
-  JOBS.set(r.data.id, { created: Date.now(), ip, mock: false });
-  json(res, 202, { id: r.data.id, status: r.data.status, model: CFG.model });
+  JOBS.set(r.data.id, { created: Date.now(), ip, mock: false, task });
+  json(res, 202, { id: r.data.id, status: r.data.status });
 }
+function validImage(s) { return typeof s === 'string' && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(s); }
+function badImage(res) { return json(res, 400, { error: 'bad_image', message: 'Send each page as a PNG, JPEG or WebP data URL.' }); }
 
 async function pollExtraction(id, res) {
   const job = JOBS.get(id);
@@ -142,7 +197,8 @@ async function pollExtraction(id, res) {
   if (job.mock) {
     if (job.cancelled) return json(res, 200, { status: 'cancelled', elapsed });
     if (elapsed < CFG.mockSeconds) return json(res, 200, { status: elapsed < 2 ? 'queued' : 'in_progress', elapsed });
-    return json(res, 200, { status: 'completed', elapsed, result: mockResult(), model: 'mock' });
+    const result = job.task === 'classify' ? mockClassify(job.meta) : job.task === 'page' ? mockPage(job.meta) : mockResult();
+    return json(res, 200, { status: 'completed', elapsed, result });
   }
 
   const r = await openai('GET', `/responses/${encodeURIComponent(id)}`);
@@ -151,15 +207,16 @@ async function pollExtraction(id, res) {
   if (status === 'queued' || status === 'in_progress') return json(res, 200, { status, elapsed });
   if (status === 'completed') {
     const { text, refusal } = outputText(d);
-    if (refusal) return json(res, 200, { status: 'failed', elapsed, error: 'refused', message: 'The model declined to read this file.' });
-    try { return json(res, 200, { status, elapsed, result: JSON.parse(text), model: d.model, usage: d.usage || null }); }
+    if (refusal) return json(res, 200, { status: 'failed', elapsed, error: 'refused', message: 'The reading service declined to read this file.' });
+    try { return json(res, 200, { status, elapsed, result: JSON.parse(text) }); }
     catch { return json(res, 200, { status: 'failed', elapsed, error: 'bad_output', message: 'The reading came back incomplete. Try again.' }); }
   }
   if (status === 'incomplete') {
     const why = d.incomplete_details && d.incomplete_details.reason;
-    return json(res, 200, { status, elapsed, error: 'incomplete', message: why === 'max_output_tokens' ? 'The plan has more openings than one reading can return. Raise OPENAI_MAX_OUTPUT_TOKENS or crop the page.' : 'The reading stopped early. Try again.' });
+    return json(res, 200, { status, elapsed, error: 'incomplete', message: why === 'max_output_tokens' ? 'The plan has more openings than one reading can return. Crop the page and try again.' : 'The reading stopped early. Try again.' });
   }
-  const msg = (d.error && d.error.message) || `Reading ${status}.`;
+  if (d.error && d.error.message) console.error(`[openai] reading ${id} ${status}: ${d.error.message}`);
+  const msg = `Reading ${status}. Try again.`;
   json(res, 200, { status, elapsed, error: status, message: msg });
 }
 
@@ -184,16 +241,17 @@ async function openai(method, p, body) {
     if (!r.ok) {
       const m = (data.error && data.error.message) || `OpenAI returned HTTP ${r.status}.`;
       console.error(`[openai] ${method} ${p} → ${r.status}: ${m}`);
-      const friendly = r.status === 401 ? 'The server’s OpenAI API key was rejected. Check OPENAI_API_KEY.'
-        : r.status === 429 ? 'OpenAI rate limit or quota reached. Check billing and limits on the OpenAI Platform.'
-        : r.status === 404 && /model/i.test(m) ? `Model "${CFG.model}" isn’t available to this API key. Set OPENAI_MODEL to a vision-capable model you have access to.`
-        : m;
-      return { ok: false, message: friendly };
+      // shown in the page, so keep the provider out of it; the console line above has the details
+      const friendly = r.status === 401 ? 'The reading service isn’t set up correctly on the server (access key rejected).'
+        : r.status === 429 ? 'The reading service is busy or out of quota. Try again later.'
+        : r.status === 404 && /model/i.test(m) ? 'The reading service isn’t set up correctly on the server (reader not available).'
+        : 'The reading service returned an error. Try again.';
+      return { ok: false, status: r.status, raw: m, message: friendly };
     }
     return { ok: true, data };
   } catch (e) {
     console.error(`[openai] ${method} ${p} failed:`, e.message);
-    return { ok: false, message: 'Couldn’t reach OpenAI from the server.' };
+    return { ok: false, status: 0, raw: e.message, message: 'Couldn’t reach the reading service from the server.' };
   }
 }
 function outputText(d) {

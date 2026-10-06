@@ -1,10 +1,10 @@
 'use strict';
 /* processing */
 const PSTEPS = ['Plan received','Sheet identified','Finding windows and doors','Reading marks and sizes','Matching types','Building the takeoff'];
-function showProc(title) {
+function showProc(title, steps = PSTEPS) {
   $('#proc').hidden = false; $('#rev').hidden = true;
   $('#procTitle').textContent = title;
-  $('#psteps').innerHTML = PSTEPS.map(s => `<li><i></i>${s}</li>`).join('');
+  $('#psteps').innerHTML = steps.map(s => `<li><i></i>${s}</li>`).join('');
   $('#plog').innerHTML = ''; $('#procAct').innerHTML = '';
 }
 function setStep(i, st) { const li = $$('#psteps li')[i]; if (li) li.className = st; }
@@ -16,8 +16,11 @@ function counts() {
   return {windows:S.items.filter(i => i.cat === 'window').length, doors:S.items.filter(i => i.cat === 'door').length, products:groups().length, openings:S.items.length};
 }
 function renderStats() {
-  const c = counts(), a = S.items.filter(i => i.approved).length;
-  $('#wStats').innerHTML = `<div><b>${c.windows}</b>windows</div><div><b>${c.doors}</b>doors</div><div><b>${c.products}</b>products</div><div><b>${a}/${c.openings}</b>verified</div>`;
+  const list = visibleItems(), a = list.filter(i => i.approved).length;
+  const c = {windows:list.filter(i => i.cat === 'window').length, doors:list.filter(i => i.cat === 'door').length,
+             products:groups(list).length, openings:list.length};
+  const doors = S.src && S.src.kind === 'sample' ? `<div><b>${c.doors}</b>doors</div>` : '';   // uploads are windows only
+  $('#wStats').innerHTML = `<div><b>${c.windows}</b>windows</div>${doors}<div><b>${c.products}</b>products</div><div><b>${a}/${c.openings}</b>verified</div>`;
 }
 function scanTo(x) {
   $('#vscan').style.display = '';
@@ -25,11 +28,14 @@ function scanTo(x) {
   $('#vscan rect').setAttribute('x', x - V.W*.04);
 }
 function resetTakeoff(src) {
-  S.src = src; S.items = []; S.sel = null; S.selGroup = null; S.takeoffOK = false; S.tab = 'openings'; S.adding = false;
-  S.rfq = null; S.bids = null; S.pick = null;
+  if (S.ctl) S.ctl.abort();                   // stops any background reading of the previous takeoff
+  S.bg = null; S.bgPage = null; S.bgReading = new Set(); S.bgFound = new Set();
+  S.src = src; S.items = []; S.sel = null; S.selGroup = null; S.open = null; S.leftOut = []; S.takeoffOK = false; S.tab = 'groups'; S.adding = false;
+  S.rfq = null; S.bids = null; S.pick = null; S.sheet = null;
   $('#wTitle').textContent = src.title; $('#wFile').textContent = src.file;
   goStage('work');
   setupViewer(src);
+  renderSheetTabs(); renderStrip();
   renderStats();
 }
 async function runSample() {
@@ -141,12 +147,12 @@ Window and door tags and size callouts sit next to their openings, so use their 
   return `You are reading an architectural drawing to build a window and door takeoff for a window dealer.
 ${source}
 
-Find every exterior window and exterior door opening shown on this page. Skip interior doors, cased openings, closets and cabinets.
-If the page is a window or door schedule rather than a drawing, return one entry per schedule row with box set to null.
+Find every exterior window shown on this page. This is a windows-only takeoff: do NOT include doors of any kind (entry, patio, sliding glass, French, bifold, garage). Skip cased openings, closets and cabinets.
+If the page is a window schedule rather than a drawing, return one entry per window row with box set to null. Skip door schedules.
 
 For each opening return:
 - mark: the tag shown on the drawing (e.g. "W3", "101", "A"). If there is none, assign W01, W02... for windows and D01, D02... for doors.
-- category: "window" or "door"
+- category: always "window"
 - type: exactly one of ${TYPES.map(t => `"${t}"`).join(', ')}
 - width_in, height_in: numbers in inches, only if written on the drawing (dimension string, tag, size code or schedule). Convert 3'-0" to 36. A size code like 3050 means 3'0" x 5'0" = 36 x 60. Use null when not legible. Never estimate from the drawing scale.
 - room: the room the opening serves, or null
@@ -170,6 +176,7 @@ function normalize(res, W, H) {
     if (!r || typeof r !== 'object') continue;
     const type = TYPES.find(t => t.toLowerCase() === String(r.type || '').toLowerCase()) || 'Unknown';
     const cat = String(r.category || '').toLowerCase() === 'door' || DOOR_TYPES.has(type) ? 'door' : 'window';
+    if (cat === 'door') continue;                                   // windows-only takeoff
     const num = v => { const n = Number(v); return Number.isFinite(n) && n > 0 && n < 400 ? Math.round(n*10)/10 : null; };
     let box = null;
     if (Array.isArray(r.box) && r.box.length === 4 && r.box.every(v => Number.isFinite(Number(v)))) {
@@ -210,7 +217,7 @@ async function runUpload(f, sample) {
   setStep(0, 'done'); log(`${esc(f.name)} · ${pages} page${pages > 1 ? 's' : ''}${pages > 1 ? ' · analyzing page 1' : ''}`);
   setStep(1, 'active');
   if (text && text.length) log(`Text layer: <b>${text.length}</b> text items${textOnly ? '' : ' sent as a reference'}`);
-  log(sample.polled ? `Sending page 1 to the WindowBid server (${esc(AI_NAME)})` : textOnly ? 'Sending the page\u2019s text to Claude for reading' : 'Sending page 1 to Claude for reading');
+  log(sample.polled ? 'Sending page 1 to the WindowBid reading service' : textOnly ? 'Sending the page\u2019s text to Claude for reading' : 'Sending page 1 to Claude for reading');
   const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
   let scanOn = !REDUCED; const t0 = performance.now();
   const scanStep = t => { if (!scanOn || !live()) return; const p = ((t - t0) / 2600) % 2; scanTo((p < 1 ? p : 2 - p) * W); requestAnimationFrame(scanStep); };
@@ -257,7 +264,7 @@ async function runUpload(f, sample) {
   scanOn = false; $('#vscan').style.display = 'none';
   if (!live()) return;
   const items = normalize(res, W, H);
-  if (!items.length) { showError('No exterior windows or doors were found on page 1. Try a floor plan, elevation or schedule page.', f); return; }
+  if (!items.length) { showError('No exterior windows were found on page 1. Try a floor plan, elevation or window schedule page.', f); return; }
   setStep(1, 'done'); setStep(2, 'done'); setStep(3, 'done'); setStep(4, 'active');
   if (res && res.sheet && !gotFirst) log(`Sheet identified: <b>${esc(res.sheet)}</b>`);
   if (res && res.summary && Number.isFinite(res.summary.unique_configurations)) log(`${res.summary.total_windows} windows · ${res.summary.total_doors} doors · ${res.summary.unique_configurations} configurations`);
@@ -280,7 +287,7 @@ function showError(msg, f) {
   $$('#psteps li.active').forEach(li => li.className = '');
   $('#procTitle').textContent = 'Reading stopped';
   $('#procAct').innerHTML = `<div class="perr"><p>${esc(msg)}</p><div class="foot-row" style="justify-content:flex-start"><button class="btn sm" id="retry">Try again</button><button class="btn-ghost sm" id="back">Back to upload</button><button class="btn-text" id="trySample">Use the sample plan</button></div></div>`;
-  $('#retry').onclick = () => handleFile(f);
+  $('#retry').onclick = () => f ? handleFile(f) : goStage('upload');
   $('#back').onclick = () => goStage('upload');
   $('#trySample').onclick = runSample;
 }

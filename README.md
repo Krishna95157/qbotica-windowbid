@@ -1,369 +1,503 @@
-# qBotica WindowBid — Demo Website
+# qBotica WindowBid — Demo (v18, saved working version)
 
-**Review. Procure. Fulfill.**
-
-A single-page marketing and demo site for **qBotica WindowBid**, a platform that takes a window and door project from architectural drawings to an installed order. It's built with plain HTML, CSS and JavaScript (no framework, no build dependencies).
+**Review. Procure. Fulfill.** Upload an architectural drawing set — one sheet or a 90-page PDF — and get a
+**window takeoff**: every window with its tag, type, size, room and glass, read from the drawings, shown on
+the plan, explained in plain words, and ready to check, export and send for quotes.
 
 | | |
 |---|---|
-| **Run it** | `node server/server.mjs` → http://localhost:3000 (section 1) |
-| **Single-file build** | `dist/windowbid.html` (SHA-256 `b421cb93e1b134c8532dd748e114165b8fa67f15610a7065120ab3842c156e24`) |
-| **Source to edit** | `src/` (HTML, 10 CSS files, 18 JS files) and `server/` (plan-reading API) |
-| **AI plan reading** | **OpenAI via the WindowBid server** (`server/server.mjs`, key kept server-side). The page also supports a host-provided AI runtime — see section 8 |
-| **Owner / context** | Internal demo for qBotica, requested by qBotica's CEO |
-| **Status** | Working prototype. Plan reading and review are real; manufacturers, bids, prices and fulfillment dates are sample data, labelled "Platform preview" |
+| **Run it** | `node server/server.mjs` → open the address it prints (section 2) |
+| **What's real** | Uploading, reading the drawings, the takeoff and the review screen |
+| **What's sample data** | RFQ, bids, proposal and order tracking (labelled "Platform preview") |
+| **Reads plans with** | OpenAI `gpt-6-astra`, called only by this project's own server (the key never reaches the browser) |
+| **Built with** | Plain HTML/CSS/JavaScript, PDF.js, SVG, Node.js (no npm packages) — section 6 |
+| **Tested on** | Two real 30-page drawing sets and a single floor plan — section 5 |
+| **Owner** | Internal demo for qBotica |
 
 ---
 
-## 1. Quick start
+## Contents
 
-You need **Node.js 18+** (for the site plus AI plan reading) and a modern browser with internet access for the web fonts. Python 3 is only needed for the build script.
+1. [What it does](#1-what-it-does)
+2. [Getting it running](#2-getting-it-running)
+3. [How the extraction works — the pipeline](#3-how-the-extraction-works--the-pipeline)
+4. [Why it is built this way](#4-why-it-is-built-this-way)
+5. [Results on real drawings](#5-results-on-real-drawings)
+6. [Technologies](#6-technologies)
+7. [The review screen](#7-the-review-screen)
+8. [Design](#8-design)
+9. [Project structure](#9-project-structure)
+10. [Server API](#10-server-api)
+11. [Configuration](#11-configuration-env)
+12. [Security and cost](#12-security-and-cost)
+13. [Testing](#13-testing)
+14. [Limits and known issues](#14-limits-and-known-issues)
+15. [Version history](#15-version-history)
+16. [Related projects](#16-related-projects)
 
-### A. Full demo with AI plan reading (recommended)
+---
+
+## 1. What it does
+
+A window dealer has to turn an architect's drawing set into a list of windows to price. In a real set the
+facts about one window are **spread over several sheets**:
+
+```
+ Floor plan (sheet A-2.1, page 7)                 Window schedule (sheet A-4.1, page 15)
+ ───────────────────────────────                  ──────────────────────────────────────────────
+   wall ═══╡ ⬡6 ╞═══ wall                          MARK  SIZE           OPERATION  TEMPERED  QTY
+          (just a tag — no size here)              ⬡6    4'-0" X 2'-6"  FIXED      NO        5
+```
+
+WindowBid reads the set the way an estimator does — find the floor plans, find the schedule, match every
+tag on the plan to its row in the schedule — and produces one takeoff:
+
+| Mark | Room | Type | Size (in) | Found in |
+|---|---|---|---|---|
+| 6·1 … 6·5 | Great Room | Picture (fixed) | 48 × 30 | Tag 6 on A-2.1 (p.7) · Schedule on A-4.1 (p.15) |
+
+Then the dealer reviews it: every window is boxed on the plan, explained in plain words, and verified,
+corrected or removed. The verified takeoff becomes an RFQ for manufacturers (sample screens from there on).
+
+**Windows only.** Doors of every kind are left out on purpose; this is a window bid.
+
+---
+
+## 2. Getting it running
+
+### What you need
+
+| | Why |
+|---|---|
+| **Node.js 18+** | runs the server (`server/server.mjs`); nothing to install with npm |
+| **An OpenAI API key with billing** | reading the drawings (a ChatGPT subscription is not API credit) |
+| **Internet access** | OpenAI, Google Fonts, and PDF.js (loaded from cdnjs when a PDF is opened) |
+| Python 3 *(only to change the page)* | `scripts/build.py` rebuilds `dist/windowbid.html` from `src/` |
+
+### Start it
+
 ```bash
-cd qbotica-windowbid
-cp .env.example .env          # Windows: copy .env.example .env
-# open .env and paste your NEW OpenAI key after OPENAI_API_KEY=
-node server/server.mjs        # or: npm start
-```
-Open **http://localhost:3000** and use **Try Demo → upload a plan**. With no key in `.env`, the server runs in **mock mode**: uploads return a canned reading after about 12 seconds, at no cost, so you can test the flow first.
-
-### B. Static preview only (no upload reading)
-```bash
-python3 -m http.server 8080
-```
-| URL | What it is |
-|---|---|
-| http://localhost:8080/dist/windowbid.html | The single-file build |
-| http://localhost:8080/src/index.html | The same page from the separate source files |
-
-In this mode, uploading your own plan is disabled and a note says why. The sample plan works everywhere.
-
----
-
-## 2. What the project is about
-
-A window and door project passes through three parties:
-
-- **The customer** (homeowner or project owner) needs windows and doors installed.
-- **The dealer** reads the architectural plans, works out every opening, gets prices from manufacturers and sells the package to the customer.
-- **The manufacturer** builds and ships the products.
-
-WindowBid sits in the middle and carries **one continuous record** of every opening from the drawing through to installation:
-
-| Stage | Question | What happens | Who acts |
-|---|---|---|---|
-| **01 Review** | Review the extracted takeoff | AI reads the openings from the drawing; the dealer verifies, edits and marks the takeoff **Ready for RFQ** | Dealer reviews AI-extracted data |
-| **02 Procure** | Compare manufacturer options | The takeoff becomes an RFQ; manufacturers bid; bids are compared like for like; a proposal goes to the customer | Customer **accepts** the proposal |
-| **03 Fulfill** | From order to installation | The accepted proposal becomes a purchase order, tracked through manufacturing, shipping, delivery and installation | Manufacturer **acknowledges** the PO |
-
-**Wording rule (important):** the dealer *verifies* technical data, the customer *accepts* the commercial proposal, and the manufacturer *acknowledges* the PO. The word "approve" is never used for the takeoff.
-
-## 3. Main objective
-
-Show qBotica's leadership and prospective customers, in one browser tab, that WindowBid can:
-
-1. read a construction drawing with AI and turn it into structured opening data, with a human in the loop;
-2. carry that same record, without retyping, into procurement and fulfillment;
-3. do it in a polished, distinctive way that looks like the industry's own material (drawing sheets), not a generic software dashboard.
-
----
-
-## 4. Everything implemented so far
-
-### Site-wide
-- **Brand:** "qBotica WindowBid" lockups (header, footer, demo bar, browser-tab icon). The qBotica cube symbol is rebuilt from a written spec, and the wordmark uses Poppins Bold as a stand-in.
-- **Design system:** drafting-paper look with ruled frames, ruler ticks, registration crosses and sheet labels. Three typefaces: Archivo for statements, Instrument Sans for body text, Geist Mono for technical labels. The colour rule is **orange = machine-read / needs attention**, **green = confirmed by a person / complete**. Full details are in `docs/DESIGN.md`.
-- **Theme:** **dark by default**. Draw a **W** with the mouse anywhere (desktop) to switch to light and back, or use the footer's theme switch on any device. The new theme opens as a circle from where the W ended, and the choice is saved in `localStorage` under `wb-theme`.
-- **Drafting cursor (desktop):** an orange pen trail, a crosshair over drawings, snapping to window openings, and small action labels.
-- **Page transitions:** an "aperture" between Home, About and Contact. Hash routes are `#about`, `#contact` and `#takeoff` (the demo).
-- **Accessibility:** keyboard focus outlines, "reduce motion" support (animations skip to their final state), and responsive layouts down to about 360 px wide.
-
-### Home page (top to bottom)
-1. **Hero:** "Review. Procure. Fulfill." A floor plan assembles from 14 flying wall pieces, then window W07 is highlighted.
-2. **Three stages. One continuous record:** three ruled rows, each with a small animated example (takeoff statuses Verified / Edited / Needs review; three supplier prices; seven fulfillment milestones).
-3. **Review** (pinned scroll scene): the drawing is read, W02's missing height is edited and verified, plan labels stretch into a takeoff table, and identical rows group into seven products.
-4. **Procure** (pinned scroll scene): one procurement sheet. The product card becomes RFQ line 01, the bid schedule draws itself, **Cascade** is selected with a green trace, the dealer ledger becomes the customer proposal ($42,500), and the customer signs and accepts.
-5. **Fulfill** (pinned, charcoal): the order becomes PO #WB-0048 (Cascade). One line draws down through seven milestones (with owner and date), with a W07 tag riding the line, and ends on **"W07 — Complete."**
-6. **Metrics:** 10 windows, 02 doors, 07 products, 12 openings verified. These update to the user's own counts after an upload in the demo.
-7. **Call to action:** "See the workflow yourself."
-8. **Footer:** links, theme switch and "draw a W" hint.
-
-### About page
-1. The qBotica logo **builds itself** (about 5.6 s, five steps, progress bar, then Replay and "Scroll to unfold").
-2. **"One cube. Three sides."** As you scroll, the cube's faces flatten into three coloured panels: Who we are (orange), What we do (deep green), Our agenda (mint).
-3. An orange "Let's build it together." band with a Contact Us button.
-
-### Contact page
-A fill-in-the-blank sentence on a drawing sheet: *"Hi, I'm ___ from ___. I'd like [a live demo ▾]. Reach me at ___."* Blanks turn green when valid, and sending shows a thank-you. **The form is a prototype and does not send anything yet.**
-
-### Demo workspace ("Try Demo", `#takeoff`)
-
-| Step | What works |
-|---|---|
-| Upload | Sample plan (works anywhere) or your own PDF/PNG/JPG/WebP, read by **Claude** on claude.ai or by **OpenAI through the WindowBid server** everywhere else (section 8). PDFs also send their **text layer**; if a view can't send images, PDFs are read from that text alone |
-| Extract | Scan animation with a live log. For uploads, page 1 is rendered (PDF.js) and read by AI; server readings run as **background jobs** with elapsed time and step-by-step progress (1–3 minutes is normal) |
-| Review | Zoomable plan, coloured detection boxes, an editable opening card showing the **drawing callout as written** (e.g. `5050 XO`) with Tempered / Egress flags, statuses **AI read / Needs review / Verified / Edited**, add or remove openings, keyboard shortcuts (↑/↓ or J/K, V to verify, Esc), **Mark Ready for RFQ →**, CSV export |
-| RFQ | RFQ #WB-1042 built from the grouped takeoff; choose manufacturers, set a due date and notes |
-| Bids | Three sample bids (Northline, Cascade, Mesa Ridge), compared like for like with badges |
-| Proposal | Dealer ledger with margin slider beside the customer view; choosing Cascade on the sample plan gives exactly **$42,500** |
-| Order | PO #WB-0048 with a seven-step tracker, ending in "Project complete" |
-
----
-
-## 5. Latest changes (most recent first)
-
-| Version | Change |
-|---|---|
-| **v12 — PDFs in every view** | Uploaded PDFs now also send their **text layer** (every text item with its position: tags, size callouts like `5050 XO`, room names). When the claude.ai view can't send images to Claude, PDFs are **read from the text layer alone**, so CAD-exported PDFs still work. When images are available (Claude or OpenAI), the text layer goes along as a reference for exact spelling. Clear, specific messages for: Claude not available in this view; scanned PDF with no text; image files in a text-only view. |
-| **v11 — OpenAI plan reading** | New `server/` (Node 18+, no dependencies) that serves the site and reads uploaded plans with the **OpenAI Responses API in background mode**, using a **strict JSON schema** (Structured Outputs). The API key stays in `.env` on the server. The browser polls `/api/extract/:id`, so 2–3 minute readings never freeze the page. The model returns the **raw drawing callout**, tempered/egress flags and quantities. The review card shows the callout as evidence, and the CSV includes it. Also new: mock mode, a fake-OpenAI test server, an end-to-end test, a Dockerfile and Render config. The claude.ai page keeps using Claude and now also shows callouts. |
-| **v10 — packaging** | Code organised into `src/` (HTML + 10 CSS + 18 JS files) with a lossless build to `dist/windowbid.html`. Two small code improvements, both re-published to the live link: (1) CSV export now also works outside claude.ai (plain browser download); (2) the internal `status()` function was renamed `openingStatus()` so the multi-file version doesn't shadow the browser's `window.status`. |
-| v9 | **Dark theme by default**; switch with a W cursor gesture or the footer switch; circle-reveal transition; choice remembered. |
-| — | Tried a horizontal "three coloured panels" version of the Three-stages section, then **reverted** at the client's request (vertical rows kept). |
-| v8 | **Procure** redesigned as one procurement sheet (self-drawing bid schedule, selection trace, signature acceptance). **Fulfill** redesigned as a single order trace ending in "W07 — Complete.". **Cascade** carried as the selected supplier from bid to PO. Stage questions reworded. The old "One record" section folded into the Fulfill ending. |
-| v7 | **Contact** redesigned three times; it ended as one sentence on a drawing sheet. |
-| v6 | Takeoff table redesign (row-overlap fix); wording rule applied site-wide (verify / accept / acknowledge). |
-| v5 | About page: self-building logo, cube unfold, orange closing band. |
-| v4 | qBotica branding; site orange matched to `#FF7805`. |
-| v1–v3 | First demo, editorial redesign, and the Review → Procure → Fulfill story with blueprint assembly. |
-
-Full history and reasons are in `docs/DESIGN.md` (section 13) and `docs/PROJECT-NOTES.md` (version history).
-
-## 6. What we're currently working on / next steps
-
-1. **Rotate the OpenAI key and deploy the server.** Revoke the key that was shared in chat, create a new one, put it in `.env` (or your host's secret settings), and deploy (section 11). The deployed URL becomes the public demo link with OpenAI reading.
-2. **Validate on real plans.** Run 5–10 real floor plans, compare with a manual takeoff, and tune `server/takeoff-schema.mjs` (prompt and codes) and `OPENAI_MODEL` / `OPENAI_IMAGE_DETAIL`.
-3. **Multi-sheet PDFs.** Pick the relevant sheets (floor plan, window schedule, elevations) instead of only page 1.
-4. **Production path (later).** CV + OCR + rules for speed, with AI only as a fallback, once the demo proves demand.
-5. **Official brand files**, **real data for the sample plan**, **wiring the Contact form**, **About page sign-off** and the **font licence**, as before.
-
----
-
-## 7. Project structure
-
-```
-windowbid/
-├── README.md                     ← you are here
-├── package.json                  ← npm shortcuts (start / build / check / fake-openai); no dependencies
-├── .env.example                  ← copy to .env and add OPENAI_API_KEY (never commit .env)
-├── .gitignore / .dockerignore    ← keep .env out of git and Docker images
-├── Dockerfile                    ← run anywhere: docker build -t windowbid . && docker run -p 3000:3000 -e OPENAI_API_KEY=… windowbid
-├── render.yaml                   ← one-click deploy on Render (asks for OPENAI_API_KEY)
-├── server/                       ← plan-reading backend (Node 18+, built-ins only)
-│   ├── server.mjs                ← serves dist/ (and /src/), plus /api/health, /api/extract, polling and cancel
-│   ├── takeoff-schema.mjs        ← the extraction prompt + strict JSON schema (edit here to tune results)
-│   ├── mock.mjs                  ← canned reading used when no key is set
-│   └── test/fake-openai.mjs      ← fake Responses API that checks every request, for offline testing
-├── dist/
-│   └── windowbid.html            ← BUILT single-file page = exactly what is live. Do not edit by hand.
-├── src/                          ← SOURCE. Edit here, then run the build.
-│   ├── index.html                ← all markup; <link>/<script> tags inside build markers
-│   ├── css/                      ← loaded in this order (order = cascade, do not reorder)
-│   │   ├── 01-tokens-base.css            colour/type tokens (light + dark), reset, type, buttons, header, logo lockup
-│   │   ├── 02-plan-drawing.css           floor-plan line weights, detections, drawing frames
-│   │   ├── 03-home-hero-stages.css       hero + "Three stages" rows
-│   │   ├── 04-home-pinned-scenes.css     Review, handoff cards, Procure sheet, Fulfill trace
-│   │   ├── 05-home-metrics-cta-footer.css
-│   │   ├── 06-contact.css                page shell + Contact sentence form
-│   │   ├── 07-status-cursor.css          status pills + drafting cursor
-│   │   ├── 08-demo-app.css               the whole demo workspace
-│   │   ├── 09-about.css                  About: logo construction, cube unfold, orange band
-│   │   └── 10-additions-theme-motion.css later additions, theme switch/reveal, reduced-motion rule
-│   └── js/                       ← classic scripts, loaded in this order (order matters)
-│       ├── 00-theme-preload.js           runs in <head>: applies the saved/default theme before first paint
-│       ├── 01-core-helpers.js            $, $$, el(), tween, toast, layout helpers, REDUCED flag
-│       ├── 02-plan-model.js              the sample floor plan: SEED openings, rooms, walls, statuses
-│       ├── 03-pricing.js                 BASE prices, SCALE calibration, MFRS (manufacturers), install cost
-│       ├── 04-scroll-scheduler.js        SCENES list + one requestAnimationFrame loop for scroll scenes
-│       ├── 05-theme-cursor.js            Theme module, W-gesture recogniser, drafting cursor + pen trail
-│       ├── 06-router-reveals.js          hash router, aperture transition, reveal-on-scroll
-│       ├── 07-home-hero-stages.js        hero blueprint assembly, Three-stages rows
-│       ├── 08-home-review.js             Review pinned scene
-│       ├── 09-home-procure-fulfill.js    Procure sheet, Fulfill trace, handoff cards
-│       ├── 10-home-metrics.js            count-up metrics
-│       ├── 11-about.js                   About page (prepare / enter / leave)
-│       ├── 12-contact.js                 Contact sentence form
-│       ├── 13-app-state-order.js         demo state, step routing, proposal + order screens
-│       ├── 14-app-upload-viewer.js       upload, AI provider detection (Claude / WindowBid server), zoom/pan viewer
-│       ├── 15-app-processing.js          sample run, PDF rendering, AI prompt + response handling
-│       ├── 16-app-review-rfq-bids.js     review UI, CSV export, RFQ, bids
-│       └── 99-boot.js                    initialises everything in order
-├── scripts/
-│   ├── build.py                  ← src/ → dist/windowbid.html (and --check)
-│   ├── screenshots.py            ← optional: reference screenshots via Playwright
-│   └── test_extraction.py        ← optional: end-to-end upload → reading → review test via Playwright
-├── assets/
-│   └── brand/qbotica-symbol.svg  ← standalone copy of the (rebuilt) cube symbol, for designers
-└── docs/
-    ├── DESIGN.md                 ← full design rationale, page by page (colours, type, motion, rules)
-    └── PROJECT-NOTES.md          ← product details, demo data and numbers, wording rule, history
+cd qbotica-windowbid-release-v18
+cp .env.example .env              # once; then put your key after OPENAI_API_KEY=
+node server/server.mjs            # or: npm start
 ```
 
-### How the source fits together
-- **No modules, no bundler.** The JS files are classic `<script>` tags that share one global scope in the order listed. `99-boot.js` calls the `init…` functions. If you add a file, add its `<script src>` (or `<link>`) tag **inside the build markers** in `src/index.html`, in the right position.
-- **Each JS file starts with `'use strict';`.** The build removes the duplicates and wraps everything in a single `(() => { … })();`, so the published page leaks no globals.
-- **All drawings are code.** The floor plan, logo, icons and animations are SVG/CSS/JS; there are no image files. The qBotica symbol lives once as `<symbol id="qmark">` in `src/index.html` and is reused everywhere with `<use href="#qmark">`.
-- **Colours and fonts** are CSS variables in `src/css/01-tokens-base.css`. The dark theme is a token block applied by `data-wb="dark"` on `<html>`.
-- **Sample data** (12 openings, 3 manufacturers, $42,500 proposal, PO #WB-0048, dates) is consistent across the homepage and the demo. If you change a number, see `docs/PROJECT-NOTES.md` ("The demo data") for everything that must stay in sync.
+It prints `WindowBid running at http://localhost:<PORT>` and `Plan reading: OpenAI gpt-6-astra …`. Open that
+address, click **Try Demo**, then upload a PDF or use the sample plan. With no key the server runs in
+**mock mode** (sample answers, free), so the whole flow can be tried first.
 
----
+### Share it
 
-## 8. Dependencies and requirements
-
-| Requirement | Why | Needed for |
+| Way | How | Notes |
 |---|---|---|
-| Modern browser | View transitions (theme reveal), `position: sticky`, CSS `color-mix` | Viewing (older browsers degrade gracefully) |
-| Internet access | **Google Fonts**: Archivo, Instrument Sans, Geist Mono, Poppins | The exact look (offline falls back to Arial/Helvetica) |
-| Internet access, on demand | **PDF.js 3.11.174** from cdnjs, loaded only when a PDF is uploaded | Reading uploaded PDFs |
-| **Node.js 18+** | `server/server.mjs` (built-in `fetch`, no npm packages) | AI plan reading with OpenAI; serving the full demo |
-| **OpenAI API key with billing** | Plan reading through the server (API billing is separate from ChatGPT Plus) | Real readings (without a key, mock mode) |
-| Python 3.8+ | `scripts/build.py`, simple static server | Building; static preview (standard library only) |
-| Playwright (optional) | `pip install playwright && python3 -m playwright install chromium` | `scripts/screenshots.py` only |
-
-There are **no npm or pip packages** for the site or the server.
-
-### Where AI plan reading comes from
-
-| Where the page runs | Reads uploaded plans with | Notes |
-|---|---|---|
-| **claude.ai artifact** (live link) | **Claude**, via the artifact's `sample` capability (declared at publish: `{sample: {}, downloads: true}`) | If the view can send images: image + text layer. If not: **PDF text layer only**. If the runtime gives no Claude access (signed out or AI turned off in that account): uploads disabled with an explanation. A claude.ai page cannot call your own server (the artifact sandbox blocks outside requests). |
-| **WindowBid server** (`node server/server.mjs`, local or deployed) | **OpenAI**, via `server/server.mjs` | The key lives only on the server. Mock mode when no key is set. |
-| Plain static hosting (no server) | — | Upload disabled with an explanation; the sample plan and everything else work. |
-
-The page picks automatically: `window.claude` present → Claude; otherwise it calls `GET /api/health` on its own origin → OpenAI server; otherwise uploads are disabled.
+| **Instant link** | in a second terminal: `cloudflared tunnel --url http://localhost:<PORT>` → prints `https://….trycloudflare.com` | free, no sign-up; works only while this computer is on and both terminals run; a new address each time |
+| **Permanent link** | push to a (private) GitHub repo → Render → New → Blueprint → pick the repo (uses `render.yaml`) → paste `OPENAI_API_KEY` | fixed `https://….onrender.com`; free plan sleeps when idle (first visit ~30 s) |
+| Docker | `docker build -t windowbid . && docker run -p 3000:3000 -e OPENAI_API_KEY=… windowbid` | any host |
+| Static only | upload `dist/windowbid.html` anywhere | the sample plan works; reading your own plans needs the server |
 
 ---
 
-## 8b. OpenAI plan reading: how it works
+## 3. How the extraction works — the pipeline
+
+Two parts work together: **the page in the visitor's browser** does the PDF handling, the choosing and all
+the matching; **the server** holds the OpenAI key and asks OpenAI to read images. OpenAI only ever *reads
+pictures of sheets*; everything else is ordinary, traceable code.
 
 ```
-Browser                                   WindowBid server (server.mjs)                 OpenAI
-───────                                   ─────────────────────────────                 ──────
-upload PDF/PNG/JPG
-render page 1 → PNG (PDF.js, ~2000 px)
-POST /api/extract {image, filename,…} ──► validate · rate-limit · build request ──► POST /v1/responses
-                                                                                       background: true
-                                          ◄── {id: resp_…, status: queued} ◄──────────  strict JSON schema
-poll GET /api/extract/:id every 2.5 s ──► GET /v1/responses/:id ─────────────────────►  queued → in_progress
-show "Reading plan · 1:12", steps, log    ◄── status / elapsed                          → completed
-                                          completed → parse output_text → JSON
-◄── {status: completed, result} ◄────────
-review UI: boxes, callouts, Needs review → dealer verifies / edits → Mark Ready for RFQ
-Stop button ──► POST /api/extract/:id/cancel ──► POST /v1/responses/:id/cancel
+ BROWSER  (dist/windowbid.html)                         SERVER (server/server.mjs)        OpenAI
+ ─────────────────────────────────                      ──────────────────────────        ──────
+ 0  OPEN       PDF.js renders pages, reads the text layer
+ 1  SORT       every page → 1000 px JPEG + its biggest text ──"classify" (8 pages/call)──►  gpt-6-astra
+                                                           ◄── kind · sheet no. · level · tag style · schedule boxes
+ 2  CHOOSE     tagged floor plans + schedule tables (plain code)
+ 3  READ       first: schedules → 2400 px crops + text layer ───"page"──────────────────►  gpt-6-astra
+                                                           ◄── schedule rows + row boxes (strict JSON)
+               schedule gives every size and count? → takeoff ready, review opens;
+                 the plans are then read in the background and each unit placed on its plan
+               otherwise: plans → 4000 px PNG + text layer ─────"page"──────────────────►  (full detail)
+                                                           ◄── openings by tag (strict JSON)
+ 3b ELEVATIONS only if many tags are still unexplained ─────"page"──────────────────►
+ 4  JOIN       tag ↔ schedule row, quantities, conflicts, doors out (plain code)
+ 5  REVIEW     boxes on the plan, cards, plain words, preview, CSV
 ```
 
-**What the model returns** (`server/takeoff-schema.mjs`, enforced with Structured Outputs in strict mode):
+Each call to OpenAI is a **background job**: the server starts it and returns an id at once; the browser
+asks for the result every 2.5 s (that's the live "Reading drawing set · 2:41" timer). Up to 3 jobs run at a
+time. **Stop** cancels the running jobs.
 
-```json
-{ "sheet": "floor plan",
-  "summary": { "total_windows": 36, "total_doors": 4, "unique_configurations": 18 },
-  "openings": [ { "mark": "W01", "category": "window", "type": "Sliding",
-                  "raw_callout": "5050 XO", "width_in": 60, "height_in": 60, "room": "Bedroom 2",
-                  "quantity": 1, "tempered_glass": false, "egress": true,
-                  "box": [120, 80, 180, 96], "confidence": 0.94, "needs_review": false, "note": "" } ] }
+### Step 0 — Open the file (browser, `17-app-document.js`)
+
+- **PDF.js 3.11.174** opens the PDF in the browser; nothing is uploaded as a file.
+- For each page it renders an image and extracts the **text layer**: every text item with its position
+  (tags, size callouts like `5050 XO`, room names, sheet titles). CAD-exported PDFs carry this text exactly,
+  so it is sent along with every image as a spelling reference ("x,y: text", positions on a 0–1000 scale).
+- Images (PNG/JPG/WebP) and one-page PDFs skip step 1 and go straight to step 3.
+
+### Step 1 — Sort every page (AI, cheap pass)
+
+- Every page becomes a **1000 px JPEG** (quality 0.72) plus the **largest text on the sheet** (title block
+  and sheet titles, up to 500 characters) — enough to tell a floor plan from an electrical plan.
+- Pages go to the server in **batches of 8**, task `classify`, at image detail `high`.
+- For each page the model returns (strict JSON, `server/document-schema.mjs`):
+  `kind` (floor_plan · window_schedule · door_schedule · window_door_schedule · window_types · elevation ·
+  other_plan · other), `sheet_number` (e.g. A-2.1), `title`, `level` (first floor, casita…),
+  `opening_tags` (many/few/none), `tag_style` (symbols / callouts / both / none) and `schedule_regions`
+  (boxes around every window schedule or type-legend table on the page).
+- The model is told to judge each page by its drawings and title, not by a sheet index printed on a cover.
+
+### Step 2 — Choose the sheets (plain code)
+
+- **Floor plans tagged with symbols** (⬡6, ①…): *all* of them are read (up to 6), so a level split over a
+  "NOTED FLOOR PLAN – CONTINUED" sheet stays whole. Dimensioned plans and electrical/framing/roof plans
+  repeat the same walls and are skipped, so nothing is counted twice.
+- If no plan uses tag symbols: **one plan per level** — the one with the most size callouts.
+- **Every window schedule / window type legend** (up to 6 pages, up to 3 tables per page), read as a
+  zoomed crop of the table (its box padded a little), also when the table sits on a plan sheet.
+- The log lists the chosen sheets and how many were skipped.
+
+### Step 3 — Read the chosen sheets (AI, full detail) — one thing first, the rest only if needed
+
+**The rule:** read the **window schedule first**. If every window row in it has a size and a count (a
+`#` / `QTY` column), the schedule *is* the takeoff: the floor plans and elevations are **not read**, and the
+takeoff is built straight from the schedule rows (mark 5 × 15 → fifteen windows `5·1 … 5·15`). The log says
+"The window schedule lists all 65 windows (12 marks) with sizes and counts · floor plans not needed". The
+viewer then shows the schedule sheet, with one box per row (`5 ×15`), so clicking a product highlights its row.
+Only when the schedule is missing, has no count column, or has rows without a size (the log says which) are
+the floor plans read and joined as below, before the review opens.
+
+**Every schedule, not just the first.** Page sorting looks at every page, so every page carrying a window
+schedule is read (up to 12) and the log names them: "Window schedules found on 2 pages: A-2.1, A-2.2". A table
+that repeats one already read (most rows the same mark and size) is **counted once** ("A-2.1 repeats A-2.2 ·
+counted once"); a table that reuses marks with other sizes is kept as a **separate schedule** (marks
+`A-4.2/1…`, flagged); new marks simply continue the list.
+
+**Plans mapped in the background (v16).** When the takeoff comes from the schedule, the review opens at once
+on the schedule sheet, unchanged. Behind it, the floor plans (same choice as step 2) are read and every plan
+window is matched by its tag to its schedule mark and placed on the next unplaced unit of that mark (`mapPlans`).
+Counts never change — the schedule stands; "the plans show 16, the schedule lists 15" or "not found on the floor
+plans" is noted on the product. A line above the list shows progress, then "64 of 65 windows located on A-2.1".
+From then on, selecting a product switches the viewer to the plan page and highlights its windows, each with
+its room. (37th Place: review in ~1 min, plans mapped ~2 min later; 8887: 66 of 78 placed.)
+
+- **Plans**: rendered at **4000 px** (PNG) and sent with the page's text layer, at image detail
+  **`original`** (see section 4 for why). A 3000 px JPEG copy is kept for the review viewer.
+- **Schedule tables**: rendered as **2400 px crops** of just the table.
+- Task `page`; the model returns two lists (strict JSON):
+  - `openings` — every **exterior window drawn on the plan**: `tag` exactly as written, `box` on the
+    sheet, `room`, and only what is written *at* the opening (`raw_callout` such as "3050 SH", size, type,
+    tempered, egress). A window with only a tag gets size `null` — its size comes from the schedule.
+  - `definitions` — every **window schedule row**: `key` (the mark), `size_text` exactly as written,
+    `width_in`/`height_in`, `type`, `quantity`, `tempered_glass`, `egress`, `exterior`, `remarks`, and
+    `row_box` (where that row sits, to highlight it on the schedule sheet).
+- The instructions are strict: report only what this sheet shows; never invent sizes or tags; keynote
+  bubbles, room numbers, grid bubbles and detail callouts are **not** window tags; skip every kind of door;
+  size codes mean feet+inches (`5050` = 60 × 60 in, `2640` = 30 × 48 in); `XO` = sliding, `SH` = single
+  hung, `FX/FXD/PW` = picture…
+- If a model doesn't accept `original` detail, the server retries at `high` automatically.
+
+### Step 3b — Elevations (only when needed)
+
+If many plan tags still have no schedule row (or the set has no schedule at all), up to 4 **exterior
+elevation** sheets are read for tag → size/type notes. A stray keynote read as a tag doesn't trigger this.
+
+### Step 4 — Join everything (plain code, `mergeSet` in `17-app-document.js`)
+
+| Situation | Result |
+|---|---|
+| Plan tag matches a schedule row | size, type, tempered, egress come from the schedule; **Found in** lists both sheets |
+| Tag spelled differently (`3` vs `W3`, `03`) | normalized and matched |
+| Same mark read from two sources | schedule beats type legend beats a schedule on a plan sheet beats an elevation; disagreements are flagged |
+| A lone "window" row read from a door table (or the reverse) | treated as a misread; can't override the proper table |
+| Schedule quantity > windows found on the plans | the missing units are added without a location, flagged "A-4.1 lists 11; 8 found on the plans" |
+| More on the plans than the schedule lists, or the schedule lists **0** | flagged |
+| Tag with no schedule row (often a keynote read as a tag) | flagged "Tag 21 isn't in any schedule found in this set" |
+| Plan note and schedule disagree on size | schedule wins, both values shown, flagged |
+| Anything that is a door (by tag, type or a door row) | left out; the log says how many |
+| Schedules but no floor plan | one row per scheduled window, without a location |
+
+**Marks** follow the drawing: tag `6` found five times becomes `6·1 … 6·5`; untagged windows get `W01, W02…`.
+**Confidence** comes from the model, capped when it asked for review or when sources disagree; below 85 % a
+window shows **Needs review**, and a missing width or height always does.
+
+### Single sheets
+
+A one-page PDF or an image goes through the same READ step with `kind: auto` (floor plan, elevation or
+schedule, whichever it is) and the same JOIN, so a plan whose windows carry their size in a callout
+(`5050 XO`) works with no schedule at all.
+
+### The server's part (`server/server.mjs`)
+
+- Serves the page (`dist/`) and three tasks on `POST /api/extract`: `classify`, `page`, and `takeoff`
+  (the older single-page format).
+- Builds the request to the **OpenAI Responses API** with `background: true`, the instructions, the image(s)
+  as `input_image` data URLs with the chosen detail, and a **strict JSON schema** (Structured Outputs), so
+  every answer has exactly the expected fields.
+- Polling (`GET /api/extract/:id`) and cancel (`POST /api/extract/:id/cancel`); it only answers for jobs it
+  started itself, so it can't be used as a proxy to the OpenAI account.
+- Limits each visitor (by IP) to `EXTRACTIONS_PER_HOUR` reading calls and requests to `MAX_UPLOAD_MB`.
+- Error messages shown in the page never name the provider ("the reading service"); details go to the
+  server's log.
+- No key → **mock mode**: sample sorting and sheet results after a short wait, free.
+
+---
+
+## 4. Why it is built this way
+
+These choices came from measuring, not guessing.
+
+- **Image detail `original` for sheet reads.** With `high`, the model shrinks *every* image to about 3,000
+  tokens, however large it is; tag digits and size codes blur. At `original` a 4000 px sheet is about
+  13,500 tokens. On the RC-Mahesh sheet this alone took exact window sizes from **32–56 % to 96 %**.
+- **Sort first, then read only what matters.** A 30-page set has 2–4 sheets that carry the windows.
+  Reading only those at full detail keeps it to about 10–15 calls and 2–3 minutes.
+- **Crops for schedules.** A schedule is a small table on a big sheet; a 2400 px crop of the table gives the
+  model far more pixels per character than the whole sheet.
+- **The text layer goes with every image.** CAD PDFs contain the exact characters; the model uses them for
+  spelling and the image for meaning (which number is a tag, which is a keynote).
+- **Tag symbols decide which plans to read.** Real sets split one floor over "continued" sheets (8887-25:
+  A-2.1 + A-2.2); reading one plan per level lost windows, reading every *tagged* plan doesn't.
+- **The AI reads; code decides.** Matching, counting, quantity checks and the plain-words summaries are
+  deterministic, so every number in the takeoff can be traced to a sheet and a line.
+- **Background jobs + polling.** A full-detail read can take minutes; the page never waits on one long
+  request and shows real progress instead.
+- **Strict JSON schemas.** No parsing of free text; the model can't return a malformed answer.
+
+---
+
+## 5. Results on real drawings
+
+Measured with `gpt-6-astra` (October 2026). The two sets are real 30-page architectural sets with
+window schedules; RC-Mahesh is a single plan whose windows carry their size in callouts.
+
+| File | Pages | Sheets chosen | Result | Time |
+|---|---|---|---|---|
+| 37TH PLACE – FULL SET (v15, schedule first) | 31 | schedule A-4.1 (p.15) only — plans not needed | **65 windows, 12 products**, equal to the schedule's # column | ~1 min |
+| 8887-25 APPROVED – FULL SET (v15, schedule first) | 30 | schedules on A-2.1/A-2.2 only — plans not needed | **78 windows, 15 products** from the schedule's counts | ~1 min |
+| 37TH PLACE – FULL SET (v14, plans + schedule) | 31 | noted floor plan A-2.1 (p.7), schedules A-4.1 (p.15) | **65 of 65 windows**, every tag count equal to the schedule's quantity; doors left out | ~2 min |
+| 8887-25 APPROVED – FULL SET (v14, plans + schedule) | 30 | A-2.1 (p.3) + A-2.2 "continued" (p.4), schedules on both | **12 of 15 tags counted exactly**; the other 3 flagged (one is a real drawing conflict: three ⬡2 tags on the plan, schedule quantity 0) | ~2.5 min |
+| RC-Mahesh – Final FP-2 | 1 | page 1 | **24 of 25 window sizes exactly right** (32–56 % before the detail change); untagged symbols flagged | ~2 min |
+
+Page sorting picked the right sheets in every test (e.g. 2 of 31 pages on 37TH PLACE).
+
+---
+
+## 6. Technologies
+
+| Layer | Technology | Used for |
+|---|---|---|
+| Page | **HTML, CSS, JavaScript** — no framework, no bundler | the whole site and demo; about 20 classic scripts sharing one scope |
+| Drawing | **SVG** | the plan viewer, detection boxes, previews, the animated homepage plans and logo |
+| PDF | **PDF.js 3.11.174** (Mozilla, from cdnjs, loaded on demand) | rendering pages, crops and thumbnails; extracting the text layer |
+| Canvas | **HTML Canvas** | rendering pages/crops to PNG/JPEG for the model and the viewer |
+| Server | **Node.js 18+** built-ins only (`http`, `fs`, `crypto`, `fetch`) | serving the page, the reading API, rate limits, mock mode |
+| AI | **OpenAI Responses API**: background mode, **Structured Outputs** (strict JSON schema), `input_image` with detail `original`/`high` | page sorting and sheet reading |
+| Model | **`gpt-6-astra`** (set by `OPENAI_MODEL`) | vision + structured extraction |
+| Build | **Python 3** (`scripts/build.py`, standard library) | combines `src/` into the single file `dist/windowbid.html` |
+| Fonts | **Google Fonts**: Archivo, Instrument Sans, Geist Mono, Poppins | statements, body text, technical labels, logo |
+| Hosting | **Cloudflare quick tunnel**, **Render** (`render.yaml`), **Docker** (`Dockerfile`) | sharing the demo |
+| Testing | mock mode, a fake Responses API (`server/test/fake-openai.mjs`), **Playwright** with Chrome | end-to-end checks of upload → reading → review |
+
+No database: a takeoff lives in the page while it's open, and the CSV export is the saved result.
+
+---
+
+## 7. The review screen
+
+`src/js/16-app-review-rfq-bids.js` (cards, list, preview, CSV) and `src/js/14-app-upload-viewer.js` (viewer).
+
+- **Plan viewer**: zoom and pan; every window boxed with its mark; a **sheet switcher** when several plan
+  sheets were read (`A-2.1 · 70`, `A-2.2 · 28`).
+- **Statuses**: *AI read* (orange) · *Needs review* (orange, dashed) · *Verified* (green) · *Edited*.
+  The window you select turns **blue** everywhere (box, list row, card).
+- **The card** for each window:
+  - **In plain words** — what it is ("a casement window — it swings outward on side hinges"), its size in
+    feet and inches, the room, the sheet and the part of the drawing it sits in, its tag and the schedule
+    that explains it, how many like it the house has, tempered/egress glass, and what to do next.
+    Written by code from what was read — no extra AI call — and it follows edits.
+  - **No number on the plan?** It says so and gives the likely reason it was counted: a clerestory (set
+    high in the wall, so drawn only as a dashed line), a transom, a size note on a plan that names windows
+    by size, a note that may belong to a neighbour, or only a window-like symbol ("it may not be a window
+    at all"); and "count the arrows" when one note covers several windows.
+  - editable type, room, width, height; the **drawing callout as written** with Tempered/Egress badges;
+    **Found in** (the sheets each fact came from); review notes; **Not an opening**.
+- **All N**: a grid of every window with a zoomed preview of its spot on the plan, type, size, room and
+  status; click one to open it, Back/Esc returns.
+- **Grouped products** (the view it opens on): identical windows (type + size) become one product line
+  with a quantity. **Click** a product to see its windows on the plan; **double-click** to open it — it lists
+  its windows and the plan zooms to frame them; click one for its card (**← Products** goes back).
+- **One header that flips**: click *Grouped products ⇄* to see every opening; click *Openings ⇄* to go back.
+- **Pre-processing** (automatic): openings with neither a window number nor a size on the drawing are left
+  out when the review opens; a line under the list names them, with **Put them back**.
+- **Verify all** confirms every window at once (there is no per-window Verify). **Mark Ready for RFQ** is
+  always available — it verifies any window left — then **Export CSV** (adds *Plan sheet* and *Found in*).
+- Keyboard: ↑/↓ or J/K to move, Esc.
+- After that: RFQ → bids from three sample manufacturers → customer proposal (margin slider) → purchase
+  order with a seven-step tracker — **sample data**, labelled "Platform preview".
+
+---
+
+## 8. Design
+
+- **Drafting-paper look**: ruled frames, sheet labels, registration marks — the industry's own visual
+  language, not a generic dashboard. Typefaces: Archivo (statements), Instrument Sans (text), Geist Mono
+  (technical labels).
+- **Colour rule**: **orange** = read by the machine / needs attention · **green** = confirmed by a person ·
+  **blue** = the window you selected.
+- **Dark theme by default**; draw a **W** with the mouse or use the footer switch to change it.
+- **Wording rule**: the dealer *verifies* the takeoff, the customer *accepts* the proposal, the manufacturer
+  *acknowledges* the PO.
+- The homepage tells the story in three animated, scroll-driven scenes (Review → Procure → Fulfill).
+- Full design notes: `docs/DESIGN.md`. How to design anything new so it matches: `docs/DESIGN-PATHWAY.md`. The idea in plain words: `docs/CONCEPT.md`.
+
+---
+
+## 9. Project structure
+
+```
+qbotica-windowbid-release-v18/
+├── README.md                     ← this file   (the previous README: docs/README-v13-previous.md)
+├── .env / .env.example           ← settings and the OpenAI key (.env is never committed)
+├── package.json                  ← npm start / build / check shortcuts (no dependencies)
+├── Dockerfile, render.yaml       ← hosting
+├── server/
+│   ├── server.mjs                ← serves dist/, the reading API, background jobs, rate limits, mock mode
+│   ├── document-schema.mjs       ← drawing sets: sorting + sheet-reading instructions and JSON schemas
+│   ├── takeoff-schema.mjs        ← single-page instructions and schema (older format, standalone build)
+│   ├── mock.mjs                  ← sample answers without a key
+│   └── test/fake-openai.mjs      ← fake Responses API for offline tests
+├── src/                          ← SOURCE — edit here, then: python3 scripts/build.py
+│   ├── index.html
+│   ├── css/01…10-*.css           ← tokens (colours/fonts, light + dark) … demo app … additions
+│   └── js/
+│       ├── 01–12                 ← helpers, sample plan, homepage scenes, About, Contact
+│       ├── 13-app-state-order.js        demo state, steps, proposal + order screens
+│       ├── 14-app-upload-viewer.js      upload, server detection, plan viewer, sheet switcher
+│       ├── 15-app-processing.js         sample run, single-page reading
+│       ├── 16-app-review-rfq-bids.js    review cards, plain words, All-windows preview, CSV, RFQ, bids
+│       ├── 17-app-document.js           drawing sets: sort → choose → read → join
+│       └── 99-boot.js
+├── dist/windowbid.html           ← BUILT single file the server serves (don't edit by hand)
+├── scripts/build.py              ← src/ → dist/ (and --check)
+└── docs/                         ← DESIGN.md, PROJECT-NOTES.md, accuracy/ (RC-Mahesh answer key)
 ```
 
-- `raw_callout` is copied **exactly as written** on the drawing and shown on the review card as evidence. The interpretation (type, inches) sits next to it, so a dealer can check how the result was reached.
-- `needs_review: true` caps confidence below 85%, so the opening shows **Needs review**.
-- `quantity > 1` becomes one takeoff row per unit (W3, W3·2, …), so grouping and pricing stay correct.
-- `box` uses a 0–1000 scale of the page and draws the detection on the plan. Schedule rows have `box: null`.
-- `type` is one of the review UI's types. **Keep `TYPES` in `server/takeoff-schema.mjs` and `src/js/13-app-state-order.js` identical.**
+---
 
-### Configuration (`.env`)
+## 10. Server API
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/api/health` | `{ok, mock, tasks}` — the page uses it to switch reading on |
+| `POST` | `/api/extract` | start a reading job → `202 {id, status}`; body by task below |
+| `GET` | `/api/extract/:id` | `{status: queued \| in_progress \| completed \| failed \| incomplete \| cancelled, elapsed, result?}` |
+| `POST` | `/api/extract/:id/cancel` | cancel a job |
+
+| Task | Body | Returns |
+|---|---|---|
+| `classify` | `{filename, total, pages: [{page, image, text}]}` (≤ 16 pages) | `{pages: [{page, kind, sheet_number, title, level, opening_tags, tag_style, schedule_regions, confidence}]}` |
+| `page` | `{filename, page, total, kind, level, title, crop, width, height, image, textLayer}` | `{sheet, openings: [...], definitions: [...]}` |
+| `takeoff` | `{filename, width, height, pages, image, textLayer}` | `{sheet, summary, openings}` (single page, older format) |
+
+---
+
+## 11. Configuration (`.env`)
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `OPENAI_API_KEY` | *(empty → mock mode)* | Your OpenAI Platform key. **Server only.** |
-| `OPENAI_MODEL` | `gpt-6-astra` | Vision-capable model (OpenAI's current recommendation for new projects). Any model your key can use with image input and Structured Outputs works. |
-| `OPENAI_IMAGE_DETAIL` | `high` | How closely the model inspects the image (`high` / `low` / `auto`). |
-| `OPENAI_REASONING_EFFORT` | *(empty)* | Optional `low` / `medium` / `high` for reasoning models. |
-| `OPENAI_MAX_OUTPUT_TOKENS` | `32000` | Raise it if very large plans return "incomplete". |
-| `PORT` | `3000` | Server port (hosts like Render set it automatically). |
-| `MAX_UPLOAD_MB` | `20` | Largest page image accepted. |
-| `EXTRACTIONS_PER_HOUR` | `20` | Per-visitor limit to protect your API budget on a public deployment. |
-| `WB_MOCK` / `WB_MOCK_SECONDS` | — / `12` | Force mock mode and set how long a mock reading takes. |
-
-### Security rules
-- **The API key never goes to the browser.** It is read from the environment on the server. `.env` is in `.gitignore` and `.dockerignore`, and this project contains no key.
-- **If a key is ever pasted into a chat, email or repo, revoke it** at https://platform.openai.com/api-keys and create a new one.
-- On a public URL, also set a **monthly spend limit** for the project in the OpenAI dashboard. The server's per-IP hourly limit is a second line of defence.
-- The server only polls or cancels jobs it started itself, so it can't be used as a general proxy to your OpenAI account.
-- Background responses are held by OpenAI for polling; see OpenAI's data-retention docs for your project settings.
-
-### Testing without a real key
-```bash
-node server/test/fake-openai.mjs 4010                     # terminal 1: fake Responses API (checks every request)
-OPENAI_BASE_URL=http://127.0.0.1:4010/v1 OPENAI_API_KEY=sk-test-fake node server/server.mjs   # terminal 2
-python3 scripts/test_extraction.py http://127.0.0.1:3000  # terminal 3 (needs Playwright + Pillow)
-```
-The fake checks for: the key header, `background: true`, a strict `json_schema` in which every property is required and `additionalProperties` is false, `instructions`, an `input_text` and an `input_image` data URL. It then walks the job through queued → in_progress → completed. In the v11 run this passed end to end: 5 rows, `quantity: 2` expanded to W3 and W3·2, callouts and Needs review shown, Stop cancels the job, and a rejected key gives a clear message.
-
-**Note:** the real OpenAI API could not be called from the environment where this was built, so the first run with your real key is the true test. If OpenAI rejects a field, the server log and the on-screen error show OpenAI's exact message.
+| `OPENAI_API_KEY` | *(empty → mock mode)* | the key; server only |
+| `OPENAI_MODEL` | `gpt-6-astra` | the reading model |
+| `OPENAI_PAGE_DETAIL` | `original` | image detail for sheet reads |
+| `OPENAI_CLASSIFY_DETAIL` | `high` | image detail for page sorting |
+| `OPENAI_IMAGE_DETAIL` | `high` | image detail for the older single-page task |
+| `OPENAI_REASONING_EFFORT` | *(empty)* | optional `low` / `medium` / `high` |
+| `OPENAI_MAX_OUTPUT_TOKENS` | `32000` | raise if a very large plan comes back "incomplete" |
+| `PORT` | `3000` | local port (hosts set it themselves) |
+| `MAX_UPLOAD_MB` | `20` | largest request (one sheet image or one batch of thumbnails) |
+| `EXTRACTIONS_PER_HOUR` | `200` | reading calls per visitor per hour; one drawing set uses about 10–15 (use ~30 on a public link) |
+| `WB_MOCK` / `WB_MOCK_SECONDS` | — / `12` | force mock mode; how long a mock reading takes |
 
 ---
 
-## 9. Build and verify
+## 12. Security and cost
 
-```bash
-python3 scripts/build.py           # writes dist/windowbid.html from src/
-python3 scripts/build.py --check   # confirms dist/ matches src/ (exits non-zero if not)
-sha256sum dist/windowbid.html      # b421cb93e1b134c8532dd748e114165b8fa67f15610a7065120ab3842c156e24 for this package
-```
-
-**Workflow:** edit files in `src/` → check them at `http://localhost:3000/src/index.html` (server) or `http://localhost:8080/src/index.html` (static) → run `scripts/build.py` → check `http://localhost:3000/` → deploy the server and/or publish `dist/windowbid.html`.
-
-The build is lossless: splitting the original single-file page into `src/` and rebuilding it produced the exact same bytes. After each code change, the rebuilt `dist/windowbid.html` is read back and checked byte for byte.
+- **The key stays on the server** (`.env`, or the host's secret settings). `.env` is in `.gitignore` and
+  `.dockerignore`; the page and the repository never contain it.
+- **Every reading is billed to that key**, including readings by anyone with a public link. Set a
+  **monthly spend limit** in the OpenAI dashboard and keep `EXTRACTIONS_PER_HOUR` low on public links.
+- If a key is ever pasted into a chat, email or repository, replace it at
+  https://platform.openai.com/api-keys.
+- The server only polls or cancels jobs it started, and accepts only image data URLs of limited size.
 
 ---
 
-## 10. How to get the exact same preview
+## 13. Testing
 
-1. Run `node server/server.mjs` and open **http://localhost:3000** (or serve statically with `python3 -m http.server 8080` and open `http://localhost:8080/dist/windowbid.html`), with internet access so the fonts load.
-2. **Theme:** the page opens dark. If you previously switched to light, it remembers that. To reset, run `localStorage.removeItem('wb-theme')` in the browser console, or draw a W, or use the footer switch.
-3. **Viewport:** the reference look is a desktop window around **1440 × 900**. Phones and tablets get their own responsive layouts on purpose.
-4. **Motion:** animations play in full unless the operating system has "reduce motion" turned on; then you see final states.
-5. **Start positions:** the hero and About logo animate on load. The Review, Procure and Fulfill scenes are driven by scroll, so scroll slowly to watch them.
-6. **Direct links:** `…/windowbid.html#about`, `#contact`, `#takeoff` (opens the demo).
-7. **Optional proof:** `python3 scripts/screenshots.py` saves 15 reference screenshots to `screenshots/` (Playwright plus internet needed).
-8. **Stale page:** if a deployed copy ever looks older than `dist/windowbid.html`, hard-refresh (Cmd/Ctrl + Shift + R).
+- **Mock mode** (no key): `WB_MOCK=1 node server/server.mjs` — upload any multi-page PDF and watch sorting,
+  the tag join, a door left out, a quantity shortfall and an unknown tag being flagged, at no cost.
+- **Fake OpenAI**: `node server/test/fake-openai.mjs 4010`, then
+  `OPENAI_BASE_URL=http://127.0.0.1:4010/v1 OPENAI_API_KEY=sk-test node server/server.mjs` — checks every
+  request the server sends (background mode, strict schema, image input).
+- **End to end**: `scripts/test_extraction.py` (Playwright) drives upload → reading → review in a browser.
+- **Build check**: `python3 scripts/build.py --check` confirms `dist/` matches `src/`.
+- **Accuracy**: `docs/accuracy/RC-MAHESH-ACCURACY.md` holds a hand-built answer key for the RC-Mahesh sheet.
 
-## 11. Publishing and deployment
+---
 
-| Target | What you get | How |
-|---|---|---|
-| **Render** (easiest public link with OpenAI reading) | `https://<your-service>.onrender.com` | Push this folder to a GitHub repo → Render → **New → Blueprint** → pick the repo (uses `render.yaml`) → paste your new `OPENAI_API_KEY` when asked. Free instances sleep when idle; the first visit can take ~30 s. |
-| **Railway / Fly.io / any Node host** | your host's URL | Start command `node server/server.mjs`; set `OPENAI_API_KEY` as a secret. No build step, no `npm install`. |
-| **Standalone single file** (demo only) | open `dist/windowbid-standalone.html` directly (double-click) | Built with `python3 scripts/build.py --standalone`. No server: plans are read by OpenAI straight from the browser. On the first upload it asks for an OpenAI API key and keeps it in that browser's localStorage; the key is never written into the file. Use only on your own machine, since anyone using the page in that browser spends that key. |
-| **Docker** | anywhere | `docker build -t windowbid . && docker run -p 3000:3000 -e OPENAI_API_KEY=... windowbid` |
-| **Static host only** (Netlify, GitHub Pages, S3) | static URL | Upload `dist/windowbid.html`. Everything works except reading your own uploads. |
+## 14. Limits and known issues
 
-## 12. Troubleshooting
+- **Untagged symbols.** A window-like symbol with no number, no size and no note is a guess from the
+  drawing's shape (e.g. a refrigerator space). It is shown as *Needs review* with that explanation; check
+  it or remove it with **Not an opening**.
+- **Keynote bubbles** are sometimes read as window tags; they show up as "isn't in any schedule".
+- **Shared callouts** (one note with arrows to several clerestories) are counted from the arrows — verify
+  the count.
+- Up to **6 plan sheets and 6 schedule pages** per set; very large sets take longer to sort (every page is
+  rendered in the browser).
+- Reading results depend on the model; the same sheet can come back slightly differently on another run.
+  The review step is there for exactly this reason.
+- The RFQ, bids, proposal and order screens are **sample data**.
+- An instant (tunnel) link stops when the hosting computer sleeps.
 
-| Symptom | Fix |
+---
+
+## 15. Version history
+
+| Version | Change |
 |---|---|
-| Fonts look like Arial/Helvetica | No internet, or Google Fonts is blocked. Connect and reload. |
-| The live link shows an older design | Browser cache. Hard-refresh. |
-| Stuck on the light theme | Draw a W, use the footer switch, or clear `wb-theme` from localStorage. |
-| The W gesture doesn't trigger | Draw it steadily, about palm-sized (at least ~100 × 60 px), left to right, in 0.3–2 s. Very fast zigzags are ignored on purpose. Desktop mouse or trackpad only. |
-| On claude.ai: "Claude isn't available to this page in this view" | The runtime didn't give the page Claude access. This happens when signed out, or in an account or organization (e.g. a school or work workspace) where AI inside artifacts is turned off. Open the link in the claude.ai account that owns it, or use the WindowBid server. |
-| On claude.ai: "PDFs are read from their text layer" | This view can't send images to Claude. CAD-exported PDFs still work (their text carries the tags and callouts). Scans and image files need image reading: use another account or the WindowBid server. |
-| "This PDF has no text layer (it looks like a scan)" | Only in text-only views. Export the drawing to PDF from the CAD tool instead of scanning, or use the WindowBid server (OpenAI reads the image). |
-| The upload area says reading needs the WindowBid server | You opened the page from a static server or file. Run `node server/server.mjs` and open http://localhost:3000. |
-| "The server's OpenAI API key was rejected" | Wrong or revoked key in `.env`. Paste the new key and restart the server. |
-| "Model … isn't available to this API key" | Set `OPENAI_MODEL` to a vision model your account can use, then restart. |
-| "OpenAI rate limit or quota reached" | Add billing or credits on the OpenAI Platform (ChatGPT Plus doesn't include API credits), or wait. |
-| Reading stops with "more openings than one reading can return" | Raise `OPENAI_MAX_OUTPUT_TOKENS`, or crop the page to the floor plan. |
-| Upload says "Hourly limit reached" | `EXTRACTIONS_PER_HOUR` protects your budget. Raise it in `.env` if needed. |
-| Server prints "MOCK mode" | No `OPENAI_API_KEY` found. Check that `.env` sits next to `package.json` and the line has no spaces around `=`. |
-| Edited `src/` but `dist/` didn't change | Run `python3 scripts/build.py`. |
-| A new CSS/JS file doesn't load in `dist/` | Its tag must sit inside the `<!-- build:css -->` or `<!-- build:js -->` markers in `src/index.html`. |
+| **v18** | **Review:** drawing sets go through the schedule-first reader, with no left-out list; while the plan is found, a page strip and scan beam show the scan and the product cards show a searching line; the review then settles on the plan page ("On plan A-2.1 · 15 of 15"). **Procure, decision first:** RFQ, Bids, Proposal and Purchase order as progressively finished documents. Summaries are on screen and the evidence sits behind "View …" (issues are never hidden), with one bottom action bar. Bids: comparison first, the preference near the end, then the recommendation. Proposal: the installed total as the hero, with private dealer pricing and *Markup on landed cost*. PO: status first, a four-stage tracker, confirmed vs estimated dates. Calm app motion. New docs: `docs/CONCEPT.md`, `docs/DESIGN-PATHWAY.md` |
+| **v17** | **RFQ and Bids redesigned**: a specification to quote against (NFRC U-factor/SHGC per ENERGY STAR v7, glass package, tempered, finish, warranty, terms); bids leveled on cost, schedule, energy performance, glass, frame, warranty and terms, with a *What matters most* switch; light motion |
+| **v16** | **Every window schedule** read (all pages, copies counted once, separate schedules kept apart); **floor plans mapped in the background** after the review opens — products then show on the plan page with rooms, counts stay the schedule's |
+| **v15** | **Schedule first**: the window schedule is read before anything else; when it gives every size and count the plans aren't read (37th Place: 65 windows in ~1 min). Schedule-only takeoffs shown on the schedule sheet, one box per row. **Simpler review**: opens on Grouped products, one header that flips to Openings, double-click a product to open it, **Verify all**, Mark Ready for RFQ always available, pre-processing applied automatically |
+| **v14.1** | **Pre-processed** tab: the takeoff without openings that have neither a window number nor any size on the drawing; the counts, plan boxes, All preview and ↑/↓ follow it; *Remove them from the takeoff* applies it |
+| **v14** | **In plain words** on every window card; the "no number on the plan" explanation; **All N** preview of every window; selected window in blue |
+| v13.3 | **Windows only**: doors left out of the instructions and filtered in code |
+| v13.1 | Accuracy fixes from live tests: "continued" plan sheets read whole (`tag_style`), schedule crops on plan sheets, quantity-0 rows, stray door-table rows, door types from remarks |
+| v13 | **Full drawing sets**: sort every page → read chosen sheets at full detail → join tags to schedules |
+| v12.1 | Neutral wording: the page never names the AI provider |
+| v12 | PDFs send their text layer with the image |
+| v11 | The reading server (OpenAI Responses API, background mode, strict JSON), mock mode, Docker/Render |
+| v10 | Source split into `src/` with a lossless build to `dist/` |
+| v1–v9 | Demo site, design system, homepage story, dark theme, About/Contact pages |
 
-## 13. Further reading
-- **OpenAI docs used for the integration:** Background mode (`background: true`, poll `GET /v1/responses/{id}`, cancel), Structured Outputs (`text.format` with a strict `json_schema`), Images and vision (`input_image`).
-- **`docs/DESIGN.md`**: every design decision and the reason for it, page by page, plus the checklist for adding new work.
-- **`docs/PROJECT-NOTES.md`**: product details, the full demo data (openings, bids, prices, dates), the wording rule and version history.
+The full earlier history is in `docs/README-v13-previous.md` and `docs/PROJECT-NOTES.md`.
 
-## 14. Contributors
+---
+
+## 16. Related projects
+
+- **`qbotica-windowbid-release-v18`** — this folder: the latest saved working copy (port 3005 when started).
+- **`qbotica-windowbid-release-v17`** — RFQ/Bids redesign before the decision-first Procure documents, kept unchanged.
+- **`qbotica-windowbid-release-v16`** — the version currently behind the public demo link, also on GitHub as a private repository.
+- **`qbotica-windowbid-release-v15`** — the previous saved version (schedule first, plans not read), kept unchanged.
+- **`qbotica-windowbid-release-v14`** — the previous saved version, kept unchanged.
+- **`qbotica-windowbid-experiment`** — a duplicate of this demo that reads plans with the local, offline
+  WindowBid OCR app instead of OpenAI (faster and free, but leaves more for the dealer to fill in).
+- **`~/windowbid` / `~/windowbid-experiment`** — that local OCR app (Python, FastAPI, PaddleOCR, Tesseract,
+  PyMuPDF): rule-based extraction with evidence for every value; the experiment copy is about 3.4× faster.
+
+---
+
+## 17. Contributors
 
 | | |
 |---|---|

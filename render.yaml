@@ -2,7 +2,7 @@
 # Render will ask for OPENAI_API_KEY (sync: false keeps it out of the repo).
 services:
   - type: web
-    name: qbotica-windowbid
+    name: qbotica-windowbid-v18
     runtime: node
     plan: free
     buildCommand: node --version
@@ -15,7 +15,11 @@ services:
         value: gpt-6-astra
       - key: OPENAI_IMAGE_DETAIL
         value: high
+      - key: OPENAI_PAGE_DETAIL
+        value: original
+      - key: OPENAI_CLASSIFY_DETAIL
+        value: high
       - key: EXTRACTIONS_PER_HOUR
-        value: "20"
+        value: "30"
       - key: NODE_VERSION
         value: "20"

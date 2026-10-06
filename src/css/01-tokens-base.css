@@ -6,6 +6,7 @@
   --brand:#173B31; --brand-2:#235443; --on-brand:#EAE8DC;
   --green:#557D68; --green-tint:rgba(85,125,104,.16); --on-green:#fff; --green-hi:#8FC2A6;
   --orange:#FF7805; --orange-ink:#A34A00; --orange-tint:rgba(255,120,5,.14); --on-orange:#1F1F1F;
+  --sel:#1F5FD6; --sel-ink:#174BAA; --sel-tint:rgba(31,95,214,.16); --on-sel:#FFFFFF;   /* the opening selected in the demo */
   --q-orange:#FF7805; --q-ink:#000000;
   --plan:#282828; --plan-2:#8C8B84; --blend:multiply;
   --dark:#282828; --dark-ink:#EAE8DC; --dark-ink-2:rgba(234,232,220,.6); --dark-rule:rgba(234,232,220,.18);
@@ -28,6 +29,7 @@
     --brand:#2E6B57; --brand-2:#3A7F68; --on-brand:#F1EFE4;
     --green:#86B29B; --green-tint:rgba(134,178,155,.16); --on-green:#1A1A18;
     --orange:#FF8A2A; --orange-ink:#FFA864; --orange-tint:rgba(255,138,42,.15); --on-orange:#1A0E00; --q-ink:#F1EFE4;
+    --sel:#5C9DFF; --sel-ink:#8DBBFF; --sel-tint:rgba(92,157,255,.2); --on-sel:#0B1730;
     --plan:#DAD8CC; --plan-2:#77766F; --blend:screen;
     --dark:#111110; --cta:#173B31;
     color-scheme:dark;
@@ -41,6 +43,7 @@
   --brand:#2E6B57; --brand-2:#3A7F68; --on-brand:#F1EFE4;
   --green:#86B29B; --green-tint:rgba(134,178,155,.16); --on-green:#1A1A18;
   --orange:#FF8A2A; --orange-ink:#FFA864; --orange-tint:rgba(255,138,42,.15); --on-orange:#1A0E00; --q-ink:#F1EFE4;
+  --sel:#5C9DFF; --sel-ink:#8DBBFF; --sel-tint:rgba(92,157,255,.2); --on-sel:#0B1730;
   --plan:#DAD8CC; --plan-2:#77766F; --blend:screen;
   --dark:#111110; --cta:#173B31;
   color-scheme:dark;

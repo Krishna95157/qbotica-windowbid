@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="css/08-demo-app.css">
 <link rel="stylesheet" href="css/09-about.css">
 <link rel="stylesheet" href="css/10-additions-theme-motion.css">
+<link rel="stylesheet" href="css/11-procure.css">
 <!-- /build:css -->
 </head>
 <body>
@@ -419,7 +420,7 @@
     <section class="stage" data-stage="upload">
       <div class="up">
         <h1>Create a takeoff</h1>
-        <p>Upload an architectural plan. WindowBid finds the windows and doors, reads their marks, sizes and types, and lays them out for you to review.</p>
+        <p>Upload an architectural plan or a full drawing set. WindowBid finds the windows, reads their marks, sizes and types, and lays them out for you to review.</p>
         <label class="drop" id="drop" data-cursor="Upload">
           <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><rect x="8" y="6" width="34" height="44" stroke="currentColor" stroke-width="1.5"/><path d="M14 16h22M14 22h22M14 28h12" stroke="currentColor" stroke-width="1.5"/><rect x="28" y="30" width="20" height="20" style="fill:var(--paper);stroke:var(--orange)" stroke-width="1.5"/><path d="M38 44v-9m-4 4 4-4 4 4" style="stroke:var(--orange)" stroke-width="1.5"/></svg>
           <strong>Drop a plan here or browse files</strong>
@@ -432,7 +433,7 @@
           <span class="thumb"><svg id="thumbSvg" viewBox="0 0 1000 720" aria-hidden="true"></svg></span>
           <span><b>Use the sample plan</b><span>A1.0 Floor plan, Demo Residence. Seven rooms, twelve exterior openings. Runs instantly.</span></span>
         </button>
-        <p class="looks">WindowBid looks for <b>windows</b>, <b>doors</b>, <b>opening marks</b>, <b>sizes</b> and <b>room locations</b>.</p>
+        <p class="looks">WindowBid looks for <b>windows</b>, <b>window marks</b>, <b>sizes</b>, <b>types</b> and <b>room locations</b>. Doors are left out.</p>
       </div>
     </section>
 
@@ -449,8 +450,10 @@
               <g id="vscan" style="display:none"><rect class="scanglow" x="0" y="0" width="40" height="720"/><line class="scanln" x1="0" x2="0" y1="0" y2="720"/></g>
             </svg>
           </div>
+          <div class="vsheets" id="vsheets" role="toolbar" aria-label="Plan sheets" hidden></div>
+          <div class="vstrip" id="vstrip" aria-label="Pages being scanned" hidden></div>
           <div class="vhint" id="vhint">Click the missed opening on the plan</div>
-          <div class="vlegend"><span><i></i>AI read</span><span><i class="rv"></i>Needs review</span><span><i class="ok"></i>Verified</span></div>
+          <div class="vlegend"><span><i></i>AI read</span><span><i class="rv"></i>Needs review</span><span><i class="ok"></i>Verified</span><span><i class="sl"></i>Selected</span></div>
           <div class="vtools">
             <button data-z="out" aria-label="Zoom out">−</button>
             <button data-z="fit" aria-label="Fit plan">⤢</button>
@@ -466,8 +469,7 @@
           </div>
           <div class="rev" id="rev" hidden>
             <div class="tabs" role="tablist">
-              <button role="tab" data-tab="openings" aria-selected="true">Openings <span id="tN"></span></button>
-              <button role="tab" data-tab="groups" aria-selected="false">Grouped products <span id="tG"></span></button>
+              <button role="tab" data-tab="flip" aria-selected="true" id="tabFlip"></button>
             </div>
             <div class="detail" id="detail"></div>
             <div class="list" id="list"></div>
@@ -503,6 +505,9 @@
 <script src="js/14-app-upload-viewer.js"></script>
 <script src="js/15-app-processing.js"></script>
 <script src="js/16-app-review-rfq-bids.js"></script>
+<script src="js/17-app-document.js"></script>
+<script src="js/18-app-local.js"></script>
+<script src="js/19-app-procure.js"></script>
 <script src="js/99-boot.js"></script>
 <!-- /build:js -->
 </body>
